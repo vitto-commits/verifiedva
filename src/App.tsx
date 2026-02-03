@@ -7,6 +7,7 @@ import ClientSignup from './pages/ClientSignup'
 import Dashboard from './pages/Dashboard'
 
 function App() {
+  // Using HashRouter for GitHub Pages compatibility
   return (
     <div className="dark bg-gray-950 text-gray-100 min-h-screen">
       <HashRouter>

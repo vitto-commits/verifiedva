@@ -22,6 +22,8 @@ import VideoIntroUpload from './pages/VideoIntroUpload'
 import Assessments from './pages/Assessments'
 import TakeAssessment from './pages/TakeAssessment'
 import Admin from './pages/Admin'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
           <Route path="/assessments" element={<Assessments />} />
           <Route path="/assessments/:skillId" element={<TakeAssessment />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

@@ -57,6 +57,9 @@ export default function Search() {
   // Filters
   const [minRate, setMinRate] = useState('')
   const [maxRate, setMaxRate] = useState('')
+  const [minExperience, setMinExperience] = useState('')
+  const [locationQuery, setLocationQuery] = useState('')
+  const [verifiedSkillsOnly, setVerifiedSkillsOnly] = useState(false)
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([])
   const [selectedTiers, setSelectedTiers] = useState<string[]>([])
   const [selectedSkills, setSelectedSkills] = useState<string[]>([])
@@ -95,6 +98,7 @@ export default function Search() {
 
       if (minRate) query = query.gte('hourly_rate', parseFloat(minRate))
       if (maxRate) query = query.lte('hourly_rate', parseFloat(maxRate))
+      if (minExperience) query = query.gte('years_experience', parseInt(minExperience))
       if (selectedAvailability.length > 0) query = query.in('availability', selectedAvailability)
       if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
 
@@ -111,9 +115,26 @@ export default function Search() {
           })
         }
         
-        // Filter by search query
-        if (searchQuery) {
-          const q = searchQuery.toLowerCase()
+        // Filter by verified skills only
+        if (verifiedSkillsOnly) {
+          filtered = filtered.filter(va => {
+            return va.va_skills?.some(vs => vs.verified_at) || false
+          })
+        }
+        
+        // Filter by location
+        if (locationQuery) {
+          const locQ = locationQuery.toLowerCase()
+          filtered = filtered.filter(va => {
+            const location = va.location?.toLowerCase() || ''
+            const timezone = va.timezone?.toLowerCase() || ''
+            return location.includes(locQ) || timezone.includes(locQ)
+          })
+        }
+        
+        // Filter and score by search query
+        const q = searchQuery?.toLowerCase() || ''
+        if (q) {
           filtered = filtered.filter((va) => {
             const name = va.profile?.full_name?.toLowerCase() || ''
             const headline = va.headline?.toLowerCase() || ''
@@ -121,6 +142,47 @@ export default function Search() {
             const skillNames = va.va_skills?.map(vs => vs.skill?.name?.toLowerCase() || '').join(' ') || ''
             return name.includes(q) || headline.includes(q) || bio.includes(q) || skillNames.includes(q)
           })
+        }
+        
+        // Calculate relevance score for sorting
+        const scoreVA = (va: VAWithProfile): number => {
+          let score = 0
+          
+          // Verification tier bonus
+          if (va.verification_status === 'elite') score += 100
+          else if (va.verification_status === 'pro') score += 75
+          else if (va.verification_status === 'verified') score += 50
+          
+          // Verified skills bonus (10 points each, max 50)
+          const verifiedSkillCount = va.va_skills?.filter(vs => vs.verified_at)?.length || 0
+          score += Math.min(verifiedSkillCount * 10, 50)
+          
+          // Experience bonus (2 points per year, max 20)
+          score += Math.min((va.years_experience || 0) * 2, 20)
+          
+          // Search match bonuses (if searching)
+          if (q) {
+            const name = va.profile?.full_name?.toLowerCase() || ''
+            const headline = va.headline?.toLowerCase() || ''
+            const skillNames = va.va_skills?.map(vs => vs.skill?.name?.toLowerCase() || '').join(' ') || ''
+            
+            // Exact name match = huge bonus
+            if (name === q) score += 200
+            else if (name.includes(q)) score += 50
+            
+            // Headline match = good bonus
+            if (headline.includes(q)) score += 30
+            
+            // Skill match = moderate bonus
+            if (skillNames.includes(q)) score += 25
+          }
+          
+          // Completed profile bonus
+          if (va.headline) score += 5
+          if (va.bio && va.bio.length > 100) score += 5
+          if (va.portfolio_url) score += 5
+          
+          return score
         }
         
         // Sort results
@@ -134,16 +196,7 @@ export default function Search() {
               return (b.years_experience || 0) - (a.years_experience || 0)
             case 'relevance':
             default:
-              // Verified VAs first, then by verified skills count, then by experience
-              const aVerified = a.verification_status === 'verified' ? 1 : 0
-              const bVerified = b.verification_status === 'verified' ? 1 : 0
-              if (aVerified !== bVerified) return bVerified - aVerified
-              
-              const aVerifiedSkills = a.va_skills?.filter(vs => vs.verified_at)?.length || 0
-              const bVerifiedSkills = b.va_skills?.filter(vs => vs.verified_at)?.length || 0
-              if (aVerifiedSkills !== bVerifiedSkills) return bVerifiedSkills - aVerifiedSkills
-              
-              return (b.years_experience || 0) - (a.years_experience || 0)
+              return scoreVA(b) - scoreVA(a)
           }
         })
         
@@ -154,7 +207,7 @@ export default function Search() {
 
     const debounce = setTimeout(fetchVAs, 300)
     return () => clearTimeout(debounce)
-  }, [searchQuery, minRate, maxRate, selectedAvailability, selectedTiers, selectedSkills, sortBy])
+  }, [searchQuery, minRate, maxRate, minExperience, locationQuery, verifiedSkillsOnly, selectedAvailability, selectedTiers, selectedSkills, sortBy])
 
   const toggleFilter = (value: string, current: string[], setter: (v: string[]) => void) => {
     if (current.includes(value)) {
@@ -164,8 +217,8 @@ export default function Search() {
     }
   }
 
-  const hasFilters = selectedAvailability.length > 0 || selectedTiers.length > 0 || selectedSkills.length > 0 || minRate || maxRate
-  const filterCount = selectedAvailability.length + selectedTiers.length + selectedSkills.length + (minRate ? 1 : 0) + (maxRate ? 1 : 0)
+  const hasFilters = selectedAvailability.length > 0 || selectedTiers.length > 0 || selectedSkills.length > 0 || minRate || maxRate || minExperience || locationQuery || verifiedSkillsOnly
+  const filterCount = selectedAvailability.length + selectedTiers.length + selectedSkills.length + (minRate ? 1 : 0) + (maxRate ? 1 : 0) + (minExperience ? 1 : 0) + (locationQuery ? 1 : 0) + (verifiedSkillsOnly ? 1 : 0)
   const popularSkills = skills.slice(0, 5)
 
   const clearFilters = () => {
@@ -174,6 +227,9 @@ export default function Search() {
     setSelectedSkills([])
     setMinRate('')
     setMaxRate('')
+    setMinExperience('')
+    setLocationQuery('')
+    setVerifiedSkillsOnly(false)
   }
 
   const FilterContent = () => (
@@ -221,6 +277,49 @@ export default function Search() {
             />
           </div>
         </div>
+      </div>
+
+      {/* Experience Filter */}
+      <div>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Min. Experience</h3>
+        <select
+          value={minExperience}
+          onChange={(e) => setMinExperience(e.target.value)}
+          className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/20 focus:border-[hsl(var(--primary))]"
+        >
+          <option value="">Any experience</option>
+          <option value="1">1+ year</option>
+          <option value="2">2+ years</option>
+          <option value="3">3+ years</option>
+          <option value="5">5+ years</option>
+          <option value="10">10+ years</option>
+        </select>
+      </div>
+
+      {/* Location Filter */}
+      <div>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Location</h3>
+        <input
+          type="text"
+          placeholder="e.g. Philippines, Manila, PST..."
+          value={locationQuery}
+          onChange={(e) => setLocationQuery(e.target.value)}
+          className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/20 focus:border-[hsl(var(--primary))]"
+        />
+      </div>
+
+      {/* Verified Skills Toggle */}
+      <div>
+        <label className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-700 cursor-pointer hover:bg-white active:bg-slate-100 transition-colors">
+          <input
+            type="checkbox"
+            checked={verifiedSkillsOnly}
+            onChange={(e) => setVerifiedSkillsOnly(e.target.checked)}
+            className="w-5 h-5 rounded border-slate-300 bg-white text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))]/20 focus:ring-offset-0"
+          />
+          <span className="font-medium">Has verified skills only</span>
+        </label>
+        <p className="text-xs text-slate-500 mt-1 px-3">Show only VAs who passed skill assessments</p>
       </div>
 
       <div>

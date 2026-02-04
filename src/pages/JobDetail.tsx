@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { IconArrowLeft, IconBriefcase, IconClock, IconDollar, IconMapPin, IconLoader, IconMessage, IconCheckCircle, IconX, IconChevronDown, IconExternalLink } from '../components/icons'
+import { IconArrowLeft, IconBriefcase, IconClock, IconDollar, IconMapPin, IconLoader, IconMessage, IconCheckCircle, IconX, IconChevronDown, IconExternalLink, IconStar } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
+import ReviewModal from '../components/ReviewModal'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
@@ -92,6 +93,8 @@ export default function JobDetail() {
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<'details' | 'applicants'>('applicants')
   const [expandedApp, setExpandedApp] = useState<string | null>(null)
+  const [reviewModal, setReviewModal] = useState<{ vaId: string; vaName: string } | null>(null)
+  const [reviewedVaIds, setReviewedVaIds] = useState<Set<string>>(new Set())
 
   const isOwner = clientProfile?.id === job?.client_id
 
@@ -131,6 +134,17 @@ export default function JobDetail() {
             .order('created_at', { ascending: false })
 
           if (apps) setApplications(apps as Application[])
+          
+          // Fetch which VAs have been reviewed for this job
+          const { data: reviews } = await supabase
+            .from('reviews')
+            .select('va_id')
+            .eq('job_id', id)
+            .eq('client_id', clientProfile.id)
+          
+          if (reviews) {
+            setReviewedVaIds(new Set(reviews.map(r => r.va_id)))
+          }
         }
       }
       setLoading(false)
@@ -441,6 +455,24 @@ export default function JobDetail() {
                                 Mark as Hired
                               </button>
                             )}
+                            {app.status === 'hired' && !reviewedVaIds.has(app.va.id) && (
+                              <button
+                                onClick={() => setReviewModal({ 
+                                  vaId: app.va.id, 
+                                  vaName: app.va.profile?.full_name || 'VA' 
+                                })}
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/20 text-yellow-600 text-sm hover:bg-yellow-500/30"
+                              >
+                                <IconStar className="h-4 w-4" />
+                                Leave Review
+                              </button>
+                            )}
+                            {app.status === 'hired' && reviewedVaIds.has(app.va.id) && (
+                              <span className="flex items-center gap-2 px-3 py-2 text-sm text-slate-500">
+                                <IconCheckCircle className="h-4 w-4 text-green-500" />
+                                Reviewed
+                              </span>
+                            )}
                             <button className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-slate-300 hover:bg-slate-50">
                               <IconMessage className="h-4 w-4" />
                               Message
@@ -456,6 +488,21 @@ export default function JobDetail() {
           )}
         </div>
       </div>
+
+      {/* Review Modal */}
+      {reviewModal && clientProfile && (
+        <ReviewModal
+          isOpen={true}
+          onClose={() => setReviewModal(null)}
+          vaId={reviewModal.vaId}
+          vaName={reviewModal.vaName}
+          clientId={clientProfile.id}
+          jobId={id}
+          onSuccess={() => {
+            setReviewedVaIds(new Set([...reviewedVaIds, reviewModal.vaId]))
+          }}
+        />
+      )}
     </Layout>
     </AuthGuard>
   )

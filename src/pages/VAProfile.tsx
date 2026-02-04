@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { IconMapPin, IconMessage, IconGlobe, IconBriefcase, IconLoader, IconArrowLeft, IconClock, IconCalendar, IconChevronRight, IconCheckCircle } from '../components/icons'
+import { IconMapPin, IconMessage, IconGlobe, IconBriefcase, IconLoader, IconArrowLeft, IconClock, IconCalendar, IconChevronRight, IconCheckCircle, IconStar } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
@@ -11,6 +11,20 @@ import type { VA, Skill, Profile } from '../types/database'
 interface VAWithDetails extends VA {
   profile: Profile
   va_skills: { skill: Skill; proficiency_level: number; verified_at?: string; assessment_score?: number }[]
+}
+
+interface Review {
+  id: string
+  rating: number
+  comment: string | null
+  attributes: string[]
+  created_at: string
+  client: {
+    company_name: string | null
+    profile: {
+      full_name: string | null
+    }
+  }
 }
 
 const VerificationBadge = ({ status, compact = false }: { status: string; compact?: boolean }) => {
@@ -43,6 +57,7 @@ export default function VAProfile() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [va, setVa] = useState<VAWithDetails | null>(null)
+  const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [startingChat, setStartingChat] = useState(false)
@@ -122,6 +137,35 @@ export default function VAProfile() {
         setError('VA not found')
       } else {
         setVa(data as VAWithDetails)
+        
+        // Fetch reviews for this VA
+        const { data: reviewsData } = await supabase
+          .from('reviews')
+          .select(`
+            id,
+            rating,
+            comment,
+            attributes,
+            created_at,
+            client:clients(
+              company_name,
+              profile:profiles(full_name)
+            )
+          `)
+          .eq('va_id', id)
+          .order('created_at', { ascending: false })
+        
+        if (reviewsData) {
+          // Flatten the nested Supabase response
+          const flattenedReviews = reviewsData.map((r: any) => ({
+            ...r,
+            client: r.client?.[0] ? {
+              company_name: r.client[0].company_name,
+              profile: r.client[0].profile?.[0] || { full_name: null }
+            } : null
+          }))
+          setReviews(flattenedReviews as Review[])
+        }
       }
       setLoading(false)
     }
@@ -336,6 +380,71 @@ export default function VAProfile() {
                       <span key={lang} className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs sm:text-sm">
                         {lang}
                       </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Reviews */}
+              {reviews.length > 0 && (
+                <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base sm:text-lg font-semibold">Reviews</h2>
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <IconStar className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                      <span className="font-medium">
+                        {(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)}
+                      </span>
+                      <span className="text-slate-500">({reviews.length})</span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {reviews.map((review) => (
+                      <div key={review.id} className="border-b border-slate-100 last:border-0 pb-4 last:pb-0">
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <div>
+                            <div className="font-medium text-sm text-slate-900">
+                              {review.client?.company_name || review.client?.profile?.full_name || 'Client'}
+                            </div>
+                            <div className="flex items-center gap-1 mt-0.5">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <IconStar 
+                                  key={star}
+                                  className={`h-3.5 w-3.5 ${
+                                    star <= review.rating 
+                                      ? 'text-yellow-400 fill-yellow-400' 
+                                      : 'text-slate-200'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <span className="text-xs text-slate-500">
+                            {new Date(review.created_at).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              year: 'numeric' 
+                            })}
+                          </span>
+                        </div>
+                        
+                        {review.attributes.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mb-2">
+                            {review.attributes.map((attr) => (
+                              <span 
+                                key={attr}
+                                className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs"
+                              >
+                                {attr}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {review.comment && (
+                          <p className="text-sm text-slate-600">{review.comment}</p>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import { ArrowLeft, DollarSign, Clock, Loader2, CheckCircle2, AlertCircle } from
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
+import { notifyJobApplication } from '../lib/email'
 
 interface Job {
   id: string
@@ -16,6 +17,7 @@ interface Job {
   created_at: string
   client: {
     id: string
+    user_id: string
     company_name: string | null
     profile: {
       full_name: string | null
@@ -68,6 +70,7 @@ export default function JobApply() {
           *,
           client:clients!jobs_client_id_fkey (
             id,
+            user_id,
             company_name,
             profile:profiles!clients_user_id_fkey (
               full_name
@@ -144,6 +147,18 @@ export default function JobApply() {
       setError('Failed to submit application. Please try again.')
       setSubmitting(false)
       return
+    }
+
+    // Send email notification to client (fire and forget)
+    if (job.client?.user_id) {
+      notifyJobApplication({
+        clientUserId: job.client.user_id,
+        clientName: job.client.company_name || job.client.profile?.full_name || 'there',
+        applicantName: profile?.full_name || 'A VA',
+        jobTitle: job.title,
+        jobId: job.id,
+        proposedRate: proposedRate ? parseFloat(proposedRate) : null,
+      }).catch(console.error)
     }
 
     setSuccess(true)

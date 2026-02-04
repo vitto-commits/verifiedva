@@ -4,6 +4,7 @@ import { ArrowLeft, Send, Loader2, ExternalLink } from 'lucide-react'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
+import { notifyNewMessage } from '../lib/email'
 
 interface Message {
   id: string
@@ -19,6 +20,7 @@ interface OtherUser {
   full_name: string | null
   avatar_url: string | null
   user_type: string
+  email?: string
   va_id?: string
 }
 
@@ -148,6 +150,21 @@ export default function Conversation() {
     if (error) {
       setNewMessage(content) // Restore message on error
       console.error('Failed to send:', error)
+    } else if (otherUser) {
+      // Send email notification (fire and forget)
+      const { data: senderProfile } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single()
+
+      notifyNewMessage({
+        recipientUserId: otherUser.id,
+        recipientName: otherUser.full_name || 'there',
+        senderName: senderProfile?.full_name || 'Someone',
+        preview: content,
+        conversationId: id,
+      }).catch(console.error)
     }
 
     setSending(false)

@@ -4,6 +4,7 @@ import { Clock, AlertCircle, ChevronLeft, ChevronRight, Loader2, CheckCircle, X,
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
+import { notifyAssessmentPassed } from '../lib/email'
 
 interface Question {
   question_id: string
@@ -197,14 +198,31 @@ export default function TakeAssessment() {
 
       if (error) throw error
 
-      setResults(data[0])
+      const resultData = data[0]
+      setResults(resultData)
       setPhase('results')
+
+      // Send email notification if passed
+      if (resultData.passed && user && config) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single()
+
+        notifyAssessmentPassed({
+          vaUserId: user.id,
+          vaName: profile?.full_name || 'there',
+          skillName: config.skill_name,
+          score: resultData.score,
+        }).catch(console.error)
+      }
     } catch (err) {
       console.error(err)
       setError('Failed to submit assessment')
       setPhase('quiz')
     }
-  }, [attemptId, answers, questions, phase])
+  }, [attemptId, answers, questions, phase, user, config])
 
   // Format time
   const formatTime = (seconds: number) => {

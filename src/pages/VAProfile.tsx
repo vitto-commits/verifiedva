@@ -167,7 +167,7 @@ export default function VAProfile() {
           {/* Back button */}
           <Link 
             to="/search" 
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4 sm:mb-6 transition-colors py-1"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 sm:mb-6 transition-colors py-1"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm">Back to search</span>
@@ -240,13 +240,13 @@ export default function VAProfile() {
                   </div>
                 )}
                 <div className="bg-white/70 border border-slate-200 rounded-xl p-3 text-center">
-                  <div className="text-lg sm:text-xl font-bold text-white capitalize">
+                  <div className="text-lg sm:text-xl font-bold text-slate-900 capitalize">
                     {va.availability?.split('-')[0] || 'Any'}
                   </div>
                   <div className="text-xs text-slate-500">availability</div>
                 </div>
                 <div className="bg-white/70 border border-slate-200 rounded-xl p-3 text-center">
-                  <div className="text-lg sm:text-xl font-bold text-white">24h</div>
+                  <div className="text-lg sm:text-xl font-bold text-slate-900">24h</div>
                   <div className="text-xs text-slate-500">response</div>
                 </div>
               </div>
@@ -328,7 +328,7 @@ export default function VAProfile() {
                 <button 
                   onClick={handleStartConversation}
                   disabled={startingChat}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all mb-3 disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] transition-all mb-3 disabled:opacity-50"
                 >
                   {startingChat ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -342,7 +342,7 @@ export default function VAProfile() {
 
                 <Link
                   to={`/book/${va.id}`}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-white font-medium hover:bg-slate-200 active:scale-[0.98] transition-all"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium hover:bg-slate-50 active:scale-[0.98] transition-all"
                 >
                   <Calendar className="h-5 w-5" />
                   Schedule Interview
@@ -354,14 +354,14 @@ export default function VAProfile() {
                       <Clock className="h-4 w-4" />
                       Availability
                     </span>
-                    <span className="text-white font-medium capitalize">
+                    <span className="text-slate-900 font-medium capitalize">
                       {va.availability?.replace('-', ' ') || 'Not specified'}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-500">Avg Response</span>
-                    <span className="text-white font-medium">Within 24 hours</span>
+                    <span className="text-slate-900 font-medium">Within 24 hours</span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
@@ -369,7 +369,7 @@ export default function VAProfile() {
                       <Calendar className="h-4 w-4" />
                       Member since
                     </span>
-                    <span className="text-white font-medium">
+                    <span className="text-slate-900 font-medium">
                       {new Date(va.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                     </span>
                   </div>
@@ -397,7 +397,7 @@ export default function VAProfile() {
           <button 
             onClick={handleStartConversation}
             disabled={startingChat}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold active:scale-[0.98] transition-transform disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-semibold hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] transition-transform disabled:opacity-50"
           >
             {startingChat ? (
               <Loader2 className="h-5 w-5 animate-spin" />

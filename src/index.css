@@ -2,8 +2,6 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-
-.dark {
-  color-scheme: dark;
+  background-color: #ffffff;
+  color: #111827;
 }

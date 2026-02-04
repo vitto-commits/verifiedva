@@ -19,7 +19,7 @@ export default function Home() {
   const faqs = [
     { q: "How do you verify VAs?", a: "Every VA goes through identity verification, skill assessment, and reference checks. Higher tiers include background checks and video interviews." },
     { q: "What's the difference between tiers?", a: "Pending = just signed up. Verified = identity confirmed. Pro = skill tests + 2 references. Elite = background check + video interview." },
-    { q: "How much does it cost?", a: "Browsing and connecting with VAs is free. VAs set their own rates, typically $5-25/hr depending on skills and experience." },
+    { q: "How much do VAs charge?", a: "VAs set their own rates based on their skills and experience. You'll see rates upfront on every profile." },
     { q: "Can I hire directly?", a: "Yes! Once you find a VA you like, you can hire them directly. We don't take ongoing fees from your working relationship." },
   ]
 
@@ -80,7 +80,7 @@ export default function Home() {
             {[
               { icon: IconUsers, value: '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
               { icon: IconStar, value: '4.9', label: 'Avg Rating', tint: 'bg-amber-500/10 text-amber-700' },
-              { icon: IconDollar, value: '60%', label: 'Cost Savings', tint: 'bg-[hsl(var(--primary))]/10 text-emerald-700' },
+              { icon: IconCheckCircle, value: '100%', label: 'Vetted Talent', tint: 'bg-[hsl(var(--primary))]/10 text-emerald-700' },
               { icon: IconZap, value: '24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
@@ -120,9 +120,9 @@ export default function Home() {
                 tint: 'bg-slate-100 text-slate-700',
               },
               {
-                icon: IconDollar,
-                title: 'Lower costs',
-                desc: 'Save 60–70% on talent costs without sacrificing quality.',
+                icon: IconCheckCircle,
+                title: 'Skills tested',
+                desc: 'Assessments verify real abilities. No guesswork, no surprises.',
                 tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]',
               },
             ].map((feature) => (
@@ -227,7 +227,7 @@ export default function Home() {
           <div className="max-w-3xl mx-auto text-center bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Ready to find your VA?</h2>
             <p className="text-sm sm:text-base text-slate-600 mb-6 sm:mb-8 max-w-xl mx-auto">
-              Join businesses saving 60-70% on talent costs with verified Filipino virtual assistants.
+              Join businesses hiring smarter with pre-vetted, skill-tested Filipino virtual assistants.
             </p>
             <Link 
               to="/search" 

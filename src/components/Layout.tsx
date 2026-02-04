@@ -134,6 +134,26 @@ export default function Layout({ children }: LayoutProps) {
                             My Jobs
                           </Link>
                         )}
+                        {profile?.user_type === 'va' && (
+                          <>
+                            <Link
+                              to="/jobs"
+                              className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <Search className="h-5 w-5" />
+                              Browse Jobs
+                            </Link>
+                            <Link
+                              to="/my-applications"
+                              className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <Briefcase className="h-5 w-5" />
+                              My Applications
+                            </Link>
+                          </>
+                        )}
                         <button
                           onClick={() => {
                             setUserMenuOpen(false)
@@ -251,6 +271,32 @@ export default function Layout({ children }: LayoutProps) {
                       <Briefcase className="h-6 w-6" />
                       My Jobs
                     </Link>
+                  )}
+                  {profile?.user_type === 'va' && (
+                    <>
+                      <Link
+                        to="/jobs"
+                        className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
+                          location.pathname === '/jobs'
+                            ? 'bg-emerald-500/10 text-emerald-400' 
+                            : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                        }`}
+                      >
+                        <Search className="h-6 w-6" />
+                        Browse Jobs
+                      </Link>
+                      <Link
+                        to="/my-applications"
+                        className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
+                          location.pathname === '/my-applications'
+                            ? 'bg-emerald-500/10 text-emerald-400' 
+                            : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                        }`}
+                      >
+                        <Briefcase className="h-6 w-6" />
+                        My Applications
+                      </Link>
+                    </>
                   )}
                 </>
               )}

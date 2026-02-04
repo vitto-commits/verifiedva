@@ -12,6 +12,9 @@ import CreateJob from './pages/CreateJob'
 import JobDetail from './pages/JobDetail'
 import Messages from './pages/Messages'
 import Conversation from './pages/Conversation'
+import BrowseJobs from './pages/BrowseJobs'
+import JobApply from './pages/JobApply'
+import MyApplications from './pages/MyApplications'
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
           <Route path="/my-jobs" element={<MyJobs />} />
           <Route path="/jobs/new" element={<CreateJob />} />
           <Route path="/jobs/:id" element={<JobDetail />} />
+          <Route path="/jobs/:id/apply" element={<JobApply />} />
+          <Route path="/jobs" element={<BrowseJobs />} />
+          <Route path="/my-applications" element={<MyApplications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/messages/:id" element={<Conversation />} />
         </Routes>

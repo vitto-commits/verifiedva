@@ -292,7 +292,7 @@ export default function Dashboard() {
                 </div>
               )}
 
-              {/* Quick Actions */}
+              {/* Quick Actions - Client */}
               {isClient && (
                 <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                   <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Actions</h2>
@@ -318,6 +318,45 @@ export default function Dashboard() {
                       <Search className="h-6 w-6 mx-auto mb-2 text-gray-400" />
                       <div className="font-medium text-sm sm:text-base">Browse VAs</div>
                     </Link>
+                    <Link
+                      to="/messages"
+                      className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"
+                    >
+                      <div className="text-2xl mb-2">💬</div>
+                      <div className="font-medium text-sm sm:text-base">Messages</div>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* Quick Actions - VA */}
+              {isVA && (
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                  <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Actions</h2>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    <Link
+                      to="/jobs"
+                      className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 hover:border-emerald-500/50 active:bg-emerald-500/10 transition-colors text-center"
+                    >
+                      <Search className="h-6 w-6 mx-auto mb-2 text-emerald-400" />
+                      <div className="font-medium text-sm sm:text-base text-emerald-400">Browse Jobs</div>
+                    </Link>
+                    <Link
+                      to="/my-applications"
+                      className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"
+                    >
+                      <div className="text-2xl mb-2">📋</div>
+                      <div className="font-medium text-sm sm:text-base">My Applications</div>
+                    </Link>
+                    {vaProfile && (
+                      <Link
+                        to={`/va/${vaProfile.id}`}
+                        className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"
+                      >
+                        <ExternalLink className="h-6 w-6 mx-auto mb-2 text-gray-400" />
+                        <div className="font-medium text-sm sm:text-base">View Profile</div>
+                      </Link>
+                    )}
                     <Link
                       to="/messages"
                       className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"

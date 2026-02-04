@@ -24,7 +24,12 @@ interface VAWithProfile {
   created_at: string
   updated_at: string
   profile?: { full_name: string | null; avatar_url: string | null }
-  va_skills?: { skill: Skill | null }[]
+  va_skills?: { 
+    skill: Skill | null
+    proficiency_level?: number
+    verified_at?: string | null
+    assessment_score?: number | null
+  }[]
 }
 
 const VerificationBadge = ({ status }: { status: string }) => {
@@ -54,6 +59,8 @@ export default function Search() {
   const [maxRate, setMaxRate] = useState('')
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([])
   const [selectedTiers, setSelectedTiers] = useState<string[]>([])
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([])
+  const [sortBy, setSortBy] = useState<'relevance' | 'rate-low' | 'rate-high' | 'experience'>('relevance')
 
   // Prevent body scroll when filter modal is open
   useEffect(() => {
@@ -82,7 +89,7 @@ export default function Search() {
         .select(`
           *,
           profile:profiles(full_name, avatar_url),
-          va_skills(skill:skills(*))
+          va_skills(skill:skills(*), proficiency_level, verified_at, assessment_score)
         `)
         .eq('is_active', true)
 
@@ -91,10 +98,20 @@ export default function Search() {
       if (selectedAvailability.length > 0) query = query.in('availability', selectedAvailability)
       if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
 
-      const { data } = await query.order('created_at', { ascending: false })
+      const { data } = await query
 
       if (data) {
         let filtered = data as VAWithProfile[]
+        
+        // Filter by selected skills
+        if (selectedSkills.length > 0) {
+          filtered = filtered.filter(va => {
+            const vaSkillIds = va.va_skills?.map(vs => vs.skill?.id) || []
+            return selectedSkills.some(skillId => vaSkillIds.includes(skillId))
+          })
+        }
+        
+        // Filter by search query
         if (searchQuery) {
           const q = searchQuery.toLowerCase()
           filtered = filtered.filter((va) => {
@@ -105,6 +122,31 @@ export default function Search() {
             return name.includes(q) || headline.includes(q) || bio.includes(q) || skillNames.includes(q)
           })
         }
+        
+        // Sort results
+        filtered.sort((a, b) => {
+          switch (sortBy) {
+            case 'rate-low':
+              return (a.hourly_rate || 0) - (b.hourly_rate || 0)
+            case 'rate-high':
+              return (b.hourly_rate || 0) - (a.hourly_rate || 0)
+            case 'experience':
+              return (b.years_experience || 0) - (a.years_experience || 0)
+            case 'relevance':
+            default:
+              // Verified VAs first, then by verified skills count, then by experience
+              const aVerified = a.verification_status === 'verified' ? 1 : 0
+              const bVerified = b.verification_status === 'verified' ? 1 : 0
+              if (aVerified !== bVerified) return bVerified - aVerified
+              
+              const aVerifiedSkills = a.va_skills?.filter(vs => vs.verified_at)?.length || 0
+              const bVerifiedSkills = b.va_skills?.filter(vs => vs.verified_at)?.length || 0
+              if (aVerifiedSkills !== bVerifiedSkills) return bVerifiedSkills - aVerifiedSkills
+              
+              return (b.years_experience || 0) - (a.years_experience || 0)
+          }
+        })
+        
         setVas(filtered)
       }
       setLoading(false)
@@ -112,7 +154,7 @@ export default function Search() {
 
     const debounce = setTimeout(fetchVAs, 300)
     return () => clearTimeout(debounce)
-  }, [searchQuery, minRate, maxRate, selectedAvailability, selectedTiers])
+  }, [searchQuery, minRate, maxRate, selectedAvailability, selectedTiers, selectedSkills, sortBy])
 
   const toggleFilter = (value: string, current: string[], setter: (v: string[]) => void) => {
     if (current.includes(value)) {
@@ -122,19 +164,38 @@ export default function Search() {
     }
   }
 
-  const hasFilters = selectedAvailability.length > 0 || selectedTiers.length > 0 || minRate || maxRate
-  const filterCount = selectedAvailability.length + selectedTiers.length + (minRate ? 1 : 0) + (maxRate ? 1 : 0)
+  const hasFilters = selectedAvailability.length > 0 || selectedTiers.length > 0 || selectedSkills.length > 0 || minRate || maxRate
+  const filterCount = selectedAvailability.length + selectedTiers.length + selectedSkills.length + (minRate ? 1 : 0) + (maxRate ? 1 : 0)
   const popularSkills = skills.slice(0, 5)
 
   const clearFilters = () => {
     setSelectedAvailability([])
     setSelectedTiers([])
+    setSelectedSkills([])
     setMinRate('')
     setMaxRate('')
   }
 
   const FilterContent = () => (
     <div className="space-y-6">
+      {/* Skills Filter */}
+      <div>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Skills</h3>
+        <div className="space-y-1 max-h-48 overflow-y-auto">
+          {skills.map((skill) => (
+            <label key={skill.id} className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 cursor-pointer hover:bg-white active:bg-slate-100 transition-colors">
+              <input
+                type="checkbox"
+                checked={selectedSkills.includes(skill.id)}
+                onChange={() => toggleFilter(skill.id, selectedSkills, setSelectedSkills)}
+                className="w-5 h-5 rounded border-slate-300 bg-white text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))]/20 focus:ring-offset-0"
+              />
+              {skill.name}
+            </label>
+          ))}
+        </div>
+      </div>
+      
       <div>
         <h3 className="font-semibold text-slate-900 mb-3 text-sm">Hourly Rate</h3>
         <div className="flex items-center gap-2">
@@ -278,18 +339,43 @@ export default function Search() {
 
           {/* Results */}
           <div className="flex-1 min-w-0">
-            {/* Results count */}
-            <div className="mb-4">
-              {loading ? (
-                <span className="text-slate-600 text-sm">Searching...</span>
-              ) : (
-                <span className="text-slate-700 text-sm">{vas.length} VA{vas.length !== 1 ? 's' : ''} found</span>
-              )}
+            {/* Results header */}
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                {loading ? (
+                  <span className="text-slate-600 text-sm">Searching...</span>
+                ) : (
+                  <span className="text-slate-700 text-sm">{vas.length} VA{vas.length !== 1 ? 's' : ''} found</span>
+                )}
+              </div>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="text-sm px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 focus:outline-none focus:border-[hsl(var(--primary))]"
+              >
+                <option value="relevance">Best Match</option>
+                <option value="rate-low">Rate: Low to High</option>
+                <option value="rate-high">Rate: High to Low</option>
+                <option value="experience">Most Experienced</option>
+              </select>
             </div>
 
             {/* Active filters chips (mobile) */}
             {hasFilters && (
               <div className="flex flex-wrap gap-2 mb-4 lg:hidden">
+                {selectedSkills.map(skillId => {
+                  const skill = skills.find(s => s.id === skillId)
+                  return skill ? (
+                    <button
+                      key={skillId}
+                      onClick={() => toggleFilter(skillId, selectedSkills, setSelectedSkills)}
+                      className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] border border-[hsl(var(--primary))]/20"
+                    >
+                      {skill.name}
+                      <X className="h-3 w-3" />
+                    </button>
+                  ) : null
+                })}
                 {selectedAvailability.map(a => (
                   <button
                     key={a}
@@ -389,14 +475,22 @@ export default function Search() {
                         {/* Skills */}
                         {va.va_skills && va.va_skills.length > 0 && (
                           <div className="flex flex-wrap gap-1.5">
-                            {va.va_skills.slice(0, 3).map((vs) => (
-                              <span key={vs.skill?.id} className="px-2 py-0.5 text-xs rounded-full bg-slate-100 text-slate-700">
+                            {va.va_skills.slice(0, 4).map((vs) => (
+                              <span 
+                                key={vs.skill?.id} 
+                                className={`px-2 py-0.5 text-xs rounded-full flex items-center gap-1 ${
+                                  vs.verified_at 
+                                    ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                                    : 'bg-slate-100 text-slate-700'
+                                }`}
+                              >
+                                {vs.verified_at && <span className="text-[10px]">✓</span>}
                                 {vs.skill?.name}
                               </span>
                             ))}
-                            {va.va_skills.length > 3 && (
+                            {va.va_skills.length > 4 && (
                               <span className="px-2 py-0.5 text-xs rounded-full bg-slate-100 text-slate-500">
-                                +{va.va_skills.length - 3}
+                                +{va.va_skills.length - 4}
                               </span>
                             )}
                           </div>

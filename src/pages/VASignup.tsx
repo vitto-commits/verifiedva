@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Check, ChevronRight, ChevronLeft, Eye, EyeOff, Loader2, User, Briefcase, Wrench } from 'lucide-react'
 import Layout from '../components/Layout'
+import { Button, Input, Textarea } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
@@ -177,9 +178,9 @@ export default function VASignup() {
                 <span className="text-xs sm:text-sm text-slate-600">Step {currentStep} of {steps.length}</span>
                 <span className="text-xs sm:text-sm text-[hsl(var(--primary))] font-medium">{Math.round((currentStep / steps.length) * 100)}%</span>
               </div>
-              <div className="h-1.5 sm:h-2 bg-white rounded-full overflow-hidden">
+              <div className="h-1.5 sm:h-2 bg-slate-200 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] transition-all duration-300"
+                  className="h-full bg-[hsl(var(--primary))] transition-all duration-300"
                   style={{ width: `${(currentStep / steps.length) * 100}%` }}
                 />
               </div>
@@ -233,11 +234,10 @@ export default function VASignup() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Email</label>
-                      <input
+                      <Input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="you@example.com"
                         autoComplete="email"
                       />
@@ -245,11 +245,11 @@ export default function VASignup() {
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Password</label>
                       <div className="relative">
-                        <input
+                        <Input
                           type={showPassword ? 'text' : 'password'}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 pr-12 text-base"
+                          className="pr-12"
                           placeholder="Min 8 characters"
                           autoComplete="new-password"
                         />
@@ -265,11 +265,10 @@ export default function VASignup() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Confirm Password</label>
-                      <input
+                      <Input
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="Confirm password"
                         autoComplete="new-password"
                       />
@@ -294,22 +293,20 @@ export default function VASignup() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Full Name</label>
-                      <input
+                      <Input
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="Juan Dela Cruz"
                         autoComplete="name"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Location</label>
-                      <input
+                      <Input
                         type="text"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="Manila, Philippines"
                       />
                     </div>
@@ -318,7 +315,7 @@ export default function VASignup() {
                       <select
                         value={timezone}
                         onChange={(e) => setTimezone(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                       >
                         <option value="UTC+8">UTC+8 (Philippine Time)</option>
                         <option value="UTC+7">UTC+7</option>
@@ -336,20 +333,19 @@ export default function VASignup() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Professional Headline</label>
-                      <input
+                      <Input
                         type="text"
                         value={headline}
                         onChange={(e) => setHeadline(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="e.g., Executive Virtual Assistant"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Bio</label>
-                      <textarea
+                      <Textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 h-28 sm:h-32 resize-none text-base"
+                        className="h-28 sm:h-32"
                         placeholder="Tell clients about yourself..."
                       />
                     </div>
@@ -359,7 +355,7 @@ export default function VASignup() {
                         <select
                           value={yearsExperience}
                           onChange={(e) => setYearsExperience(parseInt(e.target.value))}
-                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
+                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                         >
                           <option value="0">&lt; 1 year</option>
                           <option value="1">1-2 years</option>
@@ -370,11 +366,11 @@ export default function VASignup() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Rate ($/hr)</label>
-                        <input
+                        <Input
                           type="number"
                           value={hourlyRate}
                           onChange={(e) => setHourlyRate(e.target.value)}
-                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
+                          className="px-3 sm:px-4"
                           placeholder="15"
                         />
                       </div>
@@ -389,8 +385,8 @@ export default function VASignup() {
                             onClick={() => setAvailability(option)}
                             className={`px-2 sm:px-4 py-2.5 sm:py-2 rounded-xl border text-xs sm:text-sm font-medium transition-colors active:scale-[0.98] ${
                               availability === option
-                                ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
-                                : 'border-slate-200 text-slate-600 hover:border-gray-600'
+                                ? 'border-[hsl(var(--primary))]/40 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                             }`}
                           >
                             {option === 'full-time' ? 'Full-time' : option === 'part-time' ? 'Part-time' : 'Contract'}
@@ -451,7 +447,7 @@ export default function VASignup() {
                   <ChevronLeft className="h-4 w-4" />
                   <span className="hidden sm:inline">Back</span>
                 </button>
-                <button
+                <Button
                   onClick={() => {
                     setError('')
                     if (currentStep === 1) handleAccountSubmit()
@@ -460,7 +456,7 @@ export default function VASignup() {
                     else if (currentStep === 4) handleFinalSubmit()
                   }}
                   disabled={loading}
-                  className="flex items-center gap-1.5 sm:gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 text-sm sm:text-base"
+                  size="lg"
                 >
                   {loading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -470,7 +466,7 @@ export default function VASignup() {
                       <ChevronRight className="h-4 w-4" />
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

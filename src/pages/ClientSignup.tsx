@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Eye, EyeOff, ArrowRight, Loader2, Building2, Users } from 'lucide-react'
 import Layout from '../components/Layout'
+import { Button, Input } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 
@@ -108,7 +109,7 @@ export default function ClientSignup() {
         <div className="w-full max-w-sm sm:max-w-md">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex p-3 rounded-xl bg-[hsl(var(--primary))]/10 border border-emerald-500/20 mb-4">
+            <div className="inline-flex p-3 rounded-xl bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20 mb-4">
               {step === 1 ? (
                 <Users className="h-7 w-7 sm:h-8 sm:w-8 text-[hsl(var(--primary))]" />
               ) : (
@@ -142,12 +143,11 @@ export default function ClientSignup() {
                 <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Full Name
                 </label>
-                <input
+                <Input
                   id="fullName"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="John Doe"
                   autoComplete="name"
                   required
@@ -158,12 +158,11 @@ export default function ClientSignup() {
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Work Email
                 </label>
-                <input
+                <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="you@company.com"
                   autoComplete="email"
                   required
@@ -175,12 +174,12 @@ export default function ClientSignup() {
                   Password
                 </label>
                 <div className="relative">
-                  <input
+                  <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 pr-12 text-base"
+                    className="pr-12"
                     placeholder="Min 8 characters"
                     autoComplete="new-password"
                     required
@@ -211,10 +210,11 @@ export default function ClientSignup() {
                 </span>
               </label>
 
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                size="lg"
+                className="w-full mt-2"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -224,7 +224,7 @@ export default function ClientSignup() {
                     <ArrowRight className="h-5 w-5" />
                   </>
                 )}
-              </button>
+              </Button>
             </form>
           )}
 
@@ -235,12 +235,11 @@ export default function ClientSignup() {
                 <label htmlFor="companyName" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Company Name <span className="text-slate-500">(optional)</span>
                 </label>
-                <input
+                <Input
                   id="companyName"
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="Acme Inc."
                   autoComplete="organization"
                 />
@@ -250,12 +249,11 @@ export default function ClientSignup() {
                 <label htmlFor="companyWebsite" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Website <span className="text-slate-500">(optional)</span>
                 </label>
-                <input
+                <Input
                   id="companyWebsite"
                   type="url"
                   value={companyWebsite}
                   onChange={(e) => setCompanyWebsite(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="https://example.com"
                   autoComplete="url"
                 />
@@ -269,7 +267,7 @@ export default function ClientSignup() {
                   id="industry"
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                 >
                   <option value="">Select industry</option>
                   {industries.map((ind) => (
@@ -286,7 +284,7 @@ export default function ClientSignup() {
                   id="companySize"
                   value={companySize}
                   onChange={(e) => setCompanySize(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                 >
                   <option value="">Select size</option>
                   {sizes.map((size) => (
@@ -296,17 +294,20 @@ export default function ClientSignup() {
               </div>
 
               <div className="flex gap-3 mt-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() => navigate('/search')}
-                  className="flex-1 px-4 py-3 sm:py-3.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-white active:bg-slate-100 transition-colors text-sm sm:text-base"
+                  className="flex-1"
+                  size="lg"
                 >
                   Skip
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 text-sm sm:text-base"
+                  className="flex-1"
+                  size="lg"
                 >
                   {loading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -316,7 +317,7 @@ export default function ClientSignup() {
                       <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           )}
@@ -326,14 +327,14 @@ export default function ClientSignup() {
             {step === 1 && (
               <p>
                 Already have an account?{' '}
-                <Link to="/login" className="text-[hsl(var(--primary))] hover:text-emerald-300">
+                <Link to="/login" className="text-[hsl(var(--primary))] hover:opacity-80">
                   Sign in
                 </Link>
               </p>
             )}
             <p>
               Are you a VA?{' '}
-              <Link to="/va/signup" className="text-[hsl(var(--primary))] hover:text-emerald-300">
+              <Link to="/va/signup" className="text-[hsl(var(--primary))] hover:opacity-80">
                 Create a VA profile
               </Link>
             </p>

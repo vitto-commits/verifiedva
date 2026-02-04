@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react'
 import Layout from '../components/Layout'
+import { Button, Input } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
 
 export default function Login() {
@@ -55,12 +56,11 @@ export default function Login() {
               <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                 Email
               </label>
-              <input
+              <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 transition-all text-base"
                 placeholder="you@example.com"
                 autoComplete="email"
                 required
@@ -72,12 +72,12 @@ export default function Login() {
                 Password
               </label>
               <div className="relative">
-                <input
+                <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 transition-all pr-12 text-base"
+                  className="pr-12"
                   placeholder="••••••••"
                   autoComplete="current-password"
                   required
@@ -93,10 +93,11 @@ export default function Login() {
               </div>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+              size="lg"
+              className="w-full mt-6"
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -106,7 +107,7 @@ export default function Login() {
                   <ArrowRight className="h-5 w-5" />
                 </>
               )}
-            </button>
+            </Button>
           </form>
 
           {/* Divider */}
@@ -121,17 +122,15 @@ export default function Login() {
 
           {/* Sign up options */}
           <div className="grid grid-cols-2 gap-3">
-            <Link
-              to="/client/signup"
-              className="flex items-center justify-center px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 hover:bg-white active:bg-slate-100 transition-colors"
-            >
-              Hire a VA
+            <Link to="/client/signup">
+              <Button variant="outline" className="w-full">
+                Hire a VA
+              </Button>
             </Link>
-            <Link
-              to="/va/signup"
-              className="flex items-center justify-center px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 hover:bg-white active:bg-slate-100 transition-colors"
-            >
-              Become a VA
+            <Link to="/va/signup">
+              <Button variant="outline" className="w-full">
+                Become a VA
+              </Button>
             </Link>
           </div>
         </div>

@@ -13,6 +13,7 @@ interface VAWithProfile {
   headline: string | null
   bio: string | null
   hourly_rate: number | null
+  hours_per_week: number | null
   years_experience: number
   location: string | null
   timezone: string | null
@@ -65,6 +66,7 @@ export default function Search() {
   const [locationQuery, setLocationQuery] = useState('')
   const [verifiedSkillsOnly, setVerifiedSkillsOnly] = useState(false)
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([])
+  const [selectedHoursPerWeek, setSelectedHoursPerWeek] = useState<string>('')
   const [selectedTiers, setSelectedTiers] = useState<string[]>([])
   const [selectedSkills, setSelectedSkills] = useState<string[]>([])
   const [sortBy, setSortBy] = useState<'relevance' | 'rate-low' | 'rate-high' | 'experience'>('relevance')
@@ -149,6 +151,15 @@ export default function Search() {
           })
         }
         
+        // Filter by hours per week
+        if (selectedHoursPerWeek) {
+          const minHours = parseInt(selectedHoursPerWeek)
+          filtered = filtered.filter(va => {
+            if (!va.hours_per_week) return true // flexible/any hours
+            return va.hours_per_week >= minHours
+          })
+        }
+        
         // Filter and score by search query
         const q = searchQuery?.toLowerCase() || ''
         if (q) {
@@ -224,7 +235,7 @@ export default function Search() {
 
     const debounce = setTimeout(fetchVAs, 300)
     return () => clearTimeout(debounce)
-  }, [searchQuery, minRate, maxRate, minExperience, locationQuery, verifiedSkillsOnly, selectedAvailability, selectedTiers, selectedSkills, sortBy])
+  }, [searchQuery, minRate, maxRate, minExperience, locationQuery, verifiedSkillsOnly, selectedAvailability, selectedHoursPerWeek, selectedTiers, selectedSkills, sortBy])
 
   const toggleFilter = (value: string, current: string[], setter: (v: string[]) => void) => {
     if (current.includes(value)) {
@@ -234,8 +245,8 @@ export default function Search() {
     }
   }
 
-  const hasFilters = selectedAvailability.length > 0 || selectedTiers.length > 0 || selectedSkills.length > 0 || minRate || maxRate || minExperience || locationQuery || verifiedSkillsOnly
-  const filterCount = selectedAvailability.length + selectedTiers.length + selectedSkills.length + (minRate ? 1 : 0) + (maxRate ? 1 : 0) + (minExperience ? 1 : 0) + (locationQuery ? 1 : 0) + (verifiedSkillsOnly ? 1 : 0)
+  const hasFilters = selectedAvailability.length > 0 || selectedTiers.length > 0 || selectedSkills.length > 0 || minRate || maxRate || minExperience || locationQuery || verifiedSkillsOnly || selectedHoursPerWeek
+  const filterCount = selectedAvailability.length + selectedTiers.length + selectedSkills.length + (minRate ? 1 : 0) + (maxRate ? 1 : 0) + (minExperience ? 1 : 0) + (locationQuery ? 1 : 0) + (verifiedSkillsOnly ? 1 : 0) + (selectedHoursPerWeek ? 1 : 0)
   const popularSkills = skills.slice(0, 5)
 
   const clearFilters = () => {
@@ -246,6 +257,7 @@ export default function Search() {
     setMaxRate('')
     setMinExperience('')
     setLocationQuery('')
+    setSelectedHoursPerWeek('')
     setVerifiedSkillsOnly(false)
   }
 
@@ -326,7 +338,7 @@ export default function Search() {
       </div>
 
       <div>
-        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Availability</h3>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Availability Type</h3>
         <div className="space-y-1">
           {['full-time', 'part-time', 'contract'].map((avail) => (
             <label key={avail} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 cursor-pointer hover:bg-white active:bg-slate-100 transition-colors">
@@ -340,6 +352,33 @@ export default function Search() {
             </label>
           ))}
         </div>
+      </div>
+
+      {/* Hours Per Week Filter */}
+      <div>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Hours per Week</h3>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { value: '', label: 'Any' },
+            { value: '10', label: '10+' },
+            { value: '20', label: '20+' },
+            { value: '30', label: '30+' },
+            { value: '40', label: '40+' },
+          ].map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => setSelectedHoursPerWeek(opt.value)}
+              className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${
+                selectedHoursPerWeek === opt.value
+                  ? 'border-[hsl(var(--primary))]/40 text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10'
+                  : 'border-slate-200 text-slate-600 hover:border-slate-300'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs text-slate-500 mt-2 px-1">Filter by minimum available hours</p>
       </div>
 
       <div>
@@ -570,6 +609,7 @@ export default function Search() {
                             <span className="flex items-center gap-1">
                               <IconClock className="h-3.5 w-3.5" />
                               {va.availability.replace('-', ' ')}
+                              {va.hours_per_week && ` · ${va.hours_per_week}h/wk`}
                             </span>
                           )}
                         </div>

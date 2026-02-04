@@ -12,6 +12,7 @@ interface VAWithProfile {
   headline: string | null
   bio: string | null
   hourly_rate: number | null
+  hours_per_week: number | null
   years_experience: number
   location: string | null
   timezone: string | null
@@ -278,6 +279,7 @@ export default function VAPreviewPanel({ va, onClose }: VAPreviewPanelProps) {
               <span className="flex items-center gap-1.5">
                 <IconClock className="h-4 w-4 text-slate-400" />
                 {va.availability?.replace('-', ' ')}
+                {va.hours_per_week && ` · ${va.hours_per_week}h/wk`}
               </span>
             </div>
 

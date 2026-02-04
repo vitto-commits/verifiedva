@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { IconSearch, IconClock, IconDollar, IconBriefcase, IconFilter, IconX, IconLoader, IconChevronRight } from '../components/icons'
+import { IconSearch, IconClock, IconDollar, IconBriefcase, IconFilter, IconX, IconLoader, IconChevronRight, IconHeart, IconUser } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
@@ -15,6 +15,7 @@ interface Job {
   budget_max: number | null
   status: string
   created_at: string
+  application_count?: number
   client: {
     id: string
     company_name: string | null
@@ -28,9 +29,6 @@ interface Job {
       name: string
     }
   }[]
-  _count?: {
-    applications: number
-  }
 }
 
 export default function BrowseJobs() {
@@ -40,6 +38,9 @@ export default function BrowseJobs() {
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [appliedJobIds, setAppliedJobIds] = useState<Set<string>>(new Set())
+  const [savedJobIds, setSavedJobIds] = useState<Set<string>>(new Set())
+  const [vaId, setVaId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<'all' | 'saved'>('all')
   
   // Filters
   const [budgetType, setBudgetType] = useState<string>('')
@@ -82,10 +83,20 @@ export default function BrowseJobs() {
       if (error) {
         console.error('Error fetching jobs:', error)
       } else {
-        setJobs(data || [])
+        // Fetch application counts for each job
+        const jobsWithCounts = await Promise.all(
+          (data || []).map(async (job) => {
+            const { count } = await supabase
+              .from('job_applications')
+              .select('*', { count: 'exact', head: true })
+              .eq('job_id', job.id)
+            return { ...job, application_count: count || 0 }
+          })
+        )
+        setJobs(jobsWithCounts)
       }
 
-      // If logged in as VA, get applied job IDs
+      // If logged in as VA, get applied job IDs and saved jobs
       if (user && profile?.user_type === 'va') {
         const { data: vaData } = await supabase
           .from('vas')
@@ -94,6 +105,8 @@ export default function BrowseJobs() {
           .single()
 
         if (vaData) {
+          setVaId(vaData.id)
+          
           const { data: applications } = await supabase
             .from('job_applications')
             .select('job_id')
@@ -101,6 +114,16 @@ export default function BrowseJobs() {
 
           if (applications) {
             setAppliedJobIds(new Set(applications.map(a => a.job_id)))
+          }
+
+          // Fetch saved jobs
+          const { data: savedJobs } = await supabase
+            .from('saved_jobs')
+            .select('job_id')
+            .eq('va_id', vaData.id)
+
+          if (savedJobs) {
+            setSavedJobIds(new Set(savedJobs.map(s => s.job_id)))
           }
         }
       }
@@ -111,7 +134,37 @@ export default function BrowseJobs() {
     fetchJobs()
   }, [user, profile, budgetType, minBudget])
 
+  const toggleSaveJob = async (jobId: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (!vaId) return
+
+    const isSaved = savedJobIds.has(jobId)
+    
+    if (isSaved) {
+      await supabase
+        .from('saved_jobs')
+        .delete()
+        .eq('va_id', vaId)
+        .eq('job_id', jobId)
+      setSavedJobIds(prev => {
+        const next = new Set(prev)
+        next.delete(jobId)
+        return next
+      })
+    } else {
+      await supabase
+        .from('saved_jobs')
+        .insert({ va_id: vaId, job_id: jobId })
+      setSavedJobIds(prev => new Set([...prev, jobId]))
+    }
+  }
+
   const filteredJobs = jobs.filter(job => {
+    // Filter by saved tab
+    if (activeTab === 'saved' && !savedJobIds.has(job.id)) return false
+    
     if (!searchQuery) return true
     const q = searchQuery.toLowerCase()
     return (
@@ -173,8 +226,41 @@ export default function BrowseJobs() {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">Browse Jobs</h1>
-          <p className="text-slate-600">
-            {filteredJobs.length} open position{filteredJobs.length !== 1 ? 's' : ''} available
+          
+          {/* Tabs */}
+          <div className="flex gap-1 bg-slate-100 rounded-lg p-1 w-fit mt-4">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'all'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              All Jobs
+            </button>
+            <button
+              onClick={() => setActiveTab('saved')}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 ${
+                activeTab === 'saved'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Saved
+              {savedJobIds.size > 0 && (
+                <span className="bg-[hsl(var(--primary))] text-white text-xs px-1.5 py-0.5 rounded-full">
+                  {savedJobIds.size}
+                </span>
+              )}
+            </button>
+          </div>
+          
+          <p className="text-slate-600 mt-3">
+            {activeTab === 'saved' 
+              ? `${filteredJobs.length} saved job${filteredJobs.length !== 1 ? 's' : ''}`
+              : `${filteredJobs.length} open position${filteredJobs.length !== 1 ? 's' : ''} available`
+            }
           </p>
         </div>
 
@@ -300,10 +386,27 @@ export default function BrowseJobs() {
                           <IconClock className="h-3.5 w-3.5" />
                           {formatTimeAgo(job.created_at)}
                         </span>
+                        <span className="flex items-center gap-1">
+                          <IconUser className="h-3.5 w-3.5" />
+                          {job.application_count || 0} proposal{(job.application_count || 0) !== 1 ? 's' : ''}
+                        </span>
                       </div>
                     </div>
 
-                    <IconChevronRight className="h-5 w-5 text-slate-500 flex-shrink-0 mt-1" />
+                    <div className="flex flex-col items-end gap-2">
+                      <button
+                        onClick={(e) => toggleSaveJob(job.id, e)}
+                        className={`p-2 rounded-lg transition-colors ${
+                          savedJobIds.has(job.id)
+                            ? 'text-red-500 bg-red-50 hover:bg-red-100'
+                            : 'text-slate-400 hover:text-red-500 hover:bg-slate-100'
+                        }`}
+                        title={savedJobIds.has(job.id) ? 'Unsave job' : 'Save job'}
+                      >
+                        <IconHeart className={`h-5 w-5 ${savedJobIds.has(job.id) ? 'fill-current' : ''}`} />
+                      </button>
+                      <IconChevronRight className="h-5 w-5 text-slate-500" />
+                    </div>
                   </div>
                 </Link>
               )

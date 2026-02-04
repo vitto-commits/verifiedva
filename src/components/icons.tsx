@@ -421,6 +421,14 @@ export function IconSparkle({ size = 24, ...props }: IconProps) {
   )
 }
 
+export function IconHeart({ size = 24, ...props }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...defaultProps} {...props}>
+      <path d="M12 21c-1-1-9-6-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-8 11-9 12z" />
+    </svg>
+  )
+}
+
 export function IconUserPlus({ size = 24, ...props }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...defaultProps} {...props}>

@@ -17,6 +17,7 @@ export interface VA {
   headline: string | null
   bio: string | null
   hourly_rate: number | null
+  hours_per_week: number | null
   years_experience: number
   location: string | null
   timezone: string | null
@@ -32,6 +33,24 @@ export interface VA {
   // Joined data
   profile?: Profile
   skills?: Skill[]
+}
+
+export interface Review {
+  id: string
+  va_id: string
+  client_id: string
+  job_id: string | null
+  rating: number
+  comment: string | null
+  attributes: string[]
+  created_at: string
+}
+
+export interface SavedJob {
+  id: string
+  va_id: string
+  job_id: string
+  created_at: string
 }
 
 export interface Client {

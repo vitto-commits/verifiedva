@@ -37,6 +37,7 @@ export default function VASignup() {
   const [bio, setBio] = useState('')
   const [yearsExperience, setYearsExperience] = useState(0)
   const [hourlyRate, setHourlyRate] = useState('')
+  const [hoursPerWeek, setHoursPerWeek] = useState('')
   const [availability, setAvailability] = useState('full-time')
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>([])
@@ -115,6 +116,7 @@ export default function VASignup() {
           bio,
           years_experience: yearsExperience,
           hourly_rate: hourlyRate ? parseFloat(hourlyRate) : null,
+          hours_per_week: hoursPerWeek ? parseInt(hoursPerWeek) : null,
           availability,
           location,
           timezone,
@@ -373,6 +375,31 @@ export default function VASignup() {
                           className="px-3 sm:px-4"
                           placeholder="15"
                         />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Hours per Week</label>
+                      <div className="grid grid-cols-5 gap-2">
+                        {[
+                          { value: '', label: 'Flexible' },
+                          { value: '10', label: '10h' },
+                          { value: '20', label: '20h' },
+                          { value: '30', label: '30h' },
+                          { value: '40', label: '40h' },
+                        ].map((opt) => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => setHoursPerWeek(opt.value)}
+                            className={`px-2 py-2 rounded-xl border text-xs sm:text-sm font-medium transition-colors active:scale-[0.98] ${
+                              hoursPerWeek === opt.value
+                                ? 'border-[hsl(var(--primary))]/40 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
                     <div>

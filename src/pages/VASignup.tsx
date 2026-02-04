@@ -1,264 +1,481 @@
-import { useState } from 'react'
-import { Check, ChevronRight, Upload, User, Briefcase, Wrench, Clock, Image } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Check, ChevronRight, ChevronLeft, Eye, EyeOff, Loader2, User, Briefcase, Wrench } from 'lucide-react'
+import Layout from '../components/Layout'
+import { useAuth } from '../lib/auth-context'
+import { supabase } from '../lib/supabase'
+import type { Skill } from '../types/database'
 
 const steps = [
   { id: 1, name: 'Account', icon: User },
-  { id: 2, name: 'Basic Info', icon: User },
-  { id: 3, name: 'Professional', icon: Briefcase },
+  { id: 2, name: 'Profile', icon: User },
+  { id: 3, name: 'Work', icon: Briefcase },
   { id: 4, name: 'Skills', icon: Wrench },
-  { id: 5, name: 'Preferences', icon: Clock },
-  { id: 6, name: 'Portfolio', icon: Image },
-  { id: 7, name: 'Preview', icon: Check },
 ]
 
 export default function VASignup() {
+  const navigate = useNavigate()
+  const { user, signUp } = useAuth()
   const [currentStep, setCurrentStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [skills, setSkills] = useState<Skill[]>([])
+
+  // Form state
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [agreed, setAgreed] = useState(false)
+
+  const [fullName, setFullName] = useState('')
+  const [location, setLocation] = useState('')
+  const [timezone, setTimezone] = useState('UTC+8')
+
+  const [headline, setHeadline] = useState('')
+  const [bio, setBio] = useState('')
+  const [yearsExperience, setYearsExperience] = useState(0)
+  const [hourlyRate, setHourlyRate] = useState('')
+  const [availability, setAvailability] = useState('full-time')
+
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([])
+
+  useEffect(() => {
+    if (user) setCurrentStep(2)
+  }, [user])
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      const { data } = await supabase.from('skills').select('*').order('category').order('name')
+      if (data) setSkills(data)
+    }
+    fetchSkills()
+  }, [])
+
+  const handleAccountSubmit = async () => {
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+    if (!agreed) {
+      setError('You must agree to the Terms of Service')
+      return
+    }
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    const { error } = await signUp(email, password, 'va', fullName || email.split('@')[0])
+
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+    } else {
+      setCurrentStep(2)
+      setLoading(false)
+    }
+  }
+
+  const handleProfileSubmit = async () => {
+    if (!fullName.trim()) {
+      setError('Please enter your full name')
+      return
+    }
+    setCurrentStep(3)
+  }
+
+  const handleProfessionalSubmit = async () => {
+    setCurrentStep(4)
+  }
+
+  const handleFinalSubmit = async () => {
+    if (!user) {
+      setError('You must be logged in')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      await supabase
+        .from('profiles')
+        .update({ full_name: fullName })
+        .eq('id', user.id)
+
+      const { error: vaError } = await supabase
+        .from('vas')
+        .update({
+          headline,
+          bio,
+          years_experience: yearsExperience,
+          hourly_rate: hourlyRate ? parseFloat(hourlyRate) : null,
+          availability,
+          location,
+          timezone,
+        })
+        .eq('user_id', user.id)
+
+      if (vaError) throw vaError
+
+      const { data: vaData } = await supabase
+        .from('vas')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+
+      if (vaData && selectedSkills.length > 0) {
+        const vaId = (vaData as { id: string }).id
+        const skillInserts = selectedSkills.map(skillId => ({
+          va_id: vaId,
+          skill_id: skillId,
+        }))
+
+        await supabase.from('va_skills').upsert(skillInserts)
+      }
+
+      navigate('/dashboard')
+    } catch (err: any) {
+      setError(err.message)
+      setLoading(false)
+    }
+  }
+
+  const toggleSkill = (skillId: string) => {
+    if (selectedSkills.includes(skillId)) {
+      setSelectedSkills(selectedSkills.filter(id => id !== skillId))
+    } else if (selectedSkills.length < 15) {
+      setSelectedSkills([...selectedSkills, skillId])
+    }
+  }
+
+  const skillsByCategory = skills.reduce((acc, skill) => {
+    const cat = skill.category || 'Other'
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(skill)
+    return acc
+  }, {} as Record<string, Skill[]>)
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Create Your VA Profile</h1>
-            <p className="text-muted-foreground">Join hundreds of verified virtual assistants</p>
-          </div>
-
-          {/* Progress */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-muted-foreground">Step {currentStep} of {steps.length}</span>
-              <span className="text-sm text-muted-foreground">{Math.round((currentStep / steps.length) * 100)}% complete</span>
+    <Layout>
+      <div className="min-h-[calc(100vh-200px)] py-6 sm:py-10">
+        <div className="container mx-auto px-4">
+          <div className="max-w-lg sm:max-w-2xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">Become a VA</h1>
+              <p className="text-sm sm:text-base text-gray-400">Join our marketplace of verified virtual assistants</p>
             </div>
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-primary transition-all duration-300"
-                style={{ width: `${(currentStep / steps.length) * 100}%` }}
-              />
-            </div>
-          </div>
 
-          {/* Steps indicator */}
-          <div className="flex justify-between mb-8 overflow-x-auto pb-2">
-            {steps.map((step) => (
-              <div
-                key={step.id}
-                className={`flex flex-col items-center min-w-[60px] ${
-                  step.id === currentStep
-                    ? 'text-primary'
-                    : step.id < currentStep
-                    ? 'text-verified-basic'
-                    : 'text-muted-foreground'
-                }`}
-              >
+            {/* Progress bar */}
+            <div className="mb-6 sm:mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs sm:text-sm text-gray-400">Step {currentStep} of {steps.length}</span>
+                <span className="text-xs sm:text-sm text-emerald-400 font-medium">{Math.round((currentStep / steps.length) * 100)}%</span>
+              </div>
+              <div className="h-1.5 sm:h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300"
+                  style={{ width: `${(currentStep / steps.length) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Steps indicator */}
+            <div className="flex justify-between mb-6 sm:mb-8 px-2">
+              {steps.map((step) => (
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${
+                  key={step.id}
+                  className={`flex flex-col items-center ${
                     step.id === currentStep
-                      ? 'bg-primary text-white'
+                      ? 'text-emerald-400'
                       : step.id < currentStep
-                      ? 'bg-verified-basic text-white'
-                      : 'bg-muted'
+                      ? 'text-emerald-500'
+                      : 'text-gray-600'
                   }`}
                 >
-                  {step.id < currentStep ? (
-                    <Check className="h-4 w-4" />
+                  <div
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-1 sm:mb-2 transition-colors ${
+                      step.id === currentStep
+                        ? 'bg-emerald-500 text-white'
+                        : step.id < currentStep
+                        ? 'bg-emerald-500/20 text-emerald-400'
+                        : 'bg-gray-800 text-gray-500'
+                    }`}
+                  >
+                    {step.id < currentStep ? (
+                      <Check className="h-4 w-4 sm:h-5 sm:w-5" />
+                    ) : (
+                      <step.icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                    )}
+                  </div>
+                  <span className="text-[10px] sm:text-xs">{step.name}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Form Card */}
+            <div className="rounded-xl sm:rounded-2xl border border-gray-800 bg-gray-900/50 p-4 sm:p-6 md:p-8">
+              {error && (
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+
+              {/* Step 1: Account */}
+              {currentStep === 1 && !user && (
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-lg sm:text-xl font-semibold">Create Your Account</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Email</label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        placeholder="you@example.com"
+                        autoComplete="email"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Password</label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 pr-12 text-base"
+                          placeholder="Min 8 characters"
+                          autoComplete="new-password"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-300"
+                          tabIndex={-1}
+                        >
+                          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Confirm Password</label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        placeholder="Confirm password"
+                        autoComplete="new-password"
+                      />
+                    </div>
+                    <label className="flex items-start gap-3 text-sm text-gray-400 cursor-pointer p-2 -m-2 rounded-lg active:bg-gray-800/50">
+                      <input
+                        type="checkbox"
+                        checked={agreed}
+                        onChange={(e) => setAgreed(e.target.checked)}
+                        className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-gray-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
+                      />
+                      <span>I agree to the Terms of Service and Privacy Policy</span>
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: Profile */}
+              {currentStep === 2 && (
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-lg sm:text-xl font-semibold">Your Profile</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Full Name</label>
+                      <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        placeholder="Juan Dela Cruz"
+                        autoComplete="name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Location</label>
+                      <input
+                        type="text"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        placeholder="Manila, Philippines"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Timezone</label>
+                      <select
+                        value={timezone}
+                        onChange={(e) => setTimezone(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base appearance-none"
+                      >
+                        <option value="UTC+8">UTC+8 (Philippine Time)</option>
+                        <option value="UTC+7">UTC+7</option>
+                        <option value="UTC+9">UTC+9</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Professional */}
+              {currentStep === 3 && (
+                <div className="space-y-4 sm:space-y-5">
+                  <h2 className="text-lg sm:text-xl font-semibold">Professional Details</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Professional Headline</label>
+                      <input
+                        type="text"
+                        value={headline}
+                        onChange={(e) => setHeadline(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        placeholder="e.g., Executive Virtual Assistant"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Bio</label>
+                      <textarea
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 h-28 sm:h-32 resize-none text-base"
+                        placeholder="Tell clients about yourself..."
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Experience</label>
+                        <select
+                          value={yearsExperience}
+                          onChange={(e) => setYearsExperience(parseInt(e.target.value))}
+                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base appearance-none"
+                        >
+                          <option value="0">&lt; 1 year</option>
+                          <option value="1">1-2 years</option>
+                          <option value="3">3-5 years</option>
+                          <option value="6">5-10 years</option>
+                          <option value="10">10+ years</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Rate ($/hr)</label>
+                        <input
+                          type="number"
+                          value={hourlyRate}
+                          onChange={(e) => setHourlyRate(e.target.value)}
+                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                          placeholder="15"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Availability</label>
+                      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                        {['full-time', 'part-time', 'contract'].map((option) => (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => setAvailability(option)}
+                            className={`px-2 sm:px-4 py-2.5 sm:py-2 rounded-xl border text-xs sm:text-sm font-medium transition-colors active:scale-[0.98] ${
+                              availability === option
+                                ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
+                                : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                            }`}
+                          >
+                            {option === 'full-time' ? 'Full-time' : option === 'part-time' ? 'Part-time' : 'Contract'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4: Skills */}
+              {currentStep === 4 && (
+                <div className="space-y-4 sm:space-y-5">
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-semibold">Select Your Skills</h2>
+                    <p className="text-gray-400 text-xs sm:text-sm mt-1">
+                      Tap to select up to 15 skills ({selectedSkills.length}/15)
+                    </p>
+                  </div>
+                  <div className="space-y-4 max-h-[350px] sm:max-h-[400px] overflow-y-auto pr-2 -mr-2">
+                    {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
+                      <div key={category}>
+                        <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sticky top-0 bg-gray-900/90 backdrop-blur py-1">
+                          {category}
+                        </h3>
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                          {categorySkills.map((skill) => (
+                            <button
+                              key={skill.id}
+                              type="button"
+                              onClick={() => toggleSkill(skill.id)}
+                              className={`px-3 py-1.5 rounded-full text-xs sm:text-sm transition-colors active:scale-95 ${
+                                selectedSkills.includes(skill.id)
+                                  ? 'bg-emerald-500 text-white'
+                                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                              }`}
+                            >
+                              {skill.name}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="flex justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-800">
+                <button
+                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                  disabled={currentStep === 1 || (currentStep === 2 && !user)}
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 active:bg-gray-700 transition-colors text-sm ${
+                    (currentStep === 1 || (currentStep === 2 && !user)) ? 'invisible' : ''
+                  }`}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  <span className="hidden sm:inline">Back</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setError('')
+                    if (currentStep === 1) handleAccountSubmit()
+                    else if (currentStep === 2) handleProfileSubmit()
+                    else if (currentStep === 3) handleProfessionalSubmit()
+                    else if (currentStep === 4) handleFinalSubmit()
+                  }}
+                  disabled={loading}
+                  className="flex items-center gap-1.5 sm:gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 text-sm sm:text-base"
+                >
+                  {loading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
                   ) : (
-                    <step.icon className="h-4 w-4" />
+                    <>
+                      {currentStep === steps.length ? 'Complete' : 'Continue'}
+                      <ChevronRight className="h-4 w-4" />
+                    </>
                   )}
-                </div>
-                <span className="text-xs hidden sm:block">{step.name}</span>
+                </button>
               </div>
-            ))}
-          </div>
-
-          {/* Form Content */}
-          <div className="rounded-xl border border-border bg-card p-6 md:p-8">
-            {currentStep === 1 && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-foreground">Create Your Account</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Email</label>
-                    <input
-                      type="email"
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Password</label>
-                    <input
-                      type="password"
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground"
-                      placeholder="Min 8 characters"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Confirm Password</label>
-                    <input
-                      type="password"
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground"
-                      placeholder="Confirm password"
-                    />
-                  </div>
-                  <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <input type="checkbox" className="rounded" />
-                    I agree to the Terms of Service and Privacy Policy
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 2 && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-foreground">Tell Us About Yourself</h2>
-                <div className="space-y-4">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center">
-                      <Upload className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                    <button className="text-sm text-primary hover:underline">Upload Photo</button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-1">First Name</label>
-                      <input
-                        type="text"
-                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-1">Last Name</label>
-                      <input
-                        type="text"
-                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Country</label>
-                    <select className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground">
-                      <option>Philippines</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">City</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground"
-                      placeholder="e.g., Manila"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Timezone</label>
-                    <select className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground">
-                      <option>UTC+8 (Philippine Time)</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-foreground">Your Professional Background</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Professional Title</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground"
-                      placeholder="e.g., Executive Virtual Assistant"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Bio / Summary</label>
-                    <textarea
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground h-32"
-                      placeholder="Tell clients about yourself..."
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">150-500 characters</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Years of Experience</label>
-                    <select className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground">
-                      <option>Less than 1 year</option>
-                      <option>1-2 years</option>
-                      <option>3-5 years</option>
-                      <option>5-10 years</option>
-                      <option>10+ years</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {currentStep >= 4 && currentStep <= 6 && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-foreground">
-                  {currentStep === 4 && 'Select Your Skills'}
-                  {currentStep === 5 && 'Work Preferences'}
-                  {currentStep === 6 && 'Portfolio (Optional)'}
-                </h2>
-                <p className="text-muted-foreground">
-                  {currentStep === 4 && 'Choose 3-15 skills that best describe your expertise.'}
-                  {currentStep === 5 && 'Set your availability and rates.'}
-                  {currentStep === 6 && 'Add samples of your work to showcase your abilities.'}
-                </p>
-                <div className="p-8 border border-dashed border-border rounded-lg text-center text-muted-foreground">
-                  Form fields for step {currentStep} would go here
-                </div>
-              </div>
-            )}
-
-            {currentStep === 7 && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-foreground">Preview Your Profile</h2>
-                <div className="p-6 border border-border rounded-lg">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 rounded-full bg-muted" />
-                    <div>
-                      <h3 className="font-semibold text-foreground">Your Name</h3>
-                      <p className="text-sm text-muted-foreground">Your Title</p>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-500/10 text-yellow-500 mt-1">
-                        ⚠️ Unverified
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Your profile will be live but only accessible via direct link until you complete verification.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/5 border border-primary/30 rounded-lg">
-                  <p className="text-sm text-muted-foreground">
-                    💡 <strong>Get Verified</strong> to appear in search results and build trust with clients.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Navigation */}
-            <div className="flex justify-between mt-8 pt-6 border-t border-border">
-              <button
-                onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-                className={`px-4 py-2 rounded-lg border border-border text-foreground hover:bg-muted transition-colors ${
-                  currentStep === 1 ? 'invisible' : ''
-                }`}
-              >
-                Back
-              </button>
-              <button
-                onClick={() => setCurrentStep(Math.min(steps.length, currentStep + 1))}
-                className="px-6 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
-              >
-                {currentStep === steps.length ? 'Publish Profile' : 'Continue'}
-                <ChevronRight className="h-4 w-4" />
-              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }

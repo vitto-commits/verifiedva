@@ -1,105 +1,42 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search as SearchIcon, Filter, MapPin, Clock, DollarSign, Star, MessageCircle, ArrowLeft } from 'lucide-react'
+import { Search as SearchIcon, SlidersHorizontal, MapPin, Clock, DollarSign, Loader2, X, ChevronDown } from 'lucide-react'
+import Layout from '../components/Layout'
+import { supabase } from '../lib/supabase'
+import type { Skill } from '../types/database'
 
-interface VA {
+interface VAWithProfile {
   id: string
-  name: string
-  title: string
-  photo: string
-  location: string
-  timezone: string
-  rateMin: number
-  rateMax: number
+  user_id: string
+  headline: string | null
+  bio: string | null
+  hourly_rate: number | null
+  years_experience: number
+  location: string | null
+  timezone: string | null
+  languages: string[]
   availability: string
-  experience: string
-  verificationTier: 'verified' | 'pro' | 'elite'
-  rating: number
-  reviewCount: number
-  skills: string[]
-  bio: string
+  verification_status: string
+  portfolio_url: string | null
+  resume_url: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+  profile?: { full_name: string | null; avatar_url: string | null }
+  va_skills?: { skill: Skill | null }[]
 }
 
-const mockVAs: VA[] = [
-  {
-    id: '1',
-    name: 'Maria Santos',
-    title: 'Executive Virtual Assistant',
-    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
-    location: 'Manila, Philippines',
-    timezone: 'UTC+8',
-    rateMin: 10,
-    rateMax: 15,
-    availability: 'Full-time',
-    experience: '5-10 years',
-    verificationTier: 'pro',
-    rating: 4.9,
-    reviewCount: 23,
-    skills: ['Email Management', 'Calendar', 'Travel Planning', 'Research'],
-    bio: 'Detail-oriented EA with 7 years supporting C-suite executives. Expert in calendar management and inbox organization.'
-  },
-  {
-    id: '2',
-    name: 'John Reyes',
-    title: 'Customer Support Specialist',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
-    location: 'Cebu, Philippines',
-    timezone: 'UTC+8',
-    rateMin: 8,
-    rateMax: 12,
-    availability: 'Full-time',
-    experience: '3-5 years',
-    verificationTier: 'verified',
-    rating: 4.7,
-    reviewCount: 15,
-    skills: ['Customer Support', 'Live Chat', 'Email', 'CRM'],
-    bio: 'Experienced customer support professional with background in SaaS and ecommerce companies.'
-  },
-  {
-    id: '3',
-    name: 'Anna Lopez',
-    title: 'Social Media Manager',
-    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop',
-    location: 'Davao, Philippines',
-    timezone: 'UTC+8',
-    rateMin: 12,
-    rateMax: 18,
-    availability: 'Part-time',
-    experience: '3-5 years',
-    verificationTier: 'elite',
-    rating: 5.0,
-    reviewCount: 31,
-    skills: ['Social Media', 'Content Creation', 'Canva', 'Analytics'],
-    bio: 'Creative social media manager who has grown accounts from 0 to 100K followers. Specializing in B2B brands.'
-  },
-  {
-    id: '4',
-    name: 'Carlos Mendoza',
-    title: 'Bookkeeper & Admin',
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop',
-    location: 'Manila, Philippines',
-    timezone: 'UTC+8',
-    rateMin: 10,
-    rateMax: 14,
-    availability: 'Full-time',
-    experience: '5-10 years',
-    verificationTier: 'pro',
-    rating: 4.8,
-    reviewCount: 19,
-    skills: ['QuickBooks', 'Bookkeeping', 'Invoicing', 'Data Entry'],
-    bio: 'CPA-trained bookkeeper with 8 years experience in US accounting standards. QuickBooks certified.'
-  },
-]
-
-const VerificationBadge = ({ tier }: { tier: 'verified' | 'pro' | 'elite' }) => {
-  const config = {
-    verified: { label: '✓ Verified', class: 'bg-green-100 text-green-700' },
-    pro: { label: '✓✓ Pro', class: 'bg-blue-100 text-blue-700' },
-    elite: { label: '✓✓✓ Elite', class: 'bg-purple-100 text-purple-700' },
+const VerificationBadge = ({ status }: { status: string }) => {
+  const config: Record<string, { label: string; bg: string; text: string }> = {
+    pending: { label: 'Pending', bg: 'bg-gray-500/20', text: 'text-gray-400' },
+    verified: { label: '✓ Verified', bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+    pro: { label: '✓✓ Pro', bg: 'bg-blue-500/20', text: 'text-blue-400' },
+    elite: { label: '✓✓✓ Elite', bg: 'bg-purple-500/20', text: 'text-purple-400' },
   }
+  const c = config[status] || config.pending
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${config[tier].class}`}>
-      {config[tier].label}
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${c.bg} ${c.text}`}>
+      {c.label}
     </span>
   )
 }
@@ -107,193 +44,434 @@ const VerificationBadge = ({ tier }: { tier: 'verified' | 'pro' | 'elite' }) => 
 export default function Search() {
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [vas, setVas] = useState<VAWithProfile[]>([])
+  const [skills, setSkills] = useState<Skill[]>([])
+  const [loading, setLoading] = useState(true)
+  
+  // Filters
+  const [minRate, setMinRate] = useState('')
+  const [maxRate, setMaxRate] = useState('')
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([])
+  const [selectedTiers, setSelectedTiers] = useState<string[]>([])
 
-  const popularSkills = ['Email Management', 'Social Media', 'Bookkeeping', 'Customer Support', 'Data Entry', 'Research']
+  // Prevent body scroll when filter modal is open
+  useEffect(() => {
+    if (showFilters) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [showFilters])
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b border-gray-100 bg-white sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-white font-bold text-sm">VA</div>
-              <span className="text-xl font-bold tracking-tight">marketplace</span>
-            </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/search" className="text-sm font-medium text-emerald-600">Find VAs</Link>
-              <Link to="/va/signup" className="text-sm font-medium text-gray-600 hover:text-gray-900">For VAs</Link>
-              <Link to="/client/signup" className="rounded-full bg-emerald-500 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-600 transition-colors">Get Started</Link>
-            </nav>
+  useEffect(() => {
+    const fetchSkills = async () => {
+      const { data } = await supabase.from('skills').select('*').order('name')
+      if (data) setSkills(data)
+    }
+    fetchSkills()
+  }, [])
+
+  useEffect(() => {
+    const fetchVAs = async () => {
+      setLoading(true)
+      
+      let query = supabase
+        .from('vas')
+        .select(`
+          *,
+          profile:profiles(full_name, avatar_url),
+          va_skills(skill:skills(*))
+        `)
+        .eq('is_active', true)
+
+      if (minRate) query = query.gte('hourly_rate', parseFloat(minRate))
+      if (maxRate) query = query.lte('hourly_rate', parseFloat(maxRate))
+      if (selectedAvailability.length > 0) query = query.in('availability', selectedAvailability)
+      if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
+
+      const { data } = await query.order('created_at', { ascending: false })
+
+      if (data) {
+        let filtered = data as VAWithProfile[]
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase()
+          filtered = filtered.filter((va) => {
+            const name = va.profile?.full_name?.toLowerCase() || ''
+            const headline = va.headline?.toLowerCase() || ''
+            const bio = va.bio?.toLowerCase() || ''
+            const skillNames = va.va_skills?.map(vs => vs.skill?.name?.toLowerCase() || '').join(' ') || ''
+            return name.includes(q) || headline.includes(q) || bio.includes(q) || skillNames.includes(q)
+          })
+        }
+        setVas(filtered)
+      }
+      setLoading(false)
+    }
+
+    const debounce = setTimeout(fetchVAs, 300)
+    return () => clearTimeout(debounce)
+  }, [searchQuery, minRate, maxRate, selectedAvailability, selectedTiers])
+
+  const toggleFilter = (value: string, current: string[], setter: (v: string[]) => void) => {
+    if (current.includes(value)) {
+      setter(current.filter(v => v !== value))
+    } else {
+      setter([...current, value])
+    }
+  }
+
+  const hasFilters = selectedAvailability.length > 0 || selectedTiers.length > 0 || minRate || maxRate
+  const filterCount = selectedAvailability.length + selectedTiers.length + (minRate ? 1 : 0) + (maxRate ? 1 : 0)
+  const popularSkills = skills.slice(0, 5)
+
+  const clearFilters = () => {
+    setSelectedAvailability([])
+    setSelectedTiers([])
+    setMinRate('')
+    setMaxRate('')
+  }
+
+  const FilterContent = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-semibold text-white mb-3 text-sm">Hourly Rate</h3>
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+            <input
+              type="number"
+              placeholder="Min"
+              value={minRate}
+              onChange={(e) => setMinRate(e.target.value)}
+              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
           </div>
-        </div>
-      </header>
-
-      {/* Search Header */}
-      <div className="border-b border-gray-100 bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-4">
-            <ArrowLeft className="h-4 w-4" />
-            Back to home
-          </Link>
-          <h1 className="text-2xl font-bold mb-4">Find Your Perfect VA</h1>
-          <div className="max-w-2xl">
-            <div className="relative">
-              <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="What do you need help with?"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2 mt-4">
-              {popularSkills.map((skill) => (
-                <button
-                  key={skill}
-                  onClick={() => setSearchQuery(skill)}
-                  className="px-3 py-1.5 text-sm rounded-full border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 transition-colors bg-white"
-                >
-                  {skill}
-                </button>
-              ))}
-            </div>
+          <span className="text-gray-500">-</span>
+          <div className="relative flex-1">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+            <input
+              type="number"
+              placeholder="Max"
+              value={maxRate}
+              onChange={(e) => setMaxRate(e.target.value)}
+              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <aside className={`lg:w-64 flex-shrink-0 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="sticky top-24 space-y-6 p-4 bg-gray-50 rounded-xl">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Hourly Rate</h3>
-                <div className="flex items-center gap-2">
-                  <input type="number" placeholder="Min" className="w-20 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm" />
-                  <span className="text-gray-400">-</span>
-                  <input type="number" placeholder="Max" className="w-20 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm" />
-                </div>
-              </div>
+      <div>
+        <h3 className="font-semibold text-white mb-3 text-sm">Availability</h3>
+        <div className="space-y-1">
+          {['full-time', 'part-time', 'contract'].map((avail) => (
+            <label key={avail} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 cursor-pointer hover:bg-gray-800 active:bg-gray-700 transition-colors">
+              <input
+                type="checkbox"
+                checked={selectedAvailability.includes(avail)}
+                onChange={() => toggleFilter(avail, selectedAvailability, setSelectedAvailability)}
+                className="w-5 h-5 rounded border-gray-600 bg-gray-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
+              />
+              {avail.charAt(0).toUpperCase() + avail.slice(1).replace('-', ' ')}
+            </label>
+          ))}
+        </div>
+      </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Availability</h3>
-                <div className="space-y-2">
-                  {['Full-time', 'Part-time', 'Limited'].map((avail) => (
-                    <label key={avail} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                      <input type="checkbox" className="rounded border-gray-300 text-emerald-500 focus:ring-emerald-500" />
-                      {avail}
-                    </label>
-                  ))}
-                </div>
-              </div>
+      <div>
+        <h3 className="font-semibold text-white mb-3 text-sm">Verification Tier</h3>
+        <div className="space-y-1">
+          {[
+            { value: 'verified', label: '✓ Verified', color: 'text-emerald-400' },
+            { value: 'pro', label: '✓✓ Pro', color: 'text-blue-400' },
+            { value: 'elite', label: '✓✓✓ Elite', color: 'text-purple-400' },
+          ].map((tier) => (
+            <label key={tier.value} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm cursor-pointer hover:bg-gray-800 active:bg-gray-700 transition-colors">
+              <input
+                type="checkbox"
+                checked={selectedTiers.includes(tier.value)}
+                onChange={() => toggleFilter(tier.value, selectedTiers, setSelectedTiers)}
+                className="w-5 h-5 rounded border-gray-600 bg-gray-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
+              />
+              <span className={tier.color}>{tier.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Experience</h3>
-                <div className="space-y-2">
-                  {['1-2 years', '3-5 years', '5-10 years', '10+ years'].map((exp) => (
-                    <label key={exp} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                      <input type="checkbox" className="rounded border-gray-300 text-emerald-500 focus:ring-emerald-500" />
-                      {exp}
-                    </label>
-                  ))}
-                </div>
-              </div>
+  return (
+    <Layout>
+      {/* Search Header */}
+      <div className="sticky top-14 sm:top-16 z-30 border-b border-gray-800 bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-gray-950/80">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
+          <div className="flex gap-2 sm:gap-3">
+            <div className="relative flex-1">
+              <SearchIcon className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search skills, title..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm sm:text-base placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+              />
+            </div>
+            <button
+              onClick={() => setShowFilters(true)}
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
+                hasFilters 
+                  ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10' 
+                  : 'border-gray-700 text-gray-300 hover:bg-gray-800'
+              }`}
+            >
+              <SlidersHorizontal className="h-5 w-5" />
+              <span className="hidden sm:inline">Filters</span>
+              {filterCount > 0 && (
+                <span className="flex items-center justify-center h-5 w-5 rounded-full bg-emerald-500 text-white text-xs">
+                  {filterCount}
+                </span>
+              )}
+            </button>
+          </div>
+          
+          {/* Quick skill tags */}
+          {popularSkills.length > 0 && (
+            <div className="flex gap-2 mt-3 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
+              {popularSkills.map((skill) => (
+                <button
+                  key={skill.id}
+                  onClick={() => setSearchQuery(skill.name)}
+                  className={`px-3 py-1.5 text-xs sm:text-sm rounded-full border whitespace-nowrap transition-colors ${
+                    searchQuery === skill.name
+                      ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10'
+                      : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                  }`}
+                >
+                  {skill.name}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Verification Tier</h3>
-                <div className="space-y-2">
-                  {['Verified', 'Verified Pro', 'Verified Elite'].map((tier) => (
-                    <label key={tier} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                      <input type="checkbox" className="rounded border-gray-300 text-emerald-500 focus:ring-emerald-500" />
-                      {tier}
-                    </label>
-                  ))}
-                </div>
+      {/* Desktop: Sidebar + Results */}
+      <div className="container mx-auto px-4 py-4 sm:py-6">
+        <div className="flex gap-6 lg:gap-8">
+          {/* Desktop Filters Sidebar */}
+          <aside className="hidden lg:block w-64 flex-shrink-0">
+            <div className="sticky top-36 p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-semibold">Filters</h2>
+                {hasFilters && (
+                  <button onClick={clearFilters} className="text-xs text-emerald-400 hover:text-emerald-300">
+                    Clear all
+                  </button>
+                )}
               </div>
+              <FilterContent />
             </div>
           </aside>
 
           {/* Results */}
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <span className="text-gray-900 font-medium">{mockVAs.length} verified VAs found</span>
-              </div>
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm hover:bg-gray-50"
-              >
-                <Filter className="h-4 w-4" />
-                Filters
-              </button>
+          <div className="flex-1 min-w-0">
+            {/* Results count */}
+            <div className="mb-4">
+              {loading ? (
+                <span className="text-gray-400 text-sm">Searching...</span>
+              ) : (
+                <span className="text-gray-300 text-sm">{vas.length} VA{vas.length !== 1 ? 's' : ''} found</span>
+              )}
             </div>
 
-            <div className="space-y-4">
-              {mockVAs.map((va) => (
-                <div key={va.id} className="p-6 rounded-2xl border border-gray-100 bg-white hover:border-emerald-200 hover:shadow-sm transition-all">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <img
-                      src={va.photo}
-                      alt={va.name}
-                      className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <Link to={`/va/${va.id}`} className="text-lg font-semibold text-gray-900 hover:text-emerald-600">
-                          {va.name}
-                        </Link>
-                        <VerificationBadge tier={va.verificationTier} />
+            {/* Active filters chips (mobile) */}
+            {hasFilters && (
+              <div className="flex flex-wrap gap-2 mb-4 lg:hidden">
+                {selectedAvailability.map(a => (
+                  <button
+                    key={a}
+                    onClick={() => toggleFilter(a, selectedAvailability, setSelectedAvailability)}
+                    className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-gray-800 text-gray-300 border border-gray-700"
+                  >
+                    {a.replace('-', ' ')}
+                    <X className="h-3 w-3" />
+                  </button>
+                ))}
+                {selectedTiers.map(t => (
+                  <button
+                    key={t}
+                    onClick={() => toggleFilter(t, selectedTiers, setSelectedTiers)}
+                    className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-gray-800 text-gray-300 border border-gray-700"
+                  >
+                    {t}
+                    <X className="h-3 w-3" />
+                  </button>
+                ))}
+                {(minRate || maxRate) && (
+                  <button
+                    onClick={() => { setMinRate(''); setMaxRate('') }}
+                    className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-gray-800 text-gray-300 border border-gray-700"
+                  >
+                    ${minRate || '0'}-${maxRate || '∞'}
+                    <X className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+              </div>
+            ) : vas.length === 0 ? (
+              <div className="text-center py-16 sm:py-20">
+                <div className="text-4xl mb-4">🔍</div>
+                <div className="text-gray-400 mb-4">No VAs found matching your criteria</div>
+                <button
+                  onClick={() => { setSearchQuery(''); clearFilters() }}
+                  className="text-emerald-400 hover:text-emerald-300 text-sm font-medium"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3 sm:space-y-4">
+                {vas.map((va) => (
+                  <Link
+                    key={va.id}
+                    to={`/va/${va.id}`}
+                    className="block p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-gray-800 bg-gray-800/30 hover:border-emerald-500/50 active:bg-gray-800/60 transition-all"
+                  >
+                    <div className="flex gap-3 sm:gap-4">
+                      {/* Avatar */}
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-lg sm:text-xl font-bold text-white flex-shrink-0">
+                        {va.profile?.full_name?.[0]?.toUpperCase() || 'V'}
                       </div>
-                      <p className="text-gray-600 mb-2">{va.title}</p>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-3">
-                        <span className="flex items-center gap-1">
-                          <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
-                          {va.rating} ({va.reviewCount})
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4" />
-                          {va.location}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <DollarSign className="h-4 w-4" />
-                          ${va.rateMin}-{va.rateMax}/hr
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          {va.availability}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-500 mb-3 line-clamp-2">{va.bio}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {va.skills.slice(0, 4).map((skill) => (
-                          <span key={skill} className="px-2.5 py-1 text-xs rounded-full bg-gray-100 text-gray-600">
-                            {skill}
+                      
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
+                          <span className="text-base sm:text-lg font-semibold text-white truncate">
+                            {va.profile?.full_name || 'VA'}
                           </span>
-                        ))}
+                          <VerificationBadge status={va.verification_status} />
+                        </div>
+                        
+                        {va.headline && (
+                          <p className="text-gray-400 text-sm mb-2 line-clamp-1">{va.headline}</p>
+                        )}
+                        
+                        {/* Meta row */}
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-gray-500 mb-2">
+                          {va.hourly_rate && (
+                            <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                              <DollarSign className="h-3.5 w-3.5" />
+                              ${va.hourly_rate}/hr
+                            </span>
+                          )}
+                          {va.location && (
+                            <span className="flex items-center gap-1">
+                              <MapPin className="h-3.5 w-3.5" />
+                              {va.location}
+                            </span>
+                          )}
+                          {va.availability && (
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3.5 w-3.5" />
+                              {va.availability.replace('-', ' ')}
+                            </span>
+                          )}
+                        </div>
+                        
+                        {/* Skills */}
+                        {va.va_skills && va.va_skills.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {va.va_skills.slice(0, 3).map((vs) => (
+                              <span key={vs.skill?.id} className="px-2 py-0.5 text-xs rounded-full bg-gray-700 text-gray-300">
+                                {vs.skill?.name}
+                              </span>
+                            ))}
+                            {va.va_skills.length > 3 && (
+                              <span className="px-2 py-0.5 text-xs rounded-full bg-gray-700 text-gray-500">
+                                +{va.va_skills.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Desktop: Action buttons */}
+                      <div className="hidden sm:flex flex-col gap-2 items-end justify-center">
+                        <span className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-700 text-gray-300 group-hover:border-emerald-500">
+                          View Profile
+                        </span>
                       </div>
                     </div>
-                    <div className="flex sm:flex-col gap-2 sm:items-end">
-                      <Link
-                        to={`/va/${va.id}`}
-                        className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-full border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 transition-colors text-center"
-                      >
-                        View Profile
-                      </Link>
-                      <button className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2">
-                        <MessageCircle className="h-4 w-4" />
-                        Message
-                      </button>
+                    
+                    {/* Mobile: chevron hint */}
+                    <div className="sm:hidden flex justify-end mt-2 -mb-1">
+                      <ChevronDown className="h-4 w-4 text-gray-600 rotate-[-90deg]" />
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Mobile Filter Bottom Sheet */}
+      {showFilters && (
+        <div className="lg:hidden fixed inset-0 z-50">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowFilters(false)}
+          />
+          
+          {/* Sheet */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl max-h-[85vh] overflow-hidden animate-in slide-in-from-bottom duration-300">
+            {/* Handle */}
+            <div className="flex justify-center py-3">
+              <div className="w-10 h-1 rounded-full bg-gray-700" />
+            </div>
+            
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 pb-3 border-b border-gray-800">
+              <h2 className="text-lg font-semibold">Filters</h2>
+              <div className="flex items-center gap-4">
+                {hasFilters && (
+                  <button onClick={clearFilters} className="text-sm text-emerald-400">
+                    Clear all
+                  </button>
+                )}
+                <button 
+                  onClick={() => setShowFilters(false)}
+                  className="p-1 -mr-1"
+                >
+                  <X className="h-6 w-6 text-gray-400" />
+                </button>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="px-4 py-4 overflow-y-auto max-h-[60vh]">
+              <FilterContent />
+            </div>
+            
+            {/* Footer */}
+            <div className="p-4 border-t border-gray-800 bg-gray-900">
+              <button
+                onClick={() => setShowFilters(false)}
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold active:scale-[0.98] transition-transform"
+              >
+                Show {vas.length} result{vas.length !== 1 ? 's' : ''}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </Layout>
   )
 }

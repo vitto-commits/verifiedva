@@ -1,56 +1,102 @@
 import { Link } from 'react-router-dom'
-import { Search, Shield, CheckCircle, Star, ArrowRight, Users, Clock, Award, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { Search, Shield, CheckCircle, Star, ArrowRight, Users, ChevronDown, Zap, Globe, DollarSign } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import Layout from '../components/Layout'
+import { supabase } from '../lib/supabase'
+import type { VA } from '../types/database'
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [featuredVAs, setFeaturedVAs] = useState<(VA & { profile?: { full_name: string; avatar_url: string | null } })[]>([])
+  const [stats, setStats] = useState({ vaCount: 0, skillCount: 0 })
+
+  useEffect(() => {
+    const fetchFeaturedVAs = async () => {
+      const { data } = await supabase
+        .from('vas')
+        .select(`*, profile:profiles(full_name, avatar_url)`)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(3)
+      
+      if (data) setFeaturedVAs(data as any)
+    }
+
+    const fetchStats = async () => {
+      const [{ count: vaCount }, { count: skillCount }] = await Promise.all([
+        supabase.from('vas').select('*', { count: 'exact', head: true }),
+        supabase.from('skills').select('*', { count: 'exact', head: true }),
+      ])
+      setStats({ vaCount: vaCount || 0, skillCount: skillCount || 0 })
+    }
+
+    fetchFeaturedVAs()
+    fetchStats()
+  }, [])
 
   const faqs = [
-    { q: "How do you verify VAs?", a: "Every VA goes through identity verification, education confirmation, and reference checks. Higher tiers include skill tests, background checks, and video interviews." },
-    { q: "What's the difference between tiers?", a: "Verified = identity + education + 1 reference. Pro = skill tests + 2 references. Elite = background check + video interview." },
+    { q: "How do you verify VAs?", a: "Every VA goes through identity verification, skill assessment, and reference checks. Higher tiers include background checks and video interviews." },
+    { q: "What's the difference between tiers?", a: "Pending = just signed up. Verified = identity confirmed. Pro = skill tests + 2 references. Elite = background check + video interview." },
     { q: "How much does it cost?", a: "Browsing and connecting with VAs is free. VAs set their own rates, typically $5-25/hr depending on skills and experience." },
-    { q: "Can I hire directly?", a: "Yes. Once you find a VA you like, you can hire them directly. We don't take ongoing fees from your working relationship." },
+    { q: "Can I hire directly?", a: "Yes! Once you find a VA you like, you can hire them directly. We don't take ongoing fees from your working relationship." },
   ]
 
-  return (
-    <div className="min-h-screen bg-white text-gray-900">
-      {/* Header */}
-      <header className="border-b border-gray-100 bg-white/95 backdrop-blur sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-white font-bold text-sm">VA</div>
-              <span className="text-xl font-bold tracking-tight">marketplace</span>
-            </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/search" className="text-sm font-medium text-gray-600 hover:text-gray-900">Find VAs</Link>
-              <Link to="/va/signup" className="text-sm font-medium text-gray-600 hover:text-gray-900">For VAs</Link>
-              <Link to="/client/signup" className="rounded-full bg-emerald-500 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-600 transition-colors">Get Started</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+  const getVerificationBadge = (status: string) => {
+    const badges: Record<string, { bg: string; text: string; label: string }> = {
+      pending: { bg: 'bg-gray-500/20', text: 'text-gray-400', label: 'Pending' },
+      verified: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', label: '✓ Verified' },
+      pro: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: '✓✓ Pro' },
+      elite: { bg: 'bg-purple-500/20', text: 'text-purple-400', label: '✓✓✓ Elite' },
+    }
+    return badges[status] || badges.pending
+  }
 
+  return (
+    <Layout>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-sm font-medium mb-6 border border-emerald-100">
-              <Shield className="h-4 w-4" />
-              Pre-Verified Virtual Assistants
+      <section className="relative overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-cyan-500/10" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] md:w-[800px] h-[500px] md:h-[800px] bg-emerald-500/5 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 lg:py-32 relative">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium mb-6 sm:mb-8">
+              <Shield className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              Pre-Verified Filipino VAs
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-              Hire VAs You Can Actually Trust
+            
+            {/* Headline */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
+              <span className="bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
+                Hire VAs You Can
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                Actually Trust
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Skip the guesswork. Every VA is verified before they appear in search. Find skilled Filipino talent with confirmed identity, education, and references.
+            
+            {/* Subheadline */}
+            <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-4">
+              Skip the guesswork. Every VA is verified before they appear in search. 
+              Find skilled talent with confirmed identity and references.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/search" className="inline-flex items-center justify-center gap-2 rounded-full bg-gray-900 px-6 py-3.5 text-base font-medium text-white hover:bg-gray-800 transition-colors">
+            
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
+              <Link 
+                to="/search" 
+                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25"
+              >
                 <Search className="h-5 w-5" />
                 Find Your VA
               </Link>
-              <Link to="/va/signup" className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-gray-200 px-6 py-3.5 text-base font-medium hover:border-gray-300 hover:bg-gray-50 transition-colors">
+              <Link 
+                to="/va/signup" 
+                className="flex items-center justify-center gap-2 rounded-xl border border-gray-700 px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:bg-gray-800/50 active:bg-gray-800 transition-all"
+              >
                 I'm a VA
                 <ArrowRight className="h-5 w-5" />
               </Link>
@@ -59,133 +105,209 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust Bar */}
-      <section className="border-y border-gray-100 bg-gray-50/50">
-        <div className="container mx-auto px-4 py-6">
-          <p className="text-center text-sm text-gray-500 mb-4">Trusted by growing businesses</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-60">
-            {['Agency A', 'StartupCo', 'GrowthHQ', 'ScaleFast', 'BuildRight'].map((name) => (
-              <span key={name} className="text-lg font-semibold text-gray-400">{name}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-sm font-semibold text-emerald-600 uppercase tracking-wide mb-2">The Numbers</h2>
-            <p className="text-3xl md:text-4xl font-bold">Results That Speak</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+      {/* Stats Bar */}
+      <section className="border-y border-gray-800 bg-gray-900/50">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {[
-              { icon: Users, value: '500+', label: 'Verified VAs', color: 'text-emerald-500' },
-              { icon: Star, value: '4.9', label: 'Avg Rating', color: 'text-amber-500' },
-              { icon: Clock, value: '50K+', label: 'Hours Worked', color: 'text-blue-500' },
-              { icon: Award, value: '98%', label: 'Success Rate', color: 'text-purple-500' },
+              { icon: Users, value: stats.vaCount > 0 ? `${stats.vaCount}+` : '500+', label: 'Verified VAs', color: 'from-emerald-400 to-emerald-500' },
+              { icon: Star, value: '4.9', label: 'Avg Rating', color: 'from-amber-400 to-orange-500' },
+              { icon: DollarSign, value: '60%', label: 'Cost Savings', color: 'from-green-400 to-emerald-500' },
+              { icon: Zap, value: '24h', label: 'Avg Response', color: 'from-blue-400 to-cyan-500' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <stat.icon className={`h-8 w-8 mx-auto mb-3 ${stat.color}`} />
-                <div className="text-3xl md:text-4xl font-bold">{stat.value}</div>
-                <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
+                <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br ${stat.color} bg-opacity-20 mb-2 sm:mb-3`}>
+                  <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                </div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-16 md:py-20 bg-gray-50">
+      {/* Why VA Marketplace */}
+      <section className="py-12 sm:py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-sm font-semibold text-emerald-600 uppercase tracking-wide mb-2">How It Works</h2>
-            <p className="text-3xl md:text-4xl font-bold">Simple Process, Trusted Results</p>
+          <div className="text-center mb-10 sm:mb-16">
+            <p className="text-emerald-400 font-semibold text-sm sm:text-base mb-2 sm:mb-3">WHY VA MARKETPLACE</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
+              Stop Gambling on Talent
+            </h2>
           </div>
-          <div className="max-w-3xl mx-auto space-y-6">
+          
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto">
             {[
-              { step: '01', title: 'Search & Filter', desc: 'Browse verified VAs by skills, experience, rate, and verification tier.' },
-              { step: '02', title: 'Review Profiles', desc: 'See verified credentials, work samples, ratings, and what exactly has been verified.' },
-              { step: '03', title: 'Connect & Hire', desc: 'Message VAs directly and hire on your terms. No middleman fees.' },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-6 items-start p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">
-                  {item.step}
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-1">{item.title}</h3>
-                  <p className="text-gray-600">{item.desc}</p>
+              {
+                icon: Shield,
+                title: 'Pre-Verified',
+                desc: 'Every VA passes identity, education, and reference checks before listing.',
+                gradient: 'from-emerald-500 to-teal-500',
+              },
+              {
+                icon: Globe,
+                title: 'Filipino Talent',
+                desc: 'Access skilled professionals with excellent English and strong work ethic.',
+                gradient: 'from-blue-500 to-cyan-500',
+              },
+              {
+                icon: DollarSign,
+                title: 'Save 60-70%',
+                desc: 'Get quality work at a fraction of US rates. No middleman fees.',
+                gradient: 'from-purple-500 to-pink-500',
+              },
+            ].map((feature) => (
+              <div key={feature.title} className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl sm:rounded-2xl" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 rounded-xl sm:rounded-2xl transition-opacity`} />
+                <div className="relative p-5 sm:p-6 md:p-8">
+                  <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br ${feature.gradient} mb-3 sm:mb-4`}>
+                    <feature.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2">{feature.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-400">{feature.desc}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Featured VAs */}
+      {featuredVAs.length > 0 && (
+        <section className="py-12 sm:py-16 md:py-24 bg-gray-900/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-10 sm:mb-16">
+              <p className="text-emerald-400 font-semibold text-sm sm:text-base mb-2 sm:mb-3">FEATURED TALENT</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Meet Our VAs</h2>
+            </div>
+            
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
+              {featuredVAs.map((va) => {
+                const badge = getVerificationBadge(va.verification_status)
+                return (
+                  <Link
+                    key={va.id}
+                    to={`/va/${va.id}`}
+                    className="group bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-emerald-500/50 active:bg-gray-800/80 transition-all"
+                  >
+                    <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-lg sm:text-xl font-bold flex-shrink-0">
+                        {va.profile?.full_name?.[0] || 'V'}
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-base sm:text-lg group-hover:text-emerald-400 transition-colors truncate">
+                          {va.profile?.full_name || 'VA'}
+                        </h3>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${badge.bg} ${badge.text}`}>
+                          {badge.label}
+                        </span>
+                      </div>
+                    </div>
+                    {va.headline && (
+                      <p className="text-gray-400 text-sm mb-3 line-clamp-2">{va.headline}</p>
+                    )}
+                    <div className="flex items-center justify-between text-sm">
+                      {va.hourly_rate && (
+                        <span className="text-emerald-400 font-semibold">${va.hourly_rate}/hr</span>
+                      )}
+                      {va.years_experience > 0 && (
+                        <span className="text-gray-500">{va.years_experience} yrs exp</span>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+            
+            <div className="text-center mt-8 sm:mt-10">
+              <Link
+                to="/search"
+                className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 active:text-emerald-500 font-medium py-2"
+              >
+                View all VAs
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Verification Tiers */}
-      <section className="py-16 md:py-20">
+      <section className="py-12 sm:py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-sm font-semibold text-emerald-600 uppercase tracking-wide mb-2">Verification Tiers</h2>
-            <p className="text-3xl md:text-4xl font-bold">Choose Your Confidence Level</p>
+          <div className="text-center mb-10 sm:mb-16">
+            <p className="text-emerald-400 font-semibold text-sm sm:text-base mb-2 sm:mb-3">VERIFICATION TIERS</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Choose Your Confidence Level</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div className="p-6 rounded-2xl border-2 border-green-200 bg-green-50/50">
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold mb-4">
-                ✓ Verified
+          
+          <div className="grid sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
+            {[
+              {
+                tier: 'Verified',
+                badge: '✓',
+                color: 'emerald',
+                desc: 'Foundation of trust',
+                checks: ['Identity verified', 'Education confirmed', '1+ reference'],
+              },
+              {
+                tier: 'Pro',
+                badge: '✓✓',
+                color: 'blue',
+                desc: 'Skills validated',
+                checks: ['Everything in Verified', 'Skill tests passed', '2+ references'],
+              },
+              {
+                tier: 'Elite',
+                badge: '✓✓✓',
+                color: 'purple',
+                desc: 'Maximum assurance',
+                checks: ['Everything in Pro', 'Background check', 'Video interview'],
+              },
+            ].map((tier) => (
+              <div 
+                key={tier.tier}
+                className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 border-${tier.color}-500/30 bg-${tier.color}-500/5`}
+              >
+                <div className={`inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full bg-${tier.color}-500/20 text-${tier.color}-400 text-xs sm:text-sm font-semibold mb-3 sm:mb-4`}>
+                  {tier.badge} {tier.tier}
+                </div>
+                <p className="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4">{tier.desc}</p>
+                <ul className="space-y-2 text-xs sm:text-sm">
+                  {tier.checks.map((check) => (
+                    <li key={check} className="flex items-start gap-2">
+                      <CheckCircle className={`h-4 w-4 text-${tier.color}-500 flex-shrink-0 mt-0.5`} />
+                      <span className="text-gray-300">{check}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Foundation of trust</p>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Identity verified</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Education confirmed</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> 1+ reference checked</li>
-              </ul>
-            </div>
-            <div className="p-6 rounded-2xl border-2 border-blue-200 bg-blue-50/50">
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-4">
-                ✓✓ Pro
-              </div>
-              <p className="text-gray-600 text-sm mb-4">Skills validated</p>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-blue-500" /> Everything in Verified</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-blue-500" /> Skill tests passed</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-blue-500" /> 2+ references checked</li>
-              </ul>
-            </div>
-            <div className="p-6 rounded-2xl border-2 border-purple-200 bg-purple-50/50">
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-semibold mb-4">
-                ✓✓✓ Elite
-              </div>
-              <p className="text-gray-600 text-sm mb-4">Maximum assurance</p>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-purple-500" /> Everything in Pro</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-purple-500" /> Background check</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-purple-500" /> Video interview</li>
-              </ul>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-16 md:py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-24 bg-gray-900/50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-sm font-semibold text-emerald-600 uppercase tracking-wide mb-2">FAQ</h2>
-            <p className="text-3xl md:text-4xl font-bold">Common Questions</p>
+          <div className="text-center mb-10 sm:mb-16">
+            <p className="text-emerald-400 font-semibold text-sm sm:text-base mb-2 sm:mb-3">FAQ</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Common Questions</h2>
           </div>
-          <div className="max-w-2xl mx-auto space-y-3">
+          
+          <div className="max-w-2xl mx-auto space-y-2 sm:space-y-3">
             {faqs.map((faq, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+              <div key={i} className="bg-gray-800/50 rounded-xl border border-gray-700 overflow-hidden">
                 <button 
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full px-6 py-4 text-left flex items-center justify-between font-medium hover:bg-gray-50 transition-colors"
+                  className="w-full px-4 sm:px-6 py-4 text-left flex items-center justify-between gap-4 font-medium text-sm sm:text-base hover:bg-gray-800 active:bg-gray-700 transition-colors"
                 >
-                  {faq.q}
-                  <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+                  <span>{faq.q}</span>
+                  <ChevronDown className={`h-5 w-5 text-gray-400 flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
                 </button>
                 {openFaq === i && (
-                  <div className="px-6 pb-4 text-gray-600">
+                  <div className="px-4 sm:px-6 pb-4 text-sm sm:text-base text-gray-400">
                     {faq.a}
                   </div>
                 )}
@@ -196,31 +318,23 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-emerald-50">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to find your VA?</h2>
-          <p className="text-gray-600 mb-8 max-w-xl mx-auto">Join businesses who've found reliable, verified virtual assistants.</p>
-          <Link to="/search" className="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-8 py-4 text-lg font-medium text-white hover:bg-emerald-600 transition-colors">
-            <Search className="h-5 w-5" />
-            Start Searching
-          </Link>
+      <section className="py-12 sm:py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Ready to find your VA?</h2>
+            <p className="text-sm sm:text-base text-gray-400 mb-6 sm:mb-8 max-w-xl mx-auto">
+              Join businesses saving 60-70% on talent costs with verified Filipino virtual assistants.
+            </p>
+            <Link 
+              to="/search" 
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25"
+            >
+              <Search className="h-5 w-5" />
+              Start Searching
+            </Link>
+          </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-100 py-8 bg-white">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded bg-emerald-500 text-white text-xs font-bold flex items-center justify-center">VA</div>
-            <span className="text-sm text-gray-500">© 2026 VA Marketplace</span>
-          </div>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <a href="#" className="hover:text-gray-900">Privacy</a>
-            <a href="#" className="hover:text-gray-900">Terms</a>
-            <a href="#" className="hover:text-gray-900">Contact</a>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </Layout>
   )
 }

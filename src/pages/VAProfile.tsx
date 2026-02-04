@@ -1,302 +1,318 @@
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Clock, DollarSign, Star, MessageCircle, Shield, CheckCircle, Briefcase, GraduationCap, Globe } from 'lucide-react'
+import { MapPin, MessageCircle, Globe, Briefcase, Loader2, ArrowLeft, Clock, Calendar, ChevronRight } from 'lucide-react'
+import Layout from '../components/Layout'
+import { supabase } from '../lib/supabase'
+import type { VA, Skill, Profile } from '../types/database'
 
-export default function VAProfile() {
-  const { id: _id } = useParams()
+interface VAWithDetails extends VA {
+  profile: Profile
+  va_skills: { skill: Skill; proficiency_level: number }[]
+}
 
-  // Mock data - in real app, fetch from API
-  const va = {
-    id: '1',
-    name: 'Maria Santos',
-    title: 'Executive Virtual Assistant',
-    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop',
-    location: 'Manila, Philippines',
-    timezone: 'UTC+8',
-    rateMin: 10,
-    rateMax: 15,
-    availability: 'Full-time (40+ hrs/week)',
-    experience: '7 years',
-    verificationTier: 'pro' as const,
-    rating: 4.9,
-    reviewCount: 23,
-    responseTime: 'Under 2 hours',
-    skills: [
-      { name: 'Email Management', level: 5 },
-      { name: 'Calendar Management', level: 5 },
-      { name: 'Travel Planning', level: 4 },
-      { name: 'Research', level: 4 },
-      { name: 'Data Entry', level: 5 },
-      { name: 'Document Preparation', level: 4 },
-    ],
-    tools: ['Google Workspace', 'Slack', 'Notion', 'Calendly', 'Asana', 'Zoom', 'TripIt', 'Expensify'],
-    bio: `I'm a detail-oriented Executive Assistant with 7 years of experience supporting C-suite executives at US-based companies. I specialize in calendar management, travel coordination, and inbox organization.
-
-I pride myself on anticipating needs before they arise and maintaining clear, proactive communication. I've helped executives reclaim 15+ hours per week by streamlining their admin workflows.
-
-Looking for a long-term partnership where I can grow with your business.`,
-    verification: {
-      identity: true,
-      education: true,
-      references: 2,
-      skillTests: true,
-    },
-    workHistory: [
-      { company: 'US Tech Startup', role: 'Executive Assistant', duration: '3 years', verified: true },
-      { company: 'Marketing Agency', role: 'Admin Assistant', duration: '2 years', verified: true },
-    ],
-    education: {
-      degree: "Bachelor of Arts, Communication",
-      school: "University of the Philippines Manila",
-      year: 2018,
-    },
-    reviews: [
-      {
-        id: '1',
-        author: 'John D.',
-        title: 'CEO at TechStartup Inc.',
-        rating: 5,
-        date: 'Dec 2025',
-        text: 'Maria is exceptional. She has been managing my calendar and inbox for 6 months and I can\'t imagine going back. She anticipates what I need before I even ask. Highly recommend.'
-      },
-      {
-        id: '2',
-        author: 'Sarah M.',
-        title: 'Founder at MarketingCo',
-        rating: 5,
-        date: 'Oct 2025',
-        text: 'Professional and reliable. Maria helped me organize my entire business operations. Communication is always clear and on time.'
-      },
-    ]
+const VerificationBadge = ({ status, compact = false }: { status: string; compact?: boolean }) => {
+  const config: Record<string, { label: string; bg: string; text: string; desc: string }> = {
+    pending: { label: 'Pending', bg: 'bg-gray-500/20', text: 'text-gray-400', desc: 'Identity not yet verified' },
+    verified: { label: '✓ Verified', bg: 'bg-emerald-500/20', text: 'text-emerald-400', desc: 'Identity & education confirmed' },
+    pro: { label: '✓✓ Pro', bg: 'bg-blue-500/20', text: 'text-blue-400', desc: 'Skills tested & 2+ references' },
+    elite: { label: '✓✓✓ Elite', bg: 'bg-purple-500/20', text: 'text-purple-400', desc: 'Background check & interview' },
   }
+  const c = config[status] || config.pending
 
-  const VerificationBadge = ({ tier }: { tier: 'verified' | 'pro' | 'elite' }) => {
-    const config = {
-      verified: { label: '✓ Verified', class: 'bg-verified-basic/10 text-verified-basic border-verified-basic/30' },
-      pro: { label: '✓✓ Verified Pro', class: 'bg-verified-pro/10 text-verified-pro border-verified-pro/30' },
-      elite: { label: '✓✓✓ Verified Elite', class: 'bg-verified-elite/10 text-verified-elite border-verified-elite/30' },
-    }
+  if (compact) {
     return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${config[tier].class}`}>
-        {config[tier].label}
+      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${c.bg} ${c.text}`}>
+        {c.label}
       </span>
     )
   }
 
-  const SkillLevel = ({ level }: { level: number }) => (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div
-          key={i}
-          className={`w-2 h-2 rounded-full ${i <= level ? 'bg-primary' : 'bg-muted'}`}
-        />
-      ))}
+  return (
+    <div className={`inline-flex flex-col items-start px-3 py-2 rounded-lg ${c.bg}`}>
+      <span className={`font-semibold text-sm ${c.text}`}>{c.label}</span>
+      <span className="text-xs text-gray-500">{c.desc}</span>
     </div>
   )
+}
+
+export default function VAProfile() {
+  const { id } = useParams<{ id: string }>()
+  const [va, setVa] = useState<VAWithDetails | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const fetchVA = async () => {
+      if (!id) return
+
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('vas')
+        .select(`
+          *,
+          profile:profiles(*),
+          va_skills(
+            proficiency_level,
+            skill:skills(*)
+          )
+        `)
+        .eq('id', id)
+        .single()
+
+      if (error) {
+        setError('VA not found')
+      } else {
+        setVa(data as VAWithDetails)
+      }
+      setLoading(false)
+    }
+
+    fetchVA()
+  }, [id])
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+        </div>
+      </Layout>
+    )
+  }
+
+  if (error || !va) {
+    return (
+      <Layout>
+        <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
+          <div className="text-4xl mb-4">😕</div>
+          <p className="text-gray-400 mb-4 text-center">{error || 'VA not found'}</p>
+          <Link 
+            to="/search" 
+            className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to search
+          </Link>
+        </div>
+      </Layout>
+    )
+  }
+
+  const skillsByCategory = va.va_skills?.reduce((acc, vs) => {
+    const cat = vs.skill?.category || 'Other'
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(vs)
+    return acc
+  }, {} as Record<string, typeof va.va_skills>)
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Back link */}
-          <Link to="/search" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary mb-6">
-            ← Back to Search
+    <Layout>
+      {/* Mobile-friendly padding bottom for sticky CTA */}
+      <div className="pb-24 lg:pb-0">
+        <div className="container mx-auto px-4 py-4 sm:py-6">
+          {/* Back button */}
+          <Link 
+            to="/search" 
+            className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4 sm:mb-6 transition-colors py-1"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="text-sm">Back to search</span>
           </Link>
 
-          {/* Header Card */}
-          <div className="rounded-xl border border-border bg-card p-6 md:p-8 mb-6">
-            <div className="flex flex-col md:flex-row gap-6">
-              <img
-                src={va.photo}
-                alt={va.name}
-                className="w-32 h-32 rounded-full object-cover mx-auto md:mx-0"
-              />
-              <div className="flex-1 text-center md:text-left">
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-2">
-                  <h1 className="text-2xl font-bold text-foreground">{va.name}</h1>
-                  <VerificationBadge tier={va.verificationTier} />
-                </div>
-                <p className="text-lg text-muted-foreground mb-4">{va.title}</p>
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground mb-4">
-                  <span className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    {va.location}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Globe className="h-4 w-4" />
-                    {va.timezone}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <DollarSign className="h-4 w-4" />
-                    ${va.rateMin}-{va.rateMax}/hr
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    {va.availability}
-                  </span>
-                </div>
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm">
-                  <span className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                    <span className="font-medium text-foreground">{va.rating}</span>
-                    <span className="text-muted-foreground">({va.reviewCount} reviews)</span>
-                  </span>
-                  <span className="text-muted-foreground">
-                    Response time: <span className="text-foreground">{va.responseTime}</span>
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <button className="px-6 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
-                  <MessageCircle className="h-5 w-5" />
-                  Message Maria
-                </button>
-                <button className="px-6 py-3 rounded-lg border border-border text-foreground font-medium hover:border-primary hover:text-primary transition-colors">
-                  ♡ Save
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Main Content */}
-            <div className="md:col-span-2 space-y-6">
-              {/* About */}
-              <section className="rounded-xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">About</h2>
-                <p className="text-muted-foreground whitespace-pre-line">{va.bio}</p>
-              </section>
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+              {/* Header Card */}
+              <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                  {/* Avatar + Mobile badge */}
+                  <div className="flex items-start gap-4 sm:block">
+                    <div className="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white flex-shrink-0">
+                      {va.profile?.full_name?.[0]?.toUpperCase() || 'V'}
+                    </div>
+                    {/* Mobile: Name + Badge */}
+                    <div className="sm:hidden flex-1 min-w-0">
+                      <h1 className="text-xl font-bold truncate">{va.profile?.full_name || 'VA'}</h1>
+                      <div className="mt-1">
+                        <VerificationBadge status={va.verification_status} compact />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    {/* Desktop: Name */}
+                    <h1 className="hidden sm:block text-2xl font-bold mb-2">{va.profile?.full_name || 'VA'}</h1>
+                    
+                    {va.headline && (
+                      <p className="text-base sm:text-lg text-gray-400 mb-3">{va.headline}</p>
+                    )}
+                    
+                    {/* Meta info */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500">
+                      {va.location && (
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="h-4 w-4" />
+                          {va.location}
+                        </span>
+                      )}
+                      {va.timezone && (
+                        <span className="flex items-center gap-1.5">
+                          <Globe className="h-4 w-4" />
+                          {va.timezone}
+                        </span>
+                      )}
+                      {va.years_experience > 0 && (
+                        <span className="flex items-center gap-1.5">
+                          <Briefcase className="h-4 w-4" />
+                          {va.years_experience}+ years
+                        </span>
+                      )}
+                    </div>
+                    
+                    {/* Desktop badge */}
+                    <div className="hidden sm:block mt-4">
+                      <VerificationBadge status={va.verification_status} compact />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick stats - Mobile */}
+              <div className="grid grid-cols-3 gap-2 lg:hidden">
+                {va.hourly_rate && (
+                  <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-center">
+                    <div className="text-lg sm:text-xl font-bold text-emerald-400">${va.hourly_rate}</div>
+                    <div className="text-xs text-gray-500">per hour</div>
+                  </div>
+                )}
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-center">
+                  <div className="text-lg sm:text-xl font-bold text-white capitalize">
+                    {va.availability?.split('-')[0] || 'Any'}
+                  </div>
+                  <div className="text-xs text-gray-500">availability</div>
+                </div>
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-center">
+                  <div className="text-lg sm:text-xl font-bold text-white">24h</div>
+                  <div className="text-xs text-gray-500">response</div>
+                </div>
+              </div>
+
+              {/* Bio */}
+              {va.bio && (
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                  <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">About</h2>
+                  <p className="text-sm sm:text-base text-gray-300 whitespace-pre-wrap leading-relaxed">{va.bio}</p>
+                </div>
+              )}
 
               {/* Skills */}
-              <section className="rounded-xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Skills</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {va.skills.map((skill) => (
-                    <div key={skill.name} className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">{skill.name}</span>
-                      <SkillLevel level={skill.level} />
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Tools */}
-              <section className="rounded-xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Tools & Software</h2>
-                <div className="flex flex-wrap gap-2">
-                  {va.tools.map((tool) => (
-                    <span key={tool} className="px-3 py-1 rounded-full bg-muted text-sm text-muted-foreground">
-                      {tool}
-                    </span>
-                  ))}
-                </div>
-              </section>
-
-              {/* Work History */}
-              <section className="rounded-xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <Briefcase className="h-5 w-5" />
-                  Experience
-                </h2>
-                <div className="space-y-4">
-                  {va.workHistory.map((job, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                        <Briefcase className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-foreground">{job.role}</span>
-                          {job.verified && (
-                            <CheckCircle className="h-4 w-4 text-verified-basic" />
-                          )}
-                        </div>
-                        <div className="text-sm text-muted-foreground">{job.company} • {job.duration}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Reviews */}
-              <section className="rounded-xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <Star className="h-5 w-5" />
-                  Reviews ({va.reviewCount})
-                </h2>
-                <div className="space-y-4">
-                  {va.reviews.map((review) => (
-                    <div key={review.id} className="border-b border-border pb-4 last:border-0 last:pb-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="flex">
-                          {[1, 2, 3, 4, 5].map((i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${i <= review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-muted'}`}
-                            />
+              {va.va_skills && va.va_skills.length > 0 && (
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                  <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Skills</h2>
+                  <div className="space-y-4">
+                    {Object.entries(skillsByCategory || {}).map(([category, skills]) => (
+                      <div key={category}>
+                        <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-2">{category}</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {skills.map((vs) => (
+                            <span
+                              key={vs.skill?.id}
+                              className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-700 text-gray-300 text-xs sm:text-sm"
+                            >
+                              {vs.skill?.name}
+                            </span>
                           ))}
                         </div>
-                        <span className="text-sm text-muted-foreground">{review.date}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{review.text}</p>
-                      <p className="text-sm font-medium text-foreground">{review.author}, {review.title}</p>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </section>
+              )}
+
+              {/* Languages */}
+              {va.languages && va.languages.length > 0 && (
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                  <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Languages</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {va.languages.map((lang) => (
+                      <span key={lang} className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-700 text-gray-300 text-xs sm:text-sm">
+                        {lang}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Verification Details */}
-              <section className="rounded-xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
-                  Verification Details
-                </h2>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-verified-basic" />
-                    <span className="text-sm text-muted-foreground">Identity Verified</span>
+            {/* Desktop Sidebar */}
+            <div className="hidden lg:block space-y-6">
+              {/* Contact Card */}
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 sticky top-24">
+                {va.hourly_rate && (
+                  <div className="text-center mb-6">
+                    <div className="text-3xl font-bold text-emerald-400">${va.hourly_rate}</div>
+                    <div className="text-gray-500">per hour</div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-verified-basic" />
-                    <span className="text-sm text-muted-foreground">Education Verified</span>
+                )}
+
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all mb-3">
+                  <MessageCircle className="h-5 w-5" />
+                  Contact {va.profile?.full_name?.split(' ')[0] || 'VA'}
+                </button>
+
+                <div className="space-y-4 mt-6">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500 flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      Availability
+                    </span>
+                    <span className="text-white font-medium capitalize">
+                      {va.availability?.replace('-', ' ') || 'Not specified'}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-verified-basic" />
-                    <span className="text-sm text-muted-foreground">{va.verification.references} References Checked</span>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">Avg Response</span>
+                    <span className="text-white font-medium">Within 24 hours</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-verified-basic" />
-                    <span className="text-sm text-muted-foreground">Skills Tests Passed</span>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500 flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      Member since
+                    </span>
+                    <span className="text-white font-medium">
+                      {new Date(va.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    </span>
                   </div>
                 </div>
-              </section>
 
-              {/* Education */}
-              <section className="rounded-xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <GraduationCap className="h-5 w-5" />
-                  Education
-                </h2>
-                <p className="text-sm text-foreground font-medium">{va.education.degree}</p>
-                <p className="text-sm text-muted-foreground">{va.education.school}</p>
-                <p className="text-sm text-muted-foreground">{va.education.year}</p>
-              </section>
-
-              {/* CTA */}
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 text-center">
-                <p className="text-sm text-muted-foreground mb-4">Ready to work with {va.name.split(' ')[0]}?</p>
-                <button className="w-full px-6 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
-                  <MessageCircle className="h-5 w-5" />
-                  Message {va.name.split(' ')[0]}
-                </button>
-                <p className="text-xs text-muted-foreground mt-3">Typical response: {va.responseTime}</p>
+                {/* Verification Status */}
+                <div className="mt-6 pt-6 border-t border-gray-700">
+                  <h3 className="text-sm font-medium text-gray-400 mb-3">Verification Status</h3>
+                  <VerificationBadge status={va.verification_status} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Mobile Sticky CTA */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur border-t border-gray-800 p-4 z-40">
+        <div className="flex items-center gap-3">
+          {va.hourly_rate && (
+            <div className="min-w-0">
+              <div className="text-xl font-bold text-emerald-400">${va.hourly_rate}<span className="text-sm font-normal text-gray-500">/hr</span></div>
+            </div>
+          )}
+          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold active:scale-[0.98] transition-transform">
+            <MessageCircle className="h-5 w-5" />
+            Contact
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </Layout>
   )
 }

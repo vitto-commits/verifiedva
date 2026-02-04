@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { IconSearch, IconSliders, IconMapPin, IconClock, IconDollar, IconLoader, IconX, IconChevronDown } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
+import VAPreviewPanel from '../components/VAPreviewPanel'
+import RateHistogram from '../components/RateHistogram'
 import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
 
@@ -20,6 +21,7 @@ interface VAWithProfile {
   verification_status: string
   portfolio_url: string | null
   resume_url: string | null
+  video_intro_url: string | null
   is_active: boolean
   created_at: string
   updated_at: string
@@ -51,8 +53,10 @@ export default function Search() {
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [vas, setVas] = useState<VAWithProfile[]>([])
+  const [allRates, setAllRates] = useState<number[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedVA, setSelectedVA] = useState<VAWithProfile | null>(null)
   
   // Filters
   const [minRate, setMinRate] = useState('')
@@ -81,6 +85,19 @@ export default function Search() {
       if (data) setSkills(data)
     }
     fetchSkills()
+    
+    // Fetch all rates for histogram (unfiltered)
+    const fetchAllRates = async () => {
+      const { data } = await supabase
+        .from('vas')
+        .select('hourly_rate')
+        .eq('is_active', true)
+        .not('hourly_rate', 'is', null)
+      if (data) {
+        setAllRates(data.map(v => v.hourly_rate).filter((r): r is number => r !== null))
+      }
+    }
+    fetchAllRates()
   }, [])
 
   useEffect(() => {
@@ -254,29 +271,15 @@ export default function Search() {
       
       <div>
         <h3 className="font-semibold text-slate-900 mb-3 text-sm">Hourly Rate</h3>
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
-            <input
-              type="number"
-              placeholder="Min"
-              value={minRate}
-              onChange={(e) => setMinRate(e.target.value)}
-              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/20 focus:border-[hsl(var(--primary))]"
-            />
-          </div>
-          <span className="text-slate-500">-</span>
-          <div className="relative flex-1">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
-            <input
-              type="number"
-              placeholder="Max"
-              value={maxRate}
-              onChange={(e) => setMaxRate(e.target.value)}
-              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/20 focus:border-[hsl(var(--primary))]"
-            />
-          </div>
-        </div>
+        <RateHistogram
+          rates={allRates}
+          minRate={minRate}
+          maxRate={maxRate}
+          onRangeChange={(min, max) => {
+            setMinRate(min)
+            setMaxRate(max)
+          }}
+        />
       </div>
 
       {/* Experience Filter */}
@@ -525,10 +528,10 @@ export default function Search() {
             ) : (
               <div className="space-y-3 sm:space-y-4">
                 {vas.map((va) => (
-                  <Link
+                  <div
                     key={va.id}
-                    to={`/va/${va.id}`}
-                    className="block p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 bg-white/70 hover:border-[hsl(var(--primary))]/40 active:bg-white transition-all"
+                    onClick={() => setSelectedVA(va)}
+                    className="block p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 bg-white/70 hover:border-[hsl(var(--primary))]/40 active:bg-white transition-all cursor-pointer"
                   >
                     <div className="flex gap-3 sm:gap-4">
                       {/* Avatar */}
@@ -608,7 +611,7 @@ export default function Search() {
                     <div className="sm:hidden flex justify-end mt-2 -mb-1">
                       <IconChevronDown className="h-4 w-4 text-slate-500 rotate-[-90deg]" />
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             )}
@@ -667,6 +670,12 @@ export default function Search() {
           </div>
         </div>
       )}
+
+      {/* VA Preview Panel */}
+      <VAPreviewPanel 
+        va={selectedVA} 
+        onClose={() => setSelectedVA(null)} 
+      />
     </Layout>
     </AuthGuard>
   )

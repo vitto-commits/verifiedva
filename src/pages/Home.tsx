@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { IconSearch, IconShield, IconCheckCircle, IconStar, IconArrowRight, IconUsers, IconChevronDown, IconZap, IconGlobe, IconDollar } from '../components/icons'
+import { IconSearch, IconShield, IconCheckCircle, IconStar, IconArrowRight, IconUsers, IconChevronDown, IconZap, IconGlobe } from '../components/icons'
 import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'

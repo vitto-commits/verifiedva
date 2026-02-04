@@ -1,7 +1,8 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, User, LogOut, Search, UserPlus, Briefcase, MessageCircle, Calendar, Award } from 'lucide-react'
+import { Menu, X, User, LogOut, Search, UserPlus, Briefcase, MessageCircle, Calendar, Award, Shield } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../lib/auth-context'
+import { supabase } from '../lib/supabase'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -13,12 +14,30 @@ export default function Layout({ children }: LayoutProps) {
   const { user, profile, signOut, loading } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false)
     setUserMenuOpen(false)
   }, [location.pathname])
+
+  // Check admin status
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (!user) {
+        setIsAdmin(false)
+        return
+      }
+      const { data } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+      setIsAdmin(data?.is_admin || false)
+    }
+    checkAdmin()
+  }, [user])
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -169,6 +188,16 @@ export default function Layout({ children }: LayoutProps) {
                               Skill Assessments
                             </Link>
                           </>
+                        )}
+                        {isAdmin && (
+                          <Link
+                            to="/admin"
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-purple-600 hover:bg-purple-50 active:bg-purple-100"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <Shield className="h-5 w-5" />
+                            Admin Panel
+                          </Link>
                         )}
                         <button
                           onClick={() => {

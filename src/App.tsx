@@ -21,6 +21,7 @@ import MyInterviews from './pages/MyInterviews'
 import VideoIntroUpload from './pages/VideoIntroUpload'
 import Assessments from './pages/Assessments'
 import TakeAssessment from './pages/TakeAssessment'
+import Admin from './pages/Admin'
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           <Route path="/video-intro" element={<VideoIntroUpload />} />
           <Route path="/assessments" element={<Assessments />} />
           <Route path="/assessments/:skillId" element={<TakeAssessment />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

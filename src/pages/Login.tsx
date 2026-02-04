@@ -35,12 +35,12 @@ export default function Login() {
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-white font-bold text-lg">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-white font-bold text-lg">
                 VA
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">Welcome back</h1>
-            <p className="text-sm sm:text-base text-gray-400">Sign in to your account</p>
+            <p className="text-sm sm:text-base text-slate-600">Sign in to your account</p>
           </div>
 
           {/* Form */}
@@ -52,7 +52,7 @@ export default function Login() {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                 Email
               </label>
               <input
@@ -60,7 +60,7 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all text-base"
+                className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 transition-all text-base"
                 placeholder="you@example.com"
                 autoComplete="email"
                 required
@@ -68,7 +68,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                 Password
               </label>
               <div className="relative">
@@ -77,7 +77,7 @@ export default function Login() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all pr-12 text-base"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 transition-all pr-12 text-base"
                   placeholder="••••••••"
                   autoComplete="current-password"
                   required
@@ -85,7 +85,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-300 active:text-gray-200"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-600 hover:text-slate-700 active:text-slate-800"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -96,7 +96,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -112,10 +112,10 @@ export default function Login() {
           {/* Divider */}
           <div className="relative my-6 sm:my-8">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-800"></div>
+              <div className="w-full border-t border-slate-200"></div>
             </div>
             <div className="relative flex justify-center text-xs sm:text-sm">
-              <span className="px-3 bg-gray-950 text-gray-500">New to VA Marketplace?</span>
+              <span className="px-3 bg-[hsl(var(--background))] text-slate-500">New to VA Marketplace?</span>
             </div>
           </div>
 
@@ -123,13 +123,13 @@ export default function Login() {
           <div className="grid grid-cols-2 gap-3">
             <Link
               to="/client/signup"
-              className="flex items-center justify-center px-4 py-3 rounded-xl border border-gray-700 text-sm font-medium text-gray-300 hover:bg-gray-800 active:bg-gray-700 transition-colors"
+              className="flex items-center justify-center px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 hover:bg-white active:bg-slate-100 transition-colors"
             >
               Hire a VA
             </Link>
             <Link
               to="/va/signup"
-              className="flex items-center justify-center px-4 py-3 rounded-xl border border-gray-700 text-sm font-medium text-gray-300 hover:bg-gray-800 active:bg-gray-700 transition-colors"
+              className="flex items-center justify-center px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 hover:bg-white active:bg-slate-100 transition-colors"
             >
               Become a VA
             </Link>

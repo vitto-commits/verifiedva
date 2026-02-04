@@ -45,7 +45,7 @@ export default function VideoIntro({ url, name }: VideoIntroProps) {
 
   return (
     <div 
-      className="relative rounded-xl overflow-hidden bg-gray-900 aspect-video group"
+      className="relative rounded-xl overflow-hidden bg-white aspect-video group"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => !isPlaying && setShowControls(true)}
     >

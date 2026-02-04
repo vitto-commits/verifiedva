@@ -168,18 +168,18 @@ export default function VASignup() {
             {/* Header */}
             <div className="text-center mb-6 sm:mb-8">
               <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">Become a VA</h1>
-              <p className="text-sm sm:text-base text-gray-400">Join our marketplace of verified virtual assistants</p>
+              <p className="text-sm sm:text-base text-slate-600">Join our marketplace of verified virtual assistants</p>
             </div>
 
             {/* Progress bar */}
             <div className="mb-6 sm:mb-8">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs sm:text-sm text-gray-400">Step {currentStep} of {steps.length}</span>
-                <span className="text-xs sm:text-sm text-emerald-400 font-medium">{Math.round((currentStep / steps.length) * 100)}%</span>
+                <span className="text-xs sm:text-sm text-slate-600">Step {currentStep} of {steps.length}</span>
+                <span className="text-xs sm:text-sm text-[hsl(var(--primary))] font-medium">{Math.round((currentStep / steps.length) * 100)}%</span>
               </div>
-              <div className="h-1.5 sm:h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div className="h-1.5 sm:h-2 bg-white rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300"
+                  className="h-full bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] transition-all duration-300"
                   style={{ width: `${(currentStep / steps.length) * 100}%` }}
                 />
               </div>
@@ -192,19 +192,19 @@ export default function VASignup() {
                   key={step.id}
                   className={`flex flex-col items-center ${
                     step.id === currentStep
-                      ? 'text-emerald-400'
+                      ? 'text-[hsl(var(--primary))]'
                       : step.id < currentStep
-                      ? 'text-emerald-500'
-                      : 'text-gray-600'
+                      ? 'text-[hsl(var(--primary))]'
+                      : 'text-slate-500'
                   }`}
                 >
                   <div
                     className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-1 sm:mb-2 transition-colors ${
                       step.id === currentStep
-                        ? 'bg-emerald-500 text-white'
+                        ? 'bg-[hsl(var(--primary))] text-white'
                         : step.id < currentStep
-                        ? 'bg-emerald-500/20 text-emerald-400'
-                        : 'bg-gray-800 text-gray-500'
+                        ? 'bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))]'
+                        : 'bg-white text-slate-500'
                     }`}
                   >
                     {step.id < currentStep ? (
@@ -219,7 +219,7 @@ export default function VASignup() {
             </div>
 
             {/* Form Card */}
-            <div className="rounded-xl sm:rounded-2xl border border-gray-800 bg-gray-900/50 p-4 sm:p-6 md:p-8">
+            <div className="rounded-xl sm:rounded-2xl border border-slate-200 bg-white/50 p-4 sm:p-6 md:p-8">
               {error && (
                 <div className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
                   {error}
@@ -232,31 +232,31 @@ export default function VASignup() {
                   <h2 className="text-lg sm:text-xl font-semibold">Create Your Account</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Email</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Email</label>
                       <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="you@example.com"
                         autoComplete="email"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Password</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Password</label>
                       <div className="relative">
                         <input
                           type={showPassword ? 'text' : 'password'}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 pr-12 text-base"
+                          className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 pr-12 text-base"
                           placeholder="Min 8 characters"
                           autoComplete="new-password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-300"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-600 hover:text-slate-700"
                           tabIndex={-1}
                         >
                           {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -264,22 +264,22 @@ export default function VASignup() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Confirm Password</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Confirm Password</label>
                       <input
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="Confirm password"
                         autoComplete="new-password"
                       />
                     </div>
-                    <label className="flex items-start gap-3 text-sm text-gray-400 cursor-pointer p-2 -m-2 rounded-lg active:bg-gray-800/50">
+                    <label className="flex items-start gap-3 text-sm text-slate-600 cursor-pointer p-2 -m-2 rounded-lg active:bg-white/70">
                       <input
                         type="checkbox"
                         checked={agreed}
                         onChange={(e) => setAgreed(e.target.checked)}
-                        className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-gray-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
+                        className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-white text-[hsl(var(--primary))] focus:ring-emerald-500 focus:ring-offset-0"
                       />
                       <span>I agree to the Terms of Service and Privacy Policy</span>
                     </label>
@@ -293,32 +293,32 @@ export default function VASignup() {
                   <h2 className="text-lg sm:text-xl font-semibold">Your Profile</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Full Name</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Full Name</label>
                       <input
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="Juan Dela Cruz"
                         autoComplete="name"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Location</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Location</label>
                       <input
                         type="text"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="Manila, Philippines"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Timezone</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Timezone</label>
                       <select
                         value={timezone}
                         onChange={(e) => setTimezone(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base appearance-none"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                       >
                         <option value="UTC+8">UTC+8 (Philippine Time)</option>
                         <option value="UTC+7">UTC+7</option>
@@ -335,31 +335,31 @@ export default function VASignup() {
                   <h2 className="text-lg sm:text-xl font-semibold">Professional Details</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Professional Headline</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Professional Headline</label>
                       <input
                         type="text"
                         value={headline}
                         onChange={(e) => setHeadline(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                         placeholder="e.g., Executive Virtual Assistant"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Bio</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Bio</label>
                       <textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 h-28 sm:h-32 resize-none text-base"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 h-28 sm:h-32 resize-none text-base"
                         placeholder="Tell clients about yourself..."
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3 sm:gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Experience</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Experience</label>
                         <select
                           value={yearsExperience}
                           onChange={(e) => setYearsExperience(parseInt(e.target.value))}
-                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base appearance-none"
+                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                         >
                           <option value="0">&lt; 1 year</option>
                           <option value="1">1-2 years</option>
@@ -369,18 +369,18 @@ export default function VASignup() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Rate ($/hr)</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Rate ($/hr)</label>
                         <input
                           type="number"
                           value={hourlyRate}
                           onChange={(e) => setHourlyRate(e.target.value)}
-                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                          className="w-full px-3 sm:px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                           placeholder="15"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Availability</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">Availability</label>
                       <div className="grid grid-cols-3 gap-2 sm:gap-3">
                         {['full-time', 'part-time', 'contract'].map((option) => (
                           <button
@@ -389,8 +389,8 @@ export default function VASignup() {
                             onClick={() => setAvailability(option)}
                             className={`px-2 sm:px-4 py-2.5 sm:py-2 rounded-xl border text-xs sm:text-sm font-medium transition-colors active:scale-[0.98] ${
                               availability === option
-                                ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                                : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                                ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                                : 'border-slate-200 text-slate-600 hover:border-gray-600'
                             }`}
                           >
                             {option === 'full-time' ? 'Full-time' : option === 'part-time' ? 'Part-time' : 'Contract'}
@@ -407,14 +407,14 @@ export default function VASignup() {
                 <div className="space-y-4 sm:space-y-5">
                   <div>
                     <h2 className="text-lg sm:text-xl font-semibold">Select Your Skills</h2>
-                    <p className="text-gray-400 text-xs sm:text-sm mt-1">
+                    <p className="text-slate-600 text-xs sm:text-sm mt-1">
                       Tap to select up to 15 skills ({selectedSkills.length}/15)
                     </p>
                   </div>
                   <div className="space-y-4 max-h-[350px] sm:max-h-[400px] overflow-y-auto pr-2 -mr-2">
                     {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
                       <div key={category}>
-                        <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sticky top-0 bg-gray-900/90 backdrop-blur py-1">
+                        <h3 className="text-xs sm:text-sm font-medium text-slate-500 mb-2 sticky top-0 bg-white/90 backdrop-blur py-1">
                           {category}
                         </h3>
                         <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -425,8 +425,8 @@ export default function VASignup() {
                               onClick={() => toggleSkill(skill.id)}
                               className={`px-3 py-1.5 rounded-full text-xs sm:text-sm transition-colors active:scale-95 ${
                                 selectedSkills.includes(skill.id)
-                                  ? 'bg-emerald-500 text-white'
-                                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                                  ? 'bg-[hsl(var(--primary))] text-white'
+                                  : 'bg-white text-slate-600 hover:bg-slate-100'
                               }`}
                             >
                               {skill.name}
@@ -440,11 +440,11 @@ export default function VASignup() {
               )}
 
               {/* Navigation */}
-              <div className="flex justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-800">
+              <div className="flex justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-200">
                 <button
                   onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
                   disabled={currentStep === 1 || (currentStep === 2 && !user)}
-                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 active:bg-gray-700 transition-colors text-sm ${
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-white active:bg-slate-100 transition-colors text-sm ${
                     (currentStep === 1 || (currentStep === 2 && !user)) ? 'invisible' : ''
                   }`}
                 >
@@ -460,7 +460,7 @@ export default function VASignup() {
                     else if (currentStep === 4) handleFinalSubmit()
                   }}
                   disabled={loading}
-                  className="flex items-center gap-1.5 sm:gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 text-sm sm:text-base"
+                  className="flex items-center gap-1.5 sm:gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 text-sm sm:text-base"
                 >
                   {loading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />

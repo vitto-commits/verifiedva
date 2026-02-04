@@ -195,7 +195,7 @@ export default function Conversation() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -205,22 +205,22 @@ export default function Conversation() {
     <Layout>
       <div className="flex flex-col h-[calc(100vh-57px)] sm:h-[calc(100vh-65px)]">
         {/* Header */}
-        <div className="flex-shrink-0 border-b border-gray-800 bg-gray-950/95 backdrop-blur px-4 py-3">
+        <div className="flex-shrink-0 border-b border-slate-200 bg-white/90 backdrop-blur px-4 py-3">
           <div className="max-w-2xl mx-auto flex items-center gap-3">
             <Link
               to="/messages"
-              className="p-2 -ml-2 rounded-lg hover:bg-gray-800 text-gray-400"
+              className="p-2 -ml-2 rounded-lg hover:bg-white text-slate-600"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
 
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center font-bold flex-shrink-0">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center font-bold flex-shrink-0">
               {otherUser?.full_name?.[0]?.toUpperCase() || '?'}
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="font-medium truncate">{otherUser?.full_name || 'User'}</div>
-              <div className="text-xs text-gray-500 capitalize">
+              <div className="text-xs text-slate-500 capitalize">
                 {otherUser?.user_type === 'va' ? 'Virtual Assistant' : otherUser?.user_type}
               </div>
             </div>
@@ -228,7 +228,7 @@ export default function Conversation() {
             {otherUser?.va_id && (
               <Link
                 to={`/va/${otherUser.va_id}`}
-                className="p-2 rounded-lg hover:bg-gray-800 text-gray-400"
+                className="p-2 rounded-lg hover:bg-white text-slate-600"
                 title="View Profile"
               >
                 <ExternalLink className="h-5 w-5" />
@@ -244,9 +244,9 @@ export default function Conversation() {
               <div key={date}>
                 {/* Date divider */}
                 <div className="flex items-center gap-4 my-4">
-                  <div className="flex-1 h-px bg-gray-800" />
-                  <span className="text-xs text-gray-500">{formatDate(msgs[0].created_at)}</span>
-                  <div className="flex-1 h-px bg-gray-800" />
+                  <div className="flex-1 h-px bg-white" />
+                  <span className="text-xs text-slate-500">{formatDate(msgs[0].created_at)}</span>
+                  <div className="flex-1 h-px bg-white" />
                 </div>
 
                 {/* Messages for this date */}
@@ -261,7 +261,7 @@ export default function Conversation() {
                         className={`flex gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}
                       >
                         {!isMe && showAvatar && (
-                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-xs font-bold flex-shrink-0">
                             {otherUser?.full_name?.[0]?.toUpperCase() || '?'}
                           </div>
                         )}
@@ -270,12 +270,12 @@ export default function Conversation() {
                         <div
                           className={`max-w-[75%] sm:max-w-[65%] px-4 py-2 rounded-2xl ${
                             isMe
-                              ? 'bg-emerald-500 text-white rounded-br-md'
-                              : 'bg-gray-800 text-gray-100 rounded-bl-md'
+                              ? 'bg-[hsl(var(--primary))] text-white rounded-br-md'
+                              : 'bg-white text-slate-900 rounded-bl-md'
                           }`}
                         >
                           <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
-                          <div className={`text-xs mt-1 ${isMe ? 'text-emerald-200' : 'text-gray-500'}`}>
+                          <div className={`text-xs mt-1 ${isMe ? 'text-emerald-200' : 'text-slate-500'}`}>
                             {formatTime(msg.created_at)}
                           </div>
                         </div>
@@ -288,7 +288,7 @@ export default function Conversation() {
 
             {messages.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 text-sm">No messages yet. Say hello! 👋</p>
+                <p className="text-slate-500 text-sm">No messages yet. Say hello! 👋</p>
               </div>
             )}
 
@@ -297,7 +297,7 @@ export default function Conversation() {
         </div>
 
         {/* Input */}
-        <div className="flex-shrink-0 border-t border-gray-800 bg-gray-950/95 backdrop-blur p-4">
+        <div className="flex-shrink-0 border-t border-slate-200 bg-white/90 backdrop-blur p-4">
           <div className="max-w-2xl mx-auto flex gap-3">
             <textarea
               ref={inputRef}
@@ -306,13 +306,13 @@ export default function Conversation() {
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
               rows={1}
-              className="flex-1 px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none text-base"
+              className="flex-1 px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 resize-none text-base"
               style={{ minHeight: '48px', maxHeight: '120px' }}
             />
             <button
               onClick={handleSend}
               disabled={!newMessage.trim() || sending}
-              className="px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-transform"
+              className="px-4 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-transform"
             >
               {sending ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

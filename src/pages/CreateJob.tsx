@@ -113,7 +113,7 @@ export default function CreateJob() {
             {/* Back */}
             <Link 
               to="/my-jobs" 
-              className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4 sm:mb-6 py-1 text-sm"
+              className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4 sm:mb-6 py-1 text-sm"
             >
               <ArrowLeft className="h-4 w-4" />
               My Jobs
@@ -122,7 +122,7 @@ export default function CreateJob() {
             {/* Header */}
             <div className="mb-6 sm:mb-8">
               <h1 className="text-xl sm:text-2xl font-bold mb-1">Post a Job</h1>
-              <p className="text-sm sm:text-base text-gray-400">Find the perfect VA for your needs</p>
+              <p className="text-sm sm:text-base text-slate-600">Find the perfect VA for your needs</p>
             </div>
 
             {/* Progress */}
@@ -131,14 +131,14 @@ export default function CreateJob() {
                 <div 
                   key={s} 
                   className={`flex-1 h-1.5 rounded-full transition-colors ${
-                    s <= step ? 'bg-emerald-500' : 'bg-gray-700'
+                    s <= step ? 'bg-[hsl(var(--primary))]' : 'bg-slate-100'
                   }`} 
                 />
               ))}
             </div>
 
             {/* Form Card */}
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+            <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
               {error && (
                 <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
                   {error}
@@ -149,39 +149,39 @@ export default function CreateJob() {
               {step === 1 && (
                 <div className="space-y-4 sm:space-y-5">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 rounded-lg bg-emerald-500/10">
-                      <Briefcase className="h-5 w-5 text-emerald-400" />
+                    <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
+                      <Briefcase className="h-5 w-5 text-[hsl(var(--primary))]" />
                     </div>
                     <div>
                       <h2 className="text-lg font-semibold">Job Details</h2>
-                      <p className="text-sm text-gray-400">Describe what you're looking for</p>
+                      <p className="text-sm text-slate-600">Describe what you're looking for</p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">Job Title</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Job Title</label>
                     <input
                       type="text"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                       placeholder="e.g., Executive Virtual Assistant for E-commerce Business"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">Description</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Description</label>
                     <textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 h-32 sm:h-40 resize-none text-base"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 h-32 sm:h-40 resize-none text-base"
                       placeholder="Describe the role, responsibilities, and what you're looking for in an ideal candidate..."
                     />
-                    <p className="text-xs text-gray-500 mt-1.5">Include key tasks, tools used, and work schedule expectations</p>
+                    <p className="text-xs text-slate-500 mt-1.5">Include key tasks, tools used, and work schedule expectations</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">Job Type</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Job Type</label>
                     <div className="grid grid-cols-3 gap-2 sm:gap-3">
                       {[
                         { value: 'full-time', label: 'Full-time', desc: '40 hrs/wk' },
@@ -194,12 +194,12 @@ export default function CreateJob() {
                           onClick={() => setJobType(option.value as typeof jobType)}
                           className={`p-3 rounded-xl border text-center transition-colors active:scale-[0.98] ${
                             jobType === option.value
-                              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                              : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                              ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                              : 'border-slate-200 text-slate-600 hover:border-gray-600'
                           }`}
                         >
                           <div className="font-medium text-sm">{option.label}</div>
-                          <div className="text-xs text-gray-500">{option.desc}</div>
+                          <div className="text-xs text-slate-500">{option.desc}</div>
                         </button>
                       ))}
                     </div>
@@ -211,25 +211,25 @@ export default function CreateJob() {
               {step === 2 && (
                 <div className="space-y-4 sm:space-y-5">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 rounded-lg bg-emerald-500/10">
-                      <DollarSign className="h-5 w-5 text-emerald-400" />
+                    <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
+                      <DollarSign className="h-5 w-5 text-[hsl(var(--primary))]" />
                     </div>
                     <div>
                       <h2 className="text-lg font-semibold">Budget & Requirements</h2>
-                      <p className="text-sm text-gray-400">Set your budget and experience level</p>
+                      <p className="text-sm text-slate-600">Set your budget and experience level</p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">Budget Type</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Budget Type</label>
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => setBudgetType('hourly')}
                         className={`p-3 rounded-xl border text-center transition-colors ${
                           budgetType === 'hourly'
-                            ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                            : 'border-gray-700 text-gray-400'
+                            ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                            : 'border-slate-200 text-slate-600'
                         }`}
                       >
                         <Clock className="h-5 w-5 mx-auto mb-1" />
@@ -240,8 +240,8 @@ export default function CreateJob() {
                         onClick={() => setBudgetType('fixed')}
                         className={`p-3 rounded-xl border text-center transition-colors ${
                           budgetType === 'fixed'
-                            ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                            : 'border-gray-700 text-gray-400'
+                            ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                            : 'border-slate-200 text-slate-600'
                         }`}
                       >
                         <DollarSign className="h-5 w-5 mx-auto mb-1" />
@@ -251,33 +251,33 @@ export default function CreateJob() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">
                       Budget Range {budgetType === 'hourly' ? '($/hr)' : '($)'}
                     </label>
                     <div className="flex items-center gap-3">
                       <div className="relative flex-1">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
                         <input
                           type="number"
                           value={budgetMin}
                           onChange={(e) => setBudgetMin(e.target.value)}
-                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                           placeholder="Min"
                         />
                       </div>
-                      <span className="text-gray-500">to</span>
+                      <span className="text-slate-500">to</span>
                       <div className="relative flex-1">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
                         <input
                           type="number"
                           value={budgetMax}
                           onChange={(e) => setBudgetMax(e.target.value)}
-                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                           placeholder="Max"
                         />
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1.5">
+                    <p className="text-xs text-slate-500 mt-1.5">
                       {budgetType === 'hourly' 
                         ? 'Philippine VAs typically charge $5-25/hr' 
                         : 'Enter total project budget'}
@@ -285,7 +285,7 @@ export default function CreateJob() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">Experience Level</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Experience Level</label>
                     <div className="space-y-2">
                       {[
                         { value: 'entry', label: 'Entry Level', desc: '0-2 years experience' },
@@ -298,18 +298,18 @@ export default function CreateJob() {
                           onClick={() => setExperienceLevel(option.value as typeof experienceLevel)}
                           className={`w-full p-3 rounded-xl border text-left transition-colors flex items-center justify-between ${
                             experienceLevel === option.value
-                              ? 'border-emerald-500 bg-emerald-500/10'
-                              : 'border-gray-700 hover:border-gray-600'
+                              ? 'border-emerald-500 bg-[hsl(var(--primary))]/10'
+                              : 'border-slate-200 hover:border-gray-600'
                           }`}
                         >
                           <div>
-                            <div className={`font-medium text-sm ${experienceLevel === option.value ? 'text-emerald-400' : 'text-white'}`}>
+                            <div className={`font-medium text-sm ${experienceLevel === option.value ? 'text-[hsl(var(--primary))]' : 'text-white'}`}>
                               {option.label}
                             </div>
-                            <div className="text-xs text-gray-500">{option.desc}</div>
+                            <div className="text-xs text-slate-500">{option.desc}</div>
                           </div>
                           {experienceLevel === option.value && (
-                            <div className="h-5 w-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                            <div className="h-5 w-5 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center">
                               <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                               </svg>
@@ -326,19 +326,19 @@ export default function CreateJob() {
               {step === 3 && (
                 <div className="space-y-4 sm:space-y-5">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 rounded-lg bg-emerald-500/10">
-                      <Briefcase className="h-5 w-5 text-emerald-400" />
+                    <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
+                      <Briefcase className="h-5 w-5 text-[hsl(var(--primary))]" />
                     </div>
                     <div>
                       <h2 className="text-lg font-semibold">Required Skills</h2>
-                      <p className="text-sm text-gray-400">Select up to 10 skills ({selectedSkills.length}/10)</p>
+                      <p className="text-sm text-slate-600">Select up to 10 skills ({selectedSkills.length}/10)</p>
                     </div>
                   </div>
 
                   <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 -mr-2">
                     {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
                       <div key={category}>
-                        <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sticky top-0 bg-gray-800/90 backdrop-blur py-1">
+                        <h3 className="text-xs sm:text-sm font-medium text-slate-500 mb-2 sticky top-0 bg-white/90 backdrop-blur py-1">
                           {category}
                         </h3>
                         <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -349,8 +349,8 @@ export default function CreateJob() {
                               onClick={() => toggleSkill(skill.id)}
                               className={`px-3 py-1.5 rounded-full text-xs sm:text-sm transition-colors active:scale-95 ${
                                 selectedSkills.includes(skill.id)
-                                  ? 'bg-emerald-500 text-white'
-                                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                                  ? 'bg-[hsl(var(--primary))] text-white'
+                                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                               }`}
                             >
                               {skill.name}
@@ -364,11 +364,11 @@ export default function CreateJob() {
               )}
 
               {/* Navigation */}
-              <div className="flex justify-between mt-6 pt-4 border-t border-gray-700">
+              <div className="flex justify-between mt-6 pt-4 border-t border-slate-200">
                 {step > 1 ? (
                   <button
                     onClick={() => setStep(step - 1)}
-                    className="px-4 py-2.5 rounded-xl border border-gray-700 text-gray-300 text-sm font-medium hover:bg-gray-800 active:bg-gray-700"
+                    className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:bg-white active:bg-slate-100"
                   >
                     Back
                   </button>
@@ -386,7 +386,7 @@ export default function CreateJob() {
                       }
                       setStep(step + 1)
                     }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium text-sm active:scale-[0.98]"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium text-sm active:scale-[0.98]"
                   >
                     Continue
                     <ChevronRight className="h-4 w-4" />
@@ -395,7 +395,7 @@ export default function CreateJob() {
                   <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium text-sm active:scale-[0.98] disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium text-sm active:scale-[0.98] disabled:opacity-50"
                   >
                     {loading ? (
                       <Loader2 className="h-5 w-5 animate-spin" />

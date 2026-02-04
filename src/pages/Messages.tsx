@@ -139,7 +139,7 @@ export default function Messages() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -152,34 +152,34 @@ export default function Messages() {
           {/* Header */}
           <div className="mb-4 sm:mb-6">
             <h1 className="text-xl sm:text-2xl font-bold">Messages</h1>
-            <p className="text-sm text-gray-400">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-slate-600">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
           </div>
 
           {/* Search */}
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
             <input
               type="text"
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
             />
           </div>
 
           {/* Conversations List */}
           {filteredConversations.length === 0 ? (
             <div className="text-center py-16">
-              <div className="inline-flex p-4 rounded-2xl bg-gray-800/50 mb-4">
-                <MessageCircle className="h-8 w-8 text-gray-500" />
+              <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
+                <MessageCircle className="h-8 w-8 text-slate-500" />
               </div>
               <h3 className="text-lg font-medium mb-2">No messages yet</h3>
-              <p className="text-gray-400 text-sm mb-6">
+              <p className="text-slate-600 text-sm mb-6">
                 Start a conversation by messaging a VA or client
               </p>
               <Link
                 to="/search"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
               >
                 Browse VAs
               </Link>
@@ -190,15 +190,15 @@ export default function Messages() {
                 <Link
                   key={conv.id}
                   to={`/messages/${conv.id}`}
-                  className="flex items-center gap-3 p-3 sm:p-4 rounded-xl hover:bg-gray-800/50 active:bg-gray-800 transition-colors"
+                  className="flex items-center gap-3 p-3 sm:p-4 rounded-xl hover:bg-white/70 active:bg-white transition-colors"
                 >
                   {/* Avatar */}
                   <div className="relative flex-shrink-0">
-                    <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-lg font-bold">
+                    <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-lg font-bold">
                       {conv.other_user.full_name?.[0]?.toUpperCase() || '?'}
                     </div>
                     {conv.unread_count > 0 && (
-                      <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-emerald-500 flex items-center justify-center text-xs font-bold">
+                      <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-xs font-bold">
                         {conv.unread_count > 9 ? '9+' : conv.unread_count}
                       </div>
                     )}
@@ -207,23 +207,23 @@ export default function Messages() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2 mb-0.5">
-                      <span className={`font-medium truncate ${conv.unread_count > 0 ? 'text-white' : 'text-gray-200'}`}>
+                      <span className={`font-medium truncate ${conv.unread_count > 0 ? 'text-white' : 'text-slate-800'}`}>
                         {conv.other_user.full_name || 'User'}
                       </span>
                       {conv.last_message && (
-                        <span className="text-xs text-gray-500 flex-shrink-0">
+                        <span className="text-xs text-slate-500 flex-shrink-0">
                           {formatTime(conv.last_message.created_at)}
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 capitalize">
+                      <span className="text-xs text-slate-500 capitalize">
                         {conv.other_user.user_type === 'va' ? 'VA' : conv.other_user.user_type}
                       </span>
                       {conv.last_message && (
                         <>
-                          <span className="text-gray-600">·</span>
-                          <p className={`text-sm truncate ${conv.unread_count > 0 ? 'text-gray-300' : 'text-gray-500'}`}>
+                          <span className="text-slate-500">·</span>
+                          <p className={`text-sm truncate ${conv.unread_count > 0 ? 'text-slate-700' : 'text-slate-500'}`}>
                             {conv.last_message.sender_id === user?.id ? 'You: ' : ''}
                             {conv.last_message.content}
                           </p>

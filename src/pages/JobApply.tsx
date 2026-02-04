@@ -178,7 +178,7 @@ export default function JobApply() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -195,7 +195,7 @@ export default function JobApply() {
             <h1 className="text-xl font-bold mb-2">{error}</h1>
             <Link
               to="/jobs"
-              className="text-emerald-400 hover:text-emerald-300"
+              className="text-[hsl(var(--primary))] hover:text-emerald-300"
             >
               ← Back to Jobs
             </Link>
@@ -210,24 +210,24 @@ export default function JobApply() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-lg mx-auto text-center">
-            <div className="inline-flex p-4 rounded-2xl bg-emerald-500/10 mb-4">
-              <CheckCircle2 className="h-12 w-12 text-emerald-400" />
+            <div className="inline-flex p-4 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
+              <CheckCircle2 className="h-12 w-12 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Application Submitted!</h1>
-            <p className="text-gray-400 mb-6">
+            <p className="text-slate-600 mb-6">
               Your application for "{job?.title}" has been sent to the client.
               They'll review it and reach out if interested.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/jobs"
-                className="px-6 py-3 rounded-xl bg-gray-800 text-white font-medium hover:bg-gray-700"
+                className="px-6 py-3 rounded-xl bg-white text-white font-medium hover:bg-slate-100"
               >
                 Browse More Jobs
               </Link>
               <Link
                 to="/my-applications"
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
               >
                 View My Applications
               </Link>
@@ -247,20 +247,20 @@ export default function JobApply() {
           {/* Back link */}
           <Link
             to="/jobs"
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4 sm:mb-6"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4 sm:mb-6"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Jobs
           </Link>
 
           {/* Job Header */}
-          <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6">
+          <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6">
             <h1 className="text-xl sm:text-2xl font-bold mb-2">{job.title}</h1>
-            <p className="text-gray-400 mb-4">
+            <p className="text-slate-600 mb-4">
               {job.client?.company_name || job.client?.profile?.full_name || 'Client'}
             </p>
 
-            <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-400 mb-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-600 mb-4">
               <span className="flex items-center gap-1.5">
                 <DollarSign className="h-4 w-4" />
                 {formatBudget(job)}
@@ -277,7 +277,7 @@ export default function JobApply() {
                 {job.job_skills.map((js) => (
                   <span
                     key={js.skill.id}
-                    className="px-2.5 py-1 rounded-full bg-gray-700 text-gray-300 text-xs"
+                    className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs"
                   >
                     {js.skill.name}
                   </span>
@@ -287,9 +287,9 @@ export default function JobApply() {
           </div>
 
           {/* Job Description */}
-          <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6">
+          <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6">
             <h2 className="font-semibold mb-3">Job Description</h2>
-            <p className="text-gray-300 whitespace-pre-wrap text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-700 whitespace-pre-wrap text-sm sm:text-base leading-relaxed">
               {job.description}
             </p>
           </div>
@@ -299,27 +299,27 @@ export default function JobApply() {
             <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
               <CheckCircle2 className="h-8 w-8 text-blue-400 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Already Applied</h3>
-              <p className="text-gray-400 text-sm mb-4">
+              <p className="text-slate-600 text-sm mb-4">
                 You've already submitted an application for this job.
               </p>
               <Link
                 to="/my-applications"
-                className="text-emerald-400 hover:text-emerald-300 text-sm"
+                className="text-[hsl(var(--primary))] hover:text-emerald-300 text-sm"
               >
                 View My Applications →
               </Link>
             </div>
           ) : job.status !== 'open' ? (
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
-              <AlertCircle className="h-8 w-8 text-gray-500 mx-auto mb-3" />
+            <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
+              <AlertCircle className="h-8 w-8 text-slate-500 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Job No Longer Available</h3>
-              <p className="text-gray-400 text-sm">
+              <p className="text-slate-600 text-sm">
                 This position has been {job.status === 'filled' ? 'filled' : 'closed'}.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+              <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                 <h2 className="font-semibold mb-4">Your Application</h2>
 
                 {error && (
@@ -330,7 +330,7 @@ export default function JobApply() {
 
                 {/* Cover Letter */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
                     Cover Letter
                   </label>
                   <textarea
@@ -338,20 +338,20 @@ export default function JobApply() {
                     onChange={(e) => setCoverLetter(e.target.value)}
                     placeholder="Introduce yourself and explain why you're a great fit for this role..."
                     rows={6}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none text-base"
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 resize-none text-base"
                   />
-                  <p className="mt-1.5 text-xs text-gray-500">
+                  <p className="mt-1.5 text-xs text-slate-500">
                     Highlight relevant experience and what makes you unique
                   </p>
                 </div>
 
                 {/* Proposed Rate */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
                     Your Rate {job.budget_type === 'hourly' ? '(per hour)' : '(total)'}
                   </label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">$</span>
                     <input
                       type="number"
                       value={proposedRate}
@@ -359,10 +359,10 @@ export default function JobApply() {
                       placeholder={job.budget_min ? String(job.budget_min) : '0'}
                       min="0"
                       step="0.01"
-                      className="w-full pl-8 pr-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                      className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                     />
                   </div>
-                  <p className="mt-1.5 text-xs text-gray-500">
+                  <p className="mt-1.5 text-xs text-slate-500">
                     Client's budget: {formatBudget(job)}
                   </p>
                 </div>
@@ -372,7 +372,7 @@ export default function JobApply() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-transform"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-transform"
               >
                 {submitting ? (
                   <>

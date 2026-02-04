@@ -21,9 +21,9 @@ interface Job {
 
 const StatusBadge = ({ status }: { status: string }) => {
   const configs: Record<string, { bg: string; text: string; label: string }> = {
-    open: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', label: 'Open' },
+    open: { bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]', label: 'Open' },
     paused: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', label: 'Paused' },
-    closed: { bg: 'bg-gray-500/20', text: 'text-gray-400', label: 'Closed' },
+    closed: { bg: 'bg-gray-500/20', text: 'text-slate-600', label: 'Closed' },
     filled: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: 'Filled' },
   }
   const c = configs[status] || configs.open
@@ -117,7 +117,7 @@ export default function MyJobs() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -131,11 +131,11 @@ export default function MyJobs() {
           <div className="flex items-center justify-between gap-4 mb-6">
             <div>
               <h1 className="text-xl sm:text-2xl font-bold">My Jobs</h1>
-              <p className="text-sm text-gray-400">{jobs.length} job{jobs.length !== 1 ? 's' : ''} posted</p>
+              <p className="text-sm text-slate-600">{jobs.length} job{jobs.length !== 1 ? 's' : ''} posted</p>
             </div>
             <Link
               to="/jobs/new"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium text-sm active:scale-[0.98]"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium text-sm active:scale-[0.98]"
             >
               <Plus className="h-5 w-5" />
               <span className="hidden sm:inline">Post Job</span>
@@ -145,14 +145,14 @@ export default function MyJobs() {
           {/* Jobs List */}
           {jobs.length === 0 ? (
             <div className="text-center py-16 sm:py-20">
-              <div className="inline-flex p-4 rounded-2xl bg-gray-800/50 mb-4">
-                <Briefcase className="h-8 w-8 text-gray-500" />
+              <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
+                <Briefcase className="h-8 w-8 text-slate-500" />
               </div>
               <h3 className="text-lg font-medium mb-2">No jobs posted yet</h3>
-              <p className="text-gray-400 mb-6 text-sm">Post your first job to start finding VAs</p>
+              <p className="text-slate-600 mb-6 text-sm">Post your first job to start finding VAs</p>
               <Link
                 to="/jobs/new"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium active:scale-[0.98]"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium active:scale-[0.98]"
               >
                 <Plus className="h-5 w-5" />
                 Post Your First Job
@@ -163,12 +163,12 @@ export default function MyJobs() {
               {jobs.map((job) => (
                 <div
                   key={job.id}
-                  className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:border-gray-600 transition-colors"
+                  className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:border-gray-600 transition-colors"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     {/* Icon */}
-                    <div className="hidden sm:flex h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 items-center justify-center flex-shrink-0">
-                      <Briefcase className="h-6 w-6 text-emerald-400" />
+                    <div className="hidden sm:flex h-12 w-12 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 items-center justify-center flex-shrink-0">
+                      <Briefcase className="h-6 w-6 text-[hsl(var(--primary))]" />
                     </div>
 
                     {/* Content */}
@@ -177,13 +177,13 @@ export default function MyJobs() {
                         <div className="min-w-0">
                           <Link 
                             to={`/jobs/${job.id}`}
-                            className="text-base sm:text-lg font-semibold text-white hover:text-emerald-400 transition-colors line-clamp-1"
+                            className="text-base sm:text-lg font-semibold text-white hover:text-[hsl(var(--primary))] transition-colors line-clamp-1"
                           >
                             {job.title}
                           </Link>
                           <div className="flex items-center gap-2 mt-1">
                             <StatusBadge status={job.status} />
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-slate-500">
                               {new Date(job.created_at).toLocaleDateString()}
                             </span>
                           </div>
@@ -193,7 +193,7 @@ export default function MyJobs() {
                         <div className="relative">
                           <button
                             onClick={() => setActionMenuId(actionMenuId === job.id ? null : job.id)}
-                            className="p-2 rounded-lg hover:bg-gray-700 text-gray-400"
+                            className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
                           >
                             <MoreVertical className="h-5 w-5" />
                           </button>
@@ -203,10 +203,10 @@ export default function MyJobs() {
                                 className="fixed inset-0 z-40" 
                                 onClick={() => setActionMenuId(null)}
                               />
-                              <div className="absolute right-0 mt-1 w-48 bg-gray-900 border border-gray-700 rounded-xl shadow-xl py-1 z-50">
+                              <div className="absolute right-0 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl py-1 z-50">
                                 <Link
                                   to={`/jobs/${job.id}`}
-                                  className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800"
+                                  className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-white"
                                 >
                                   <Eye className="h-4 w-4" />
                                   View Details
@@ -214,7 +214,7 @@ export default function MyJobs() {
                                 {job.status === 'open' ? (
                                   <button
                                     onClick={() => handleStatusChange(job.id, 'paused')}
-                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800"
+                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-white"
                                   >
                                     <Pause className="h-4 w-4" />
                                     Pause Job
@@ -222,7 +222,7 @@ export default function MyJobs() {
                                 ) : job.status === 'paused' ? (
                                   <button
                                     onClick={() => handleStatusChange(job.id, 'open')}
-                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800"
+                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-white"
                                   >
                                     <Play className="h-4 w-4" />
                                     Resume Job
@@ -230,7 +230,7 @@ export default function MyJobs() {
                                 ) : null}
                                 <button
                                   onClick={() => handleDelete(job.id)}
-                                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-gray-800"
+                                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-white"
                                 >
                                   <Trash2 className="h-4 w-4" />
                                   Delete
@@ -242,12 +242,12 @@ export default function MyJobs() {
                       </div>
 
                       {/* Description preview */}
-                      <p className="text-sm text-gray-400 line-clamp-2 mb-3">
+                      <p className="text-sm text-slate-600 line-clamp-2 mb-3">
                         {job.description}
                       </p>
 
                       {/* Meta */}
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-500">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-500">
                         <span className="flex items-center gap-1.5">
                           <DollarSign className="h-4 w-4" />
                           {formatBudget(job)}
@@ -267,7 +267,7 @@ export default function MyJobs() {
                     <div className="hidden sm:block">
                       <Link
                         to={`/jobs/${job.id}`}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 hover:border-emerald-500 hover:text-emerald-400 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-emerald-500 hover:text-[hsl(var(--primary))] transition-colors"
                       >
                         View
                         <ChevronRight className="h-4 w-4" />
@@ -278,7 +278,7 @@ export default function MyJobs() {
                   {/* Mobile: Tap to view hint */}
                   <Link
                     to={`/jobs/${job.id}`}
-                    className="sm:hidden flex items-center justify-between mt-3 pt-3 border-t border-gray-700/50 text-sm text-emerald-400"
+                    className="sm:hidden flex items-center justify-between mt-3 pt-3 border-t border-slate-200/50 text-sm text-[hsl(var(--primary))]"
                   >
                     View applicants
                     <ChevronRight className="h-4 w-4" />

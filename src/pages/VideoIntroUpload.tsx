@@ -145,7 +145,7 @@ export default function VideoIntroUpload() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -158,7 +158,7 @@ export default function VideoIntroUpload() {
           {/* Header */}
           <button
             onClick={() => navigate('/dashboard')}
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Dashboard
@@ -166,7 +166,7 @@ export default function VideoIntroUpload() {
 
           <div className="mb-6">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Video Introduction</h1>
-            <p className="text-gray-400">
+            <p className="text-slate-600">
               Upload a short video to introduce yourself to potential clients
             </p>
           </div>
@@ -180,7 +180,7 @@ export default function VideoIntroUpload() {
           )}
 
           {success && (
-            <div className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm flex items-center gap-2">
+            <div className="mb-4 p-3 rounded-lg bg-[hsl(var(--primary))]/10 border border-emerald-500/20 text-[hsl(var(--primary))] text-sm flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
               {success}
             </div>
@@ -188,9 +188,9 @@ export default function VideoIntroUpload() {
 
           {/* Current Video */}
           {currentVideoUrl && (
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 mb-6">
+            <div className="bg-white/70 border border-slate-200 rounded-xl p-4 mb-6">
               <h2 className="font-semibold mb-3">Current Video</h2>
-              <div className="relative rounded-xl overflow-hidden bg-gray-900 aspect-video mb-4">
+              <div className="relative rounded-xl overflow-hidden bg-white aspect-video mb-4">
                 <video
                   src={currentVideoUrl}
                   className="w-full h-full object-cover"
@@ -214,7 +214,7 @@ export default function VideoIntroUpload() {
           )}
 
           {/* Upload Section */}
-          <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 sm:p-6">
+          <div className="bg-white/70 border border-slate-200 rounded-xl p-4 sm:p-6">
             <h2 className="font-semibold mb-4">
               {currentVideoUrl ? 'Replace Video' : 'Upload Video'}
             </h2>
@@ -229,27 +229,27 @@ export default function VideoIntroUpload() {
 
             <div
               onClick={() => !uploading && fileInputRef.current?.click()}
-              className={`border-2 border-dashed border-gray-600 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-500/50 hover:bg-gray-800/30 transition-colors ${
+              className={`border-2 border-dashed border-gray-600 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-500/50 hover:bg-white/30 transition-colors ${
                 uploading ? 'pointer-events-none opacity-50' : ''
               }`}
             >
               {uploading ? (
                 <div className="space-y-4">
-                  <Loader2 className="h-12 w-12 mx-auto text-emerald-500 animate-spin" />
+                  <Loader2 className="h-12 w-12 mx-auto text-[hsl(var(--primary))] animate-spin" />
                   <div>
                     <p className="text-white font-medium">Uploading video...</p>
-                    <p className="text-sm text-gray-500">This may take a moment</p>
+                    <p className="text-sm text-slate-500">This may take a moment</p>
                   </div>
                 </div>
               ) : (
                 <>
-                  <div className="inline-flex p-4 rounded-2xl bg-gray-700/50 mb-4">
-                    <Upload className="h-8 w-8 text-gray-400" />
+                  <div className="inline-flex p-4 rounded-2xl bg-slate-50 mb-4">
+                    <Upload className="h-8 w-8 text-slate-600" />
                   </div>
                   <p className="text-white font-medium mb-2">
                     Click to upload or drag and drop
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-slate-500">
                     MP4, WebM, or MOV (max 50MB)
                   </p>
                 </>
@@ -257,12 +257,12 @@ export default function VideoIntroUpload() {
             </div>
 
             {/* Tips */}
-            <div className="mt-6 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-              <h3 className="text-emerald-400 font-medium mb-2 flex items-center gap-2">
+            <div className="mt-6 p-4 rounded-lg bg-[hsl(var(--primary))]/10 border border-emerald-500/20">
+              <h3 className="text-[hsl(var(--primary))] font-medium mb-2 flex items-center gap-2">
                 <Video className="h-4 w-4" />
                 Tips for a great intro video
               </h3>
-              <ul className="text-sm text-gray-300 space-y-1.5">
+              <ul className="text-sm text-slate-700 space-y-1.5">
                 <li>• Keep it short: 30-90 seconds is ideal</li>
                 <li>• Introduce yourself and your key skills</li>
                 <li>• Show your personality and communication style</li>

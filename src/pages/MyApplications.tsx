@@ -34,8 +34,8 @@ interface Application {
 const statusConfig: Record<string, { label: string; icon: typeof Clock; bg: string; text: string }> = {
   pending: { label: 'Pending', icon: Clock, bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
   shortlisted: { label: 'Shortlisted', icon: Star, bg: 'bg-blue-500/20', text: 'text-blue-400' },
-  rejected: { label: 'Not Selected', icon: XCircle, bg: 'bg-gray-500/20', text: 'text-gray-400' },
-  hired: { label: 'Hired!', icon: CheckCircle2, bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+  rejected: { label: 'Not Selected', icon: XCircle, bg: 'bg-gray-500/20', text: 'text-slate-600' },
+  hired: { label: 'Hired!', icon: CheckCircle2, bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]' },
 }
 
 export default function MyApplications() {
@@ -167,7 +167,7 @@ export default function MyApplications() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -179,21 +179,21 @@ export default function MyApplications() {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">My Applications</h1>
-          <p className="text-gray-400">
+          <p className="text-slate-600">
             Track the status of jobs you've applied to
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 p-1 bg-gray-800/50 rounded-xl mb-6 overflow-x-auto">
+        <div className="flex gap-1 p-1 bg-white/70 rounded-xl mb-6 overflow-x-auto">
           {(['all', 'active', 'closed'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 min-w-[80px] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === tab
-                  ? 'bg-gray-700 text-white'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'bg-slate-100 text-white'
+                  : 'text-slate-600 hover:text-white'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)} ({counts[tab]})
@@ -204,13 +204,13 @@ export default function MyApplications() {
         {/* Applications List */}
         {filteredApplications.length === 0 ? (
           <div className="text-center py-16">
-            <div className="inline-flex p-4 rounded-2xl bg-gray-800/50 mb-4">
-              <Briefcase className="h-8 w-8 text-gray-500" />
+            <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
+              <Briefcase className="h-8 w-8 text-slate-500" />
             </div>
             <h3 className="text-lg font-medium mb-2">
               {activeTab === 'all' ? 'No applications yet' : `No ${activeTab} applications`}
             </h3>
-            <p className="text-gray-400 text-sm mb-6">
+            <p className="text-slate-600 text-sm mb-6">
               {activeTab === 'all'
                 ? 'Start applying to jobs to see them here'
                 : 'Check other tabs for your applications'}
@@ -218,7 +218,7 @@ export default function MyApplications() {
             {activeTab === 'all' && (
               <Link
                 to="/jobs"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
               >
                 Browse Jobs
               </Link>
@@ -234,7 +234,7 @@ export default function MyApplications() {
               return (
                 <div
                   key={app.id}
-                  className={`bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 ${
+                  className={`bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 ${
                     jobClosed && app.status === 'pending' ? 'opacity-60' : ''
                   }`}
                 >
@@ -245,7 +245,7 @@ export default function MyApplications() {
                           {app.job.title}
                         </h3>
                       </div>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-slate-600">
                         {app.job.client?.company_name || app.job.client?.profile?.full_name || 'Client'}
                       </p>
                     </div>
@@ -259,13 +259,13 @@ export default function MyApplications() {
 
                   {/* Job Closed Notice */}
                   {jobClosed && app.status === 'pending' && (
-                    <div className="mb-3 px-3 py-2 rounded-lg bg-gray-700/50 text-gray-400 text-xs">
+                    <div className="mb-3 px-3 py-2 rounded-lg bg-slate-50 text-slate-600 text-xs">
                       This job has been {app.job.status === 'filled' ? 'filled' : 'closed'}
                     </div>
                   )}
 
                   {/* Meta */}
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mb-4">
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 mb-4">
                     <span className="flex items-center gap-1">
                       <DollarSign className="h-3.5 w-3.5" />
                       {formatBudget(app.job)}
@@ -283,9 +283,9 @@ export default function MyApplications() {
 
                   {/* Cover Letter Preview */}
                   {app.cover_letter && (
-                    <div className="mb-4 p-3 rounded-lg bg-gray-800/50 border border-gray-700">
-                      <p className="text-xs text-gray-500 mb-1">Your cover letter:</p>
-                      <p className="text-sm text-gray-300 line-clamp-2">
+                    <div className="mb-4 p-3 rounded-lg bg-white/70 border border-slate-200">
+                      <p className="text-xs text-slate-500 mb-1">Your cover letter:</p>
+                      <p className="text-sm text-slate-700 line-clamp-2">
                         {app.cover_letter}
                       </p>
                     </div>
@@ -296,7 +296,7 @@ export default function MyApplications() {
                     {(app.status === 'shortlisted' || app.status === 'hired') && (
                       <button
                         onClick={() => handleMessageClient(app.job.client.user_id)}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] text-sm font-medium hover:bg-[hsl(var(--primary))]/20 transition-colors"
                       >
                         <MessageCircle className="h-4 w-4" />
                         Message Client
@@ -304,7 +304,7 @@ export default function MyApplications() {
                     )}
                     <Link
                       to={`/jobs/${app.job.id}/apply`}
-                      className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gray-700/50 text-gray-300 text-sm font-medium hover:bg-gray-700 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-sm font-medium hover:bg-slate-100 transition-colors"
                     >
                       View Job
                     </Link>

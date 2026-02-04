@@ -157,7 +157,7 @@ export default function BrowseJobs() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -169,32 +169,32 @@ export default function BrowseJobs() {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">Browse Jobs</h1>
-          <p className="text-gray-400">
+          <p className="text-slate-600">
             {filteredJobs.length} open position{filteredJobs.length !== 1 ? 's' : ''} available
           </p>
         </div>
 
         {/* Search + Filter Bar */}
-        <div className="sticky top-[57px] sm:top-[65px] z-30 -mx-4 px-4 py-3 bg-gray-950/95 backdrop-blur border-b border-gray-800 mb-4">
+        <div className="sticky top-[57px] sm:top-[65px] z-30 -mx-4 px-4 py-3 bg-white/90 backdrop-blur border-b border-slate-200 mb-4">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
               <input
                 type="text"
                 placeholder="Search jobs or skills..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
               />
             </div>
             <button
               onClick={() => setShowFilters(true)}
-              className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 hover:bg-gray-700 active:bg-gray-600 transition-colors"
+              className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 active:bg-slate-200 transition-colors"
             >
               <Filter className="h-5 w-5" />
               <span className="hidden sm:inline">Filters</span>
               {activeFiltersCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-emerald-500 text-xs flex items-center justify-center font-bold">
+                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[hsl(var(--primary))] text-xs flex items-center justify-center font-bold">
                   {activeFiltersCount}
                 </span>
               )}
@@ -205,7 +205,7 @@ export default function BrowseJobs() {
           {activeFiltersCount > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
               {budgetType && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs">
                   {budgetType === 'hourly' ? 'Hourly' : 'Fixed Price'}
                   <button onClick={() => setBudgetType('')} className="hover:text-white">
                     <X className="h-3 w-3" />
@@ -213,7 +213,7 @@ export default function BrowseJobs() {
                 </span>
               )}
               {minBudget && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs">
                   ${minBudget}+ min
                   <button onClick={() => setMinBudget('')} className="hover:text-white">
                     <X className="h-3 w-3" />
@@ -227,11 +227,11 @@ export default function BrowseJobs() {
         {/* Job List */}
         {filteredJobs.length === 0 ? (
           <div className="text-center py-16">
-            <div className="inline-flex p-4 rounded-2xl bg-gray-800/50 mb-4">
-              <Briefcase className="h-8 w-8 text-gray-500" />
+            <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
+              <Briefcase className="h-8 w-8 text-slate-500" />
             </div>
             <h3 className="text-lg font-medium mb-2">No jobs found</h3>
-            <p className="text-gray-400 text-sm">
+            <p className="text-slate-600 text-sm">
               {searchQuery || activeFiltersCount > 0
                 ? 'Try adjusting your search or filters'
                 : 'Check back soon for new opportunities'}
@@ -246,7 +246,7 @@ export default function BrowseJobs() {
                 <Link
                   key={job.id}
                   to={`/jobs/${job.id}/apply`}
-                  className="block bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-gray-600 active:bg-gray-800 transition-colors"
+                  className="block bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-gray-600 active:bg-white transition-colors"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
@@ -259,11 +259,11 @@ export default function BrowseJobs() {
                         )}
                       </div>
                       
-                      <p className="text-sm text-gray-400 mb-3">
+                      <p className="text-sm text-slate-600 mb-3">
                         {job.client?.company_name || job.client?.profile?.full_name || 'Client'}
                       </p>
 
-                      <p className="text-sm text-gray-300 line-clamp-2 mb-3">
+                      <p className="text-sm text-slate-700 line-clamp-2 mb-3">
                         {job.description}
                       </p>
 
@@ -273,13 +273,13 @@ export default function BrowseJobs() {
                           {job.job_skills.slice(0, 4).map((js) => (
                             <span
                               key={js.skill.id}
-                              className="px-2 py-0.5 rounded-full bg-gray-700 text-gray-300 text-xs"
+                              className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs"
                             >
                               {js.skill.name}
                             </span>
                           ))}
                           {job.job_skills.length > 4 && (
-                            <span className="px-2 py-0.5 rounded-full bg-gray-700 text-gray-400 text-xs">
+                            <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs">
                               +{job.job_skills.length - 4}
                             </span>
                           )}
@@ -287,7 +287,7 @@ export default function BrowseJobs() {
                       )}
 
                       {/* Meta */}
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
                         <span className="flex items-center gap-1">
                           <DollarSign className="h-3.5 w-3.5" />
                           {formatBudget(job)}
@@ -299,7 +299,7 @@ export default function BrowseJobs() {
                       </div>
                     </div>
 
-                    <ChevronRight className="h-5 w-5 text-gray-600 flex-shrink-0 mt-1" />
+                    <ChevronRight className="h-5 w-5 text-slate-500 flex-shrink-0 mt-1" />
                   </div>
                 </Link>
               )
@@ -315,12 +315,12 @@ export default function BrowseJobs() {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setShowFilters(false)}
           />
-          <div className="relative w-full sm:max-w-md bg-gray-900 border border-gray-700 rounded-t-2xl sm:rounded-2xl p-6 animate-slide-in-from-bottom sm:animate-none">
+          <div className="relative w-full sm:max-w-md bg-white border border-slate-200 rounded-t-2xl sm:rounded-2xl p-6 animate-slide-in-from-bottom sm:animate-none">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold">Filters</h2>
               <button
                 onClick={() => setShowFilters(false)}
-                className="p-2 -mr-2 text-gray-400 hover:text-white"
+                className="p-2 -mr-2 text-slate-600 hover:text-white"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -329,7 +329,7 @@ export default function BrowseJobs() {
             <div className="space-y-5">
               {/* Budget Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
                   Budget Type
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -343,8 +343,8 @@ export default function BrowseJobs() {
                       onClick={() => setBudgetType(opt.value)}
                       className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                         budgetType === opt.value
-                          ? 'bg-emerald-500 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? 'bg-[hsl(var(--primary))] text-white'
+                          : 'bg-white text-slate-700 hover:bg-slate-100'
                       }`}
                     >
                       {opt.label}
@@ -355,7 +355,7 @@ export default function BrowseJobs() {
 
               {/* Min Budget */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
                   Minimum Budget
                 </label>
                 <div className="grid grid-cols-4 gap-2">
@@ -365,8 +365,8 @@ export default function BrowseJobs() {
                       onClick={() => setMinBudget(val)}
                       className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                         minBudget === val
-                          ? 'bg-emerald-500 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? 'bg-[hsl(var(--primary))] text-white'
+                          : 'bg-white text-slate-700 hover:bg-slate-100'
                       }`}
                     >
                       {val ? `$${val}+` : 'Any'}
@@ -383,13 +383,13 @@ export default function BrowseJobs() {
                   setBudgetType('')
                   setMinBudget('')
                 }}
-                className="flex-1 px-4 py-3 rounded-xl bg-gray-800 text-gray-300 font-medium hover:bg-gray-700"
+                className="flex-1 px-4 py-3 rounded-xl bg-white text-slate-700 font-medium hover:bg-slate-100"
               >
                 Clear All
               </button>
               <button
                 onClick={() => setShowFilters(false)}
-                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium"
+                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
               >
                 Apply Filters
               </button>

@@ -239,7 +239,7 @@ export default function BookInterview() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -250,11 +250,11 @@ export default function BookInterview() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-lg mx-auto text-center">
-            <div className="inline-flex p-4 rounded-2xl bg-emerald-500/10 mb-4">
-              <CheckCircle2 className="h-12 w-12 text-emerald-400" />
+            <div className="inline-flex p-4 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
+              <CheckCircle2 className="h-12 w-12 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Interview Scheduled!</h1>
-            <p className="text-gray-400 mb-2">
+            <p className="text-slate-600 mb-2">
               Your interview with {va?.profile?.full_name || 'the VA'} is confirmed.
             </p>
             <p className="text-lg font-medium text-white mb-6">
@@ -263,13 +263,13 @@ export default function BookInterview() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/my-interviews"
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
               >
                 View My Interviews
               </Link>
               <Link
                 to="/search"
-                className="px-6 py-3 rounded-xl bg-gray-800 text-white font-medium hover:bg-gray-700"
+                className="px-6 py-3 rounded-xl bg-white text-white font-medium hover:bg-slate-100"
               >
                 Browse More VAs
               </Link>
@@ -290,7 +290,7 @@ export default function BookInterview() {
           {/* Back */}
           <Link
             to={`/va/${vaId}`}
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Profile
@@ -301,7 +301,7 @@ export default function BookInterview() {
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">
               Book Interview with {va?.profile?.full_name || 'VA'}
             </h1>
-            <p className="text-gray-400">Select a date and time for a 30-minute call</p>
+            <p className="text-slate-600">Select a date and time for a 30-minute call</p>
           </div>
 
           {error && (
@@ -311,21 +311,21 @@ export default function BookInterview() {
           )}
 
           {availability.length === 0 ? (
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-8 text-center">
-              <Calendar className="h-10 w-10 text-gray-500 mx-auto mb-3" />
+            <div className="bg-white/70 border border-slate-200 rounded-xl p-8 text-center">
+              <Calendar className="h-10 w-10 text-slate-500 mx-auto mb-3" />
               <h3 className="font-medium mb-2">No Availability Set</h3>
-              <p className="text-gray-400 text-sm">
+              <p className="text-slate-600 text-sm">
                 This VA hasn't set their interview availability yet.
               </p>
             </div>
           ) : (
             <div className="space-y-6">
               {/* Week Calendar */}
-              <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4">
+              <div className="bg-white/70 border border-slate-200 rounded-xl p-4">
                 <div className="flex items-center justify-between mb-4">
                   <button
                     onClick={prevWeek}
-                    className="p-2 rounded-lg hover:bg-gray-700 text-gray-400"
+                    className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </button>
@@ -334,7 +334,7 @@ export default function BookInterview() {
                   </span>
                   <button
                     onClick={nextWeek}
-                    className="p-2 rounded-lg hover:bg-gray-700 text-gray-400"
+                    className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
                   >
                     <ChevronRight className="h-5 w-5" />
                   </button>
@@ -353,10 +353,10 @@ export default function BookInterview() {
                         disabled={!available}
                         className={`flex flex-col items-center p-2 sm:p-3 rounded-lg transition-colors ${
                           isSelected
-                            ? 'bg-emerald-500 text-white'
+                            ? 'bg-[hsl(var(--primary))] text-white'
                             : available
-                            ? 'bg-gray-700/50 hover:bg-gray-700 text-white'
-                            : 'bg-gray-800/30 text-gray-600 cursor-not-allowed'
+                            ? 'bg-slate-50 hover:bg-slate-100 text-white'
+                            : 'bg-white/30 text-slate-500 cursor-not-allowed'
                         } ${isToday && !isSelected ? 'ring-1 ring-emerald-500/50' : ''}`}
                       >
                         <span className="text-xs text-inherit opacity-70">{DAYS[idx]}</span>
@@ -369,13 +369,13 @@ export default function BookInterview() {
 
               {/* Time Slots */}
               {selectedDate && (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4">
+                <div className="bg-white/70 border border-slate-200 rounded-xl p-4">
                   <h3 className="font-medium mb-3">
                     Available times for {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
                   </h3>
 
                   {timeSlots.length === 0 ? (
-                    <p className="text-gray-500 text-sm py-4 text-center">
+                    <p className="text-slate-500 text-sm py-4 text-center">
                       No available slots for this date
                     </p>
                   ) : (
@@ -386,8 +386,8 @@ export default function BookInterview() {
                           onClick={() => setSelectedTime(time)}
                           className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                             selectedTime === time
-                              ? 'bg-emerald-500 text-white'
-                              : 'bg-gray-700/50 hover:bg-gray-700 text-gray-300'
+                              ? 'bg-[hsl(var(--primary))] text-white'
+                              : 'bg-slate-50 hover:bg-slate-100 text-slate-700'
                           }`}
                         >
                           {formatTime(time)}
@@ -400,9 +400,9 @@ export default function BookInterview() {
 
               {/* Notes & Book */}
               {selectedDate && selectedTime && (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-4">
+                <div className="bg-white/70 border border-slate-200 rounded-xl p-4 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Notes (optional)
                     </label>
                     <textarea
@@ -410,15 +410,15 @@ export default function BookInterview() {
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="Anything you'd like to discuss..."
                       rows={3}
-                      className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 resize-none"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] resize-none"
                     />
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                    <Clock className="h-5 w-5 text-emerald-400 flex-shrink-0" />
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-[hsl(var(--primary))]/10 border border-emerald-500/20">
+                    <Clock className="h-5 w-5 text-[hsl(var(--primary))] flex-shrink-0" />
                     <div className="text-sm">
-                      <span className="font-medium text-emerald-400">Selected: </span>
-                      <span className="text-gray-300">
+                      <span className="font-medium text-[hsl(var(--primary))]">Selected: </span>
+                      <span className="text-slate-700">
                         {selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at {formatTime(selectedTime)}
                       </span>
                     </div>
@@ -427,7 +427,7 @@ export default function BookInterview() {
                   <button
                     onClick={handleBook}
                     disabled={booking}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold text-lg disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold text-lg disabled:opacity-50"
                   >
                     {booking ? (
                       <>

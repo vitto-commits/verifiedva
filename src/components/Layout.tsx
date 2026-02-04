@@ -57,16 +57,16 @@ export default function Layout({ children }: LayoutProps) {
             <nav className="hidden md:flex items-center gap-6">
               <Link 
                 to="/search" 
-                className={`text-sm font-medium transition-colors hover:text-emerald-400 ${
-                  location.pathname === '/search' ? 'text-emerald-400' : 'text-gray-400'
+                className={`text-sm font-medium transition-colors hover:text-[hsl(var(--primary))] ${
+                  location.pathname === '/search' ? 'text-[hsl(var(--primary))]' : 'text-slate-600'
                 }`}
               >
                 Find VAs
               </Link>
               <Link 
                 to="/va/signup" 
-                className={`text-sm font-medium transition-colors hover:text-emerald-400 ${
-                  location.pathname === '/va/signup' ? 'text-emerald-400' : 'text-gray-400'
+                className={`text-sm font-medium transition-colors hover:text-[hsl(var(--primary))] ${
+                  location.pathname === '/va/signup' ? 'text-[hsl(var(--primary))]' : 'text-slate-600'
                 }`}
               >
                 Become a VA
@@ -83,10 +83,10 @@ export default function Layout({ children }: LayoutProps) {
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 rounded-lg p-1.5 sm:px-3 sm:py-2 hover:bg-slate-100 transition-colors active:scale-95"
                   >
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-sm font-medium">
+                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-sm font-medium">
                       {profile?.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
                     </div>
-                    <span className="hidden sm:block text-sm text-gray-300 max-w-[120px] truncate">
+                    <span className="hidden sm:block text-sm text-slate-700 max-w-[120px] truncate">
                       {profile?.full_name || user.email?.split('@')[0]}
                     </span>
                   </button>
@@ -104,13 +104,13 @@ export default function Layout({ children }: LayoutProps) {
                           <div className="font-medium text-white truncate">
                             {profile?.full_name || 'User'}
                           </div>
-                          <div className="text-sm text-gray-500 truncate">
+                          <div className="text-sm text-slate-500 truncate">
                             {user.email}
                           </div>
                         </div>
                         <Link
                           to="/dashboard"
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                           onClick={() => setUserMenuOpen(false)}
                         >
                           <User className="h-5 w-5" />
@@ -118,7 +118,7 @@ export default function Layout({ children }: LayoutProps) {
                         </Link>
                         <Link
                           to="/messages"
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                           onClick={() => setUserMenuOpen(false)}
                         >
                           <MessageCircle className="h-5 w-5" />
@@ -126,7 +126,7 @@ export default function Layout({ children }: LayoutProps) {
                         </Link>
                         <Link
                           to="/my-interviews"
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                           onClick={() => setUserMenuOpen(false)}
                         >
                           <Calendar className="h-5 w-5" />
@@ -135,7 +135,7 @@ export default function Layout({ children }: LayoutProps) {
                         {profile?.user_type === 'client' && (
                           <Link
                             to="/my-jobs"
-                            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                             onClick={() => setUserMenuOpen(false)}
                           >
                             <Briefcase className="h-5 w-5" />
@@ -146,7 +146,7 @@ export default function Layout({ children }: LayoutProps) {
                           <>
                             <Link
                               to="/jobs"
-                              className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                              className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                               onClick={() => setUserMenuOpen(false)}
                             >
                               <Search className="h-5 w-5" />
@@ -154,7 +154,7 @@ export default function Layout({ children }: LayoutProps) {
                             </Link>
                             <Link
                               to="/my-applications"
-                              className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                              className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                               onClick={() => setUserMenuOpen(false)}
                             >
                               <Briefcase className="h-5 w-5" />
@@ -167,7 +167,7 @@ export default function Layout({ children }: LayoutProps) {
                             setUserMenuOpen(false)
                             handleSignOut()
                           }}
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700 w-full"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100 w-full"
                         >
                           <LogOut className="h-5 w-5" />
                           Sign Out
@@ -180,13 +180,13 @@ export default function Layout({ children }: LayoutProps) {
                 <>
                   <Link
                     to="/login"
-                    className="hidden md:inline-flex text-sm font-medium text-gray-400 hover:text-white transition-colors px-3 py-2"
+                    className="hidden md:inline-flex text-sm font-medium text-slate-600 hover:text-white transition-colors px-3 py-2"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/client/signup"
-                    className="hidden md:inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white hover:from-emerald-600 hover:to-cyan-600 transition-all active:scale-95"
+                    className="hidden md:inline-flex items-center justify-center rounded-lg bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] px-4 py-2 text-sm font-medium text-white hover:from-emerald-600 hover:to-cyan-600 transition-all active:scale-95"
                   >
                     Get Started
                   </Link>
@@ -196,7 +196,7 @@ export default function Layout({ children }: LayoutProps) {
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2.5 -mr-1 rounded-lg hover:bg-gray-800 transition-colors active:scale-95"
+                className="md:hidden p-2.5 -mr-1 rounded-lg hover:bg-white transition-colors active:scale-95"
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? (
@@ -223,8 +223,8 @@ export default function Layout({ children }: LayoutProps) {
                 to="/search"
                 className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                   location.pathname === '/search' 
-                    ? 'bg-emerald-500/10 text-emerald-400' 
-                    : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                    ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                    : 'text-slate-700 hover:bg-white active:bg-slate-100'
                 }`}
               >
                 <Search className="h-6 w-6" />
@@ -234,8 +234,8 @@ export default function Layout({ children }: LayoutProps) {
                 to="/va/signup"
                 className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                   location.pathname === '/va/signup' 
-                    ? 'bg-emerald-500/10 text-emerald-400' 
-                    : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                    ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                    : 'text-slate-700 hover:bg-white active:bg-slate-100'
                 }`}
               >
                 <UserPlus className="h-6 w-6" />
@@ -244,13 +244,13 @@ export default function Layout({ children }: LayoutProps) {
               
               {user && (
                 <>
-                  <div className="h-px bg-gray-800 my-4" />
+                  <div className="h-px bg-white my-4" />
                   <Link
                     to="/dashboard"
                     className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                       location.pathname === '/dashboard' 
-                        ? 'bg-emerald-500/10 text-emerald-400' 
-                        : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                        ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                        : 'text-slate-700 hover:bg-white active:bg-slate-100'
                     }`}
                   >
                     <User className="h-6 w-6" />
@@ -260,8 +260,8 @@ export default function Layout({ children }: LayoutProps) {
                     to="/messages"
                     className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                       location.pathname.startsWith('/messages')
-                        ? 'bg-emerald-500/10 text-emerald-400' 
-                        : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                        ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                        : 'text-slate-700 hover:bg-white active:bg-slate-100'
                     }`}
                   >
                     <MessageCircle className="h-6 w-6" />
@@ -271,8 +271,8 @@ export default function Layout({ children }: LayoutProps) {
                     to="/my-interviews"
                     className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                       location.pathname === '/my-interviews' || location.pathname.startsWith('/book')
-                        ? 'bg-emerald-500/10 text-emerald-400' 
-                        : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                        ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                        : 'text-slate-700 hover:bg-white active:bg-slate-100'
                     }`}
                   >
                     <Calendar className="h-6 w-6" />
@@ -283,8 +283,8 @@ export default function Layout({ children }: LayoutProps) {
                       to="/my-jobs"
                       className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                         location.pathname === '/my-jobs' || location.pathname.startsWith('/jobs')
-                          ? 'bg-emerald-500/10 text-emerald-400' 
-                          : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                          ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                          : 'text-slate-700 hover:bg-white active:bg-slate-100'
                       }`}
                     >
                       <Briefcase className="h-6 w-6" />
@@ -297,8 +297,8 @@ export default function Layout({ children }: LayoutProps) {
                         to="/jobs"
                         className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                           location.pathname === '/jobs'
-                            ? 'bg-emerald-500/10 text-emerald-400' 
-                            : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                            ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                            : 'text-slate-700 hover:bg-white active:bg-slate-100'
                         }`}
                       >
                         <Search className="h-6 w-6" />
@@ -308,8 +308,8 @@ export default function Layout({ children }: LayoutProps) {
                         to="/my-applications"
                         className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
                           location.pathname === '/my-applications'
-                            ? 'bg-emerald-500/10 text-emerald-400' 
-                            : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                            ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                            : 'text-slate-700 hover:bg-white active:bg-slate-100'
                         }`}
                       >
                         <Briefcase className="h-6 w-6" />
@@ -322,25 +322,25 @@ export default function Layout({ children }: LayoutProps) {
             </nav>
 
             {/* Bottom actions */}
-            <div className="p-4 border-t border-gray-800 space-y-3">
+            <div className="p-4 border-t border-slate-200 space-y-3">
               {user ? (
                 <>
-                  <div className="flex items-center gap-3 px-4 py-2 text-gray-400">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center font-medium">
+                  <div className="flex items-center gap-3 px-4 py-2 text-slate-600">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center font-medium">
                       {profile?.full_name?.[0]?.toUpperCase() || 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-white truncate">
                         {profile?.full_name || 'User'}
                       </div>
-                      <div className="text-sm text-gray-500 truncate">
+                      <div className="text-sm text-slate-500 truncate">
                         {user.email}
                       </div>
                     </div>
                   </div>
                   <button
                     onClick={handleSignOut}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl border border-gray-700 text-gray-300 font-medium hover:bg-gray-800 active:bg-gray-700 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-white active:bg-slate-100 transition-colors"
                   >
                     <LogOut className="h-5 w-5" />
                     Sign Out
@@ -350,13 +350,13 @@ export default function Layout({ children }: LayoutProps) {
                 <>
                   <Link
                     to="/client/signup"
-                    className="block w-full text-center rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-4 py-3.5 text-base font-medium text-white active:scale-[0.98] transition-transform"
+                    className="block w-full text-center rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] px-4 py-3.5 text-base font-medium text-white active:scale-[0.98] transition-transform"
                   >
                     Get Started
                   </Link>
                   <Link
                     to="/login"
-                    className="block w-full text-center rounded-xl border border-gray-700 px-4 py-3.5 text-base font-medium text-gray-300 hover:bg-gray-800 active:bg-gray-700 transition-colors"
+                    className="block w-full text-center rounded-xl border border-slate-200 px-4 py-3.5 text-base font-medium text-slate-700 hover:bg-white active:bg-slate-100 transition-colors"
                   >
                     Sign In
                   </Link>
@@ -371,19 +371,19 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-800 mt-auto">
+      <footer className="border-t border-slate-200 mt-auto">
         <div className="container mx-auto px-4 py-6 sm:py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-emerald-400 to-cyan-500 text-white text-xs font-bold">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] text-white text-xs font-bold">
                 VA
               </div>
-              <span className="text-sm text-gray-400">© 2026 VA Marketplace</span>
+              <span className="text-sm text-slate-600">© 2026 VA Marketplace</span>
             </div>
-            <div className="flex gap-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-emerald-400 active:text-emerald-500">Privacy</a>
-              <a href="#" className="hover:text-emerald-400 active:text-emerald-500">Terms</a>
-              <a href="#" className="hover:text-emerald-400 active:text-emerald-500">Contact</a>
+            <div className="flex gap-6 text-sm text-slate-600">
+              <a href="#" className="hover:text-[hsl(var(--primary))] active:text-[hsl(var(--primary))]">Privacy</a>
+              <a href="#" className="hover:text-[hsl(var(--primary))] active:text-[hsl(var(--primary))]">Terms</a>
+              <a href="#" className="hover:text-[hsl(var(--primary))] active:text-[hsl(var(--primary))]">Contact</a>
             </div>
           </div>
         </div>

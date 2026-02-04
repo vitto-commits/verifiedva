@@ -13,8 +13,8 @@ interface VAWithDetails extends VA {
 
 const VerificationBadge = ({ status, compact = false }: { status: string; compact?: boolean }) => {
   const config: Record<string, { label: string; bg: string; text: string; desc: string }> = {
-    pending: { label: 'Pending', bg: 'bg-gray-500/20', text: 'text-gray-400', desc: 'Identity not yet verified' },
-    verified: { label: '✓ Verified', bg: 'bg-emerald-500/20', text: 'text-emerald-400', desc: 'Identity & education confirmed' },
+    pending: { label: 'Pending', bg: 'bg-gray-500/20', text: 'text-slate-600', desc: 'Identity not yet verified' },
+    verified: { label: '✓ Verified', bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]', desc: 'Identity & education confirmed' },
     pro: { label: '✓✓ Pro', bg: 'bg-blue-500/20', text: 'text-blue-400', desc: 'Skills tested & 2+ references' },
     elite: { label: '✓✓✓ Elite', bg: 'bg-purple-500/20', text: 'text-purple-400', desc: 'Background check & interview' },
   }
@@ -31,7 +31,7 @@ const VerificationBadge = ({ status, compact = false }: { status: string; compac
   return (
     <div className={`inline-flex flex-col items-start px-3 py-2 rounded-lg ${c.bg}`}>
       <span className={`font-semibold text-sm ${c.text}`}>{c.label}</span>
-      <span className="text-xs text-gray-500">{c.desc}</span>
+      <span className="text-xs text-slate-500">{c.desc}</span>
     </div>
   )
 }
@@ -128,7 +128,7 @@ export default function VAProfile() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -139,10 +139,10 @@ export default function VAProfile() {
       <Layout>
         <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
           <div className="text-4xl mb-4">😕</div>
-          <p className="text-gray-400 mb-4 text-center">{error || 'VA not found'}</p>
+          <p className="text-slate-600 mb-4 text-center">{error || 'VA not found'}</p>
           <Link 
             to="/search" 
-            className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium"
+            className="flex items-center gap-2 text-[hsl(var(--primary))] hover:text-emerald-300 font-medium"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to search
@@ -167,7 +167,7 @@ export default function VAProfile() {
           {/* Back button */}
           <Link 
             to="/search" 
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4 sm:mb-6 transition-colors py-1"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4 sm:mb-6 transition-colors py-1"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm">Back to search</span>
@@ -177,11 +177,11 @@ export default function VAProfile() {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-4 sm:space-y-6">
               {/* Header Card */}
-              <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+              <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                   {/* Avatar + Mobile badge */}
                   <div className="flex items-start gap-4 sm:block">
-                    <div className="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white flex-shrink-0">
+                    <div className="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-2xl sm:text-3xl font-bold text-white flex-shrink-0">
                       {va.profile?.full_name?.[0]?.toUpperCase() || 'V'}
                     </div>
                     {/* Mobile: Name + Badge */}
@@ -198,11 +198,11 @@ export default function VAProfile() {
                     <h1 className="hidden sm:block text-2xl font-bold mb-2">{va.profile?.full_name || 'VA'}</h1>
                     
                     {va.headline && (
-                      <p className="text-base sm:text-lg text-gray-400 mb-3">{va.headline}</p>
+                      <p className="text-base sm:text-lg text-slate-600 mb-3">{va.headline}</p>
                     )}
                     
                     {/* Meta info */}
-                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500">
+                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500">
                       {va.location && (
                         <span className="flex items-center gap-1.5">
                           <MapPin className="h-4 w-4" />
@@ -234,36 +234,36 @@ export default function VAProfile() {
               {/* Quick stats - Mobile */}
               <div className="grid grid-cols-3 gap-2 lg:hidden">
                 {va.hourly_rate && (
-                  <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-center">
-                    <div className="text-lg sm:text-xl font-bold text-emerald-400">${va.hourly_rate}</div>
-                    <div className="text-xs text-gray-500">per hour</div>
+                  <div className="bg-white/70 border border-slate-200 rounded-xl p-3 text-center">
+                    <div className="text-lg sm:text-xl font-bold text-[hsl(var(--primary))]">${va.hourly_rate}</div>
+                    <div className="text-xs text-slate-500">per hour</div>
                   </div>
                 )}
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-center">
+                <div className="bg-white/70 border border-slate-200 rounded-xl p-3 text-center">
                   <div className="text-lg sm:text-xl font-bold text-white capitalize">
                     {va.availability?.split('-')[0] || 'Any'}
                   </div>
-                  <div className="text-xs text-gray-500">availability</div>
+                  <div className="text-xs text-slate-500">availability</div>
                 </div>
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-center">
+                <div className="bg-white/70 border border-slate-200 rounded-xl p-3 text-center">
                   <div className="text-lg sm:text-xl font-bold text-white">24h</div>
-                  <div className="text-xs text-gray-500">response</div>
+                  <div className="text-xs text-slate-500">response</div>
                 </div>
               </div>
 
               {/* Bio */}
               {va.bio && (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                   <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">About</h2>
-                  <p className="text-sm sm:text-base text-gray-300 whitespace-pre-wrap leading-relaxed">{va.bio}</p>
+                  <p className="text-sm sm:text-base text-slate-700 whitespace-pre-wrap leading-relaxed">{va.bio}</p>
                 </div>
               )}
 
               {/* Video Intro */}
               {va.video_intro_url && (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                   <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Video Introduction</h2>
-                  <div className="relative rounded-xl overflow-hidden bg-gray-900 aspect-video">
+                  <div className="relative rounded-xl overflow-hidden bg-white aspect-video">
                     <video
                       src={va.video_intro_url}
                       className="w-full h-full object-cover"
@@ -277,17 +277,17 @@ export default function VAProfile() {
 
               {/* Skills */}
               {va.va_skills && va.va_skills.length > 0 && (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                   <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Skills</h2>
                   <div className="space-y-4">
                     {Object.entries(skillsByCategory || {}).map(([category, skills]) => (
                       <div key={category}>
-                        <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-2">{category}</h3>
+                        <h3 className="text-xs sm:text-sm font-medium text-slate-500 mb-2">{category}</h3>
                         <div className="flex flex-wrap gap-2">
                           {skills.map((vs) => (
                             <span
                               key={vs.skill?.id}
-                              className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-700 text-gray-300 text-xs sm:text-sm"
+                              className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs sm:text-sm"
                             >
                               {vs.skill?.name}
                             </span>
@@ -301,11 +301,11 @@ export default function VAProfile() {
 
               {/* Languages */}
               {va.languages && va.languages.length > 0 && (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                   <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Languages</h2>
                   <div className="flex flex-wrap gap-2">
                     {va.languages.map((lang) => (
-                      <span key={lang} className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-700 text-gray-300 text-xs sm:text-sm">
+                      <span key={lang} className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs sm:text-sm">
                         {lang}
                       </span>
                     ))}
@@ -317,18 +317,18 @@ export default function VAProfile() {
             {/* Desktop Sidebar */}
             <div className="hidden lg:block space-y-6">
               {/* Contact Card */}
-              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 sticky top-24">
+              <div className="bg-white/70 border border-slate-200 rounded-2xl p-6 sticky top-24">
                 {va.hourly_rate && (
                   <div className="text-center mb-6">
-                    <div className="text-3xl font-bold text-emerald-400">${va.hourly_rate}</div>
-                    <div className="text-gray-500">per hour</div>
+                    <div className="text-3xl font-bold text-[hsl(var(--primary))]">${va.hourly_rate}</div>
+                    <div className="text-slate-500">per hour</div>
                   </div>
                 )}
 
                 <button 
                   onClick={handleStartConversation}
                   disabled={startingChat}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all mb-3 disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all mb-3 disabled:opacity-50"
                 >
                   {startingChat ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -342,7 +342,7 @@ export default function VAProfile() {
 
                 <Link
                   to={`/book/${va.id}`}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gray-700 text-white font-medium hover:bg-gray-600 active:scale-[0.98] transition-all"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-white font-medium hover:bg-slate-200 active:scale-[0.98] transition-all"
                 >
                   <Calendar className="h-5 w-5" />
                   Schedule Interview
@@ -350,7 +350,7 @@ export default function VAProfile() {
 
                 <div className="space-y-4 mt-6">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500 flex items-center gap-2">
+                    <span className="text-slate-500 flex items-center gap-2">
                       <Clock className="h-4 w-4" />
                       Availability
                     </span>
@@ -360,12 +360,12 @@ export default function VAProfile() {
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Avg Response</span>
+                    <span className="text-slate-500">Avg Response</span>
                     <span className="text-white font-medium">Within 24 hours</span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500 flex items-center gap-2">
+                    <span className="text-slate-500 flex items-center gap-2">
                       <Calendar className="h-4 w-4" />
                       Member since
                     </span>
@@ -376,8 +376,8 @@ export default function VAProfile() {
                 </div>
 
                 {/* Verification Status */}
-                <div className="mt-6 pt-6 border-t border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-400 mb-3">Verification Status</h3>
+                <div className="mt-6 pt-6 border-t border-slate-200">
+                  <h3 className="text-sm font-medium text-slate-600 mb-3">Verification Status</h3>
                   <VerificationBadge status={va.verification_status} />
                 </div>
               </div>
@@ -387,17 +387,17 @@ export default function VAProfile() {
       </div>
 
       {/* Mobile Sticky CTA */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur border-t border-gray-800 p-4 z-40">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 p-4 z-40">
         <div className="flex items-center gap-3">
           {va.hourly_rate && (
             <div className="min-w-0">
-              <div className="text-xl font-bold text-emerald-400">${va.hourly_rate}<span className="text-sm font-normal text-gray-500">/hr</span></div>
+              <div className="text-xl font-bold text-[hsl(var(--primary))]">${va.hourly_rate}<span className="text-sm font-normal text-slate-500">/hr</span></div>
             </div>
           )}
           <button 
             onClick={handleStartConversation}
             disabled={startingChat}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold active:scale-[0.98] transition-transform disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold active:scale-[0.98] transition-transform disabled:opacity-50"
           >
             {startingChat ? (
               <Loader2 className="h-5 w-5 animate-spin" />

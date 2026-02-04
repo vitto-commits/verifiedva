@@ -108,25 +108,25 @@ export default function ClientSignup() {
         <div className="w-full max-w-sm sm:max-w-md">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 mb-4">
+            <div className="inline-flex p-3 rounded-xl bg-[hsl(var(--primary))]/10 border border-emerald-500/20 mb-4">
               {step === 1 ? (
-                <Users className="h-7 w-7 sm:h-8 sm:w-8 text-emerald-400" />
+                <Users className="h-7 w-7 sm:h-8 sm:w-8 text-[hsl(var(--primary))]" />
               ) : (
-                <Building2 className="h-7 w-7 sm:h-8 sm:w-8 text-emerald-400" />
+                <Building2 className="h-7 w-7 sm:h-8 sm:w-8 text-[hsl(var(--primary))]" />
               )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
               {step === 1 ? 'Create Your Account' : 'About Your Company'}
             </h1>
-            <p className="text-sm sm:text-base text-gray-400">
+            <p className="text-sm sm:text-base text-slate-600">
               {step === 1 ? 'Start finding verified VAs in minutes' : 'Help us match you with the right VAs'}
             </p>
           </div>
 
           {/* Progress */}
           <div className="flex gap-2 mb-6 sm:mb-8">
-            <div className={`flex-1 h-1.5 rounded-full transition-colors ${step >= 1 ? 'bg-emerald-500' : 'bg-gray-700'}`} />
-            <div className={`flex-1 h-1.5 rounded-full transition-colors ${step >= 2 ? 'bg-emerald-500' : 'bg-gray-700'}`} />
+            <div className={`flex-1 h-1.5 rounded-full transition-colors ${step >= 1 ? 'bg-[hsl(var(--primary))]' : 'bg-slate-100'}`} />
+            <div className={`flex-1 h-1.5 rounded-full transition-colors ${step >= 2 ? 'bg-[hsl(var(--primary))]' : 'bg-slate-100'}`} />
           </div>
 
           {error && (
@@ -139,7 +139,7 @@ export default function ClientSignup() {
           {step === 1 && (
             <form onSubmit={handleAccountSubmit} className="space-y-4">
               <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Full Name
                 </label>
                 <input
@@ -147,7 +147,7 @@ export default function ClientSignup() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="John Doe"
                   autoComplete="name"
                   required
@@ -155,7 +155,7 @@ export default function ClientSignup() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Work Email
                 </label>
                 <input
@@ -163,7 +163,7 @@ export default function ClientSignup() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="you@company.com"
                   autoComplete="email"
                   required
@@ -171,7 +171,7 @@ export default function ClientSignup() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -180,7 +180,7 @@ export default function ClientSignup() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 pr-12 text-base"
+                    className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 pr-12 text-base"
                     placeholder="Min 8 characters"
                     autoComplete="new-password"
                     required
@@ -188,7 +188,7 @@ export default function ClientSignup() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-600 hover:text-slate-700"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -196,25 +196,25 @@ export default function ClientSignup() {
                 </div>
               </div>
 
-              <label className="flex items-start gap-3 text-sm text-gray-400 cursor-pointer p-2 -mx-2 rounded-lg active:bg-gray-800/50">
+              <label className="flex items-start gap-3 text-sm text-slate-600 cursor-pointer p-2 -mx-2 rounded-lg active:bg-white/70">
                 <input
                   type="checkbox"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-gray-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
+                  className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-white text-[hsl(var(--primary))] focus:ring-emerald-500 focus:ring-offset-0"
                 />
                 <span>
                   I agree to the{' '}
-                  <a href="#" className="text-emerald-400">Terms of Service</a>
+                  <a href="#" className="text-[hsl(var(--primary))]">Terms of Service</a>
                   {' '}and{' '}
-                  <a href="#" className="text-emerald-400">Privacy Policy</a>
+                  <a href="#" className="text-[hsl(var(--primary))]">Privacy Policy</a>
                 </span>
               </label>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -232,44 +232,44 @@ export default function ClientSignup() {
           {step === 2 && (
             <form onSubmit={handleCompanySubmit} className="space-y-4">
               <div>
-                <label htmlFor="companyName" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
-                  Company Name <span className="text-gray-500">(optional)</span>
+                <label htmlFor="companyName" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
+                  Company Name <span className="text-slate-500">(optional)</span>
                 </label>
                 <input
                   id="companyName"
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="Acme Inc."
                   autoComplete="organization"
                 />
               </div>
 
               <div>
-                <label htmlFor="companyWebsite" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
-                  Website <span className="text-gray-500">(optional)</span>
+                <label htmlFor="companyWebsite" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
+                  Website <span className="text-slate-500">(optional)</span>
                 </label>
                 <input
                   id="companyWebsite"
                   type="url"
                   value={companyWebsite}
                   onChange={(e) => setCompanyWebsite(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                   placeholder="https://example.com"
                   autoComplete="url"
                 />
               </div>
 
               <div>
-                <label htmlFor="industry" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                <label htmlFor="industry" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Industry
                 </label>
                 <select
                   id="industry"
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base appearance-none"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                 >
                   <option value="">Select industry</option>
                   {industries.map((ind) => (
@@ -279,14 +279,14 @@ export default function ClientSignup() {
               </div>
 
               <div>
-                <label htmlFor="companySize" className="block text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                <label htmlFor="companySize" className="block text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
                   Company Size
                 </label>
                 <select
                   id="companySize"
                   value={companySize}
                   onChange={(e) => setCompanySize(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-900 border border-gray-800 text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-base appearance-none"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base appearance-none"
                 >
                   <option value="">Select size</option>
                   {sizes.map((size) => (
@@ -299,14 +299,14 @@ export default function ClientSignup() {
                 <button
                   type="button"
                   onClick={() => navigate('/search')}
-                  className="flex-1 px-4 py-3 sm:py-3.5 rounded-xl border border-gray-700 text-gray-300 font-medium hover:bg-gray-800 active:bg-gray-700 transition-colors text-sm sm:text-base"
+                  className="flex-1 px-4 py-3 sm:py-3.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-white active:bg-slate-100 transition-colors text-sm sm:text-base"
                 >
                   Skip
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 text-sm sm:text-base"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all disabled:opacity-50 text-sm sm:text-base"
                 >
                   {loading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -322,18 +322,18 @@ export default function ClientSignup() {
           )}
 
           {/* Footer */}
-          <div className="mt-6 sm:mt-8 text-center text-sm text-gray-400 space-y-2">
+          <div className="mt-6 sm:mt-8 text-center text-sm text-slate-600 space-y-2">
             {step === 1 && (
               <p>
                 Already have an account?{' '}
-                <Link to="/login" className="text-emerald-400 hover:text-emerald-300">
+                <Link to="/login" className="text-[hsl(var(--primary))] hover:text-emerald-300">
                   Sign in
                 </Link>
               </p>
             )}
             <p>
               Are you a VA?{' '}
-              <Link to="/va/signup" className="text-emerald-400 hover:text-emerald-300">
+              <Link to="/va/signup" className="text-[hsl(var(--primary))] hover:text-emerald-300">
                 Create a VA profile
               </Link>
             </p>

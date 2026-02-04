@@ -387,7 +387,7 @@ export default function Admin() {
                       <tr key={va.id} className="hover:bg-slate-50">
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-white font-bold">
+                            <div className="h-10 w-10 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-white font-bold">
                               {va.profile?.full_name?.[0] || '?'}
                             </div>
                             <div>

@@ -48,8 +48,8 @@ export default function Home() {
             
             {/* Subheadline */}
             <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-4">
-              Pay only when you find the perfect match. World-class virtual assistants, handpicked by industry experts.
-              Fast, transparent hiring — built for operators.
+              Browse pre-verified Filipino virtual assistants. Review skills, watch intros, and hire directly.
+              No middlemen — just great talent.
             </p>
             
             {/* CTAs */}

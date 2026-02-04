@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, User, LogOut, Search, UserPlus, Briefcase, MessageCircle, Calendar } from 'lucide-react'
+import { Menu, X, User, LogOut, Search, UserPlus, Briefcase, MessageCircle, Calendar, Award } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../lib/auth-context'
 
@@ -160,6 +160,14 @@ export default function Layout({ children }: LayoutProps) {
                               <Briefcase className="h-5 w-5" />
                               My Applications
                             </Link>
+                            <Link
+                              to="/assessments"
+                              className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <Award className="h-5 w-5" />
+                              Skill Assessments
+                            </Link>
                           </>
                         )}
                         <button
@@ -314,6 +322,17 @@ export default function Layout({ children }: LayoutProps) {
                       >
                         <Briefcase className="h-6 w-6" />
                         My Applications
+                      </Link>
+                      <Link
+                        to="/assessments"
+                        className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
+                          location.pathname.startsWith('/assessments')
+                            ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' 
+                            : 'text-slate-700 hover:bg-white active:bg-slate-100'
+                        }`}
+                      >
+                        <Award className="h-6 w-6" />
+                        Skill Assessments
                       </Link>
                     </>
                   )}

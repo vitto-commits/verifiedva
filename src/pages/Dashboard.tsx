@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Edit, ExternalLink, Loader2, CheckCircle, Clock, X, Search } from 'lucide-react'
+import { Edit, ExternalLink, Loader2, CheckCircle, Clock, X, Search, Award } from 'lucide-react'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -347,6 +347,13 @@ export default function Dashboard() {
                     >
                       <div className="text-2xl mb-2">📋</div>
                       <div className="font-medium text-sm sm:text-base">My Applications</div>
+                    </Link>
+                    <Link
+                      to="/assessments"
+                      className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-purple-500/30 hover:border-purple-500/50 active:bg-purple-500/10 transition-colors text-center"
+                    >
+                      <Award className="h-6 w-6 mx-auto mb-2 text-purple-400" />
+                      <div className="font-medium text-sm sm:text-base text-purple-400">Skill Tests</div>
                     </Link>
                     <Link
                       to="/availability"

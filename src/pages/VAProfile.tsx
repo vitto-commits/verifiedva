@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { MapPin, MessageCircle, Globe, Briefcase, Loader2, ArrowLeft, Clock, Calendar, ChevronRight } from 'lucide-react'
+import { MapPin, MessageCircle, Globe, Briefcase, Loader2, ArrowLeft, Clock, Calendar, ChevronRight, CheckCircle } from 'lucide-react'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
@@ -10,7 +10,7 @@ import type { VA, Skill, Profile } from '../types/database'
 
 interface VAWithDetails extends VA {
   profile: Profile
-  va_skills: { skill: Skill; proficiency_level: number }[]
+  va_skills: { skill: Skill; proficiency_level: number; verified_at?: string; assessment_score?: number }[]
 }
 
 const VerificationBadge = ({ status, compact = false }: { status: string; compact?: boolean }) => {
@@ -110,6 +110,8 @@ export default function VAProfile() {
           profile:profiles(*),
           va_skills(
             proficiency_level,
+            verified_at,
+            assessment_score,
             skill:skills(*)
           )
         `)
@@ -305,9 +307,17 @@ export default function VAProfile() {
                           {skills.map((vs) => (
                             <span
                               key={vs.skill?.id}
-                              className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs sm:text-sm"
+                              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm ${
+                                vs.verified_at 
+                                  ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] border border-[hsl(var(--primary))]/30' 
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}
                             >
+                              {vs.verified_at && <CheckCircle className="h-3 w-3" />}
                               {vs.skill?.name}
+                              {vs.assessment_score && (
+                                <span className="text-[10px] opacity-75">({vs.assessment_score}%)</span>
+                              )}
                             </span>
                           ))}
                         </div>

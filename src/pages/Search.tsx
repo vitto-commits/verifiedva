@@ -135,7 +135,7 @@ export default function Search() {
   const FilterContent = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="font-semibold text-white mb-3 text-sm">Hourly Rate</h3>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Hourly Rate</h3>
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
@@ -144,7 +144,7 @@ export default function Search() {
               placeholder="Min"
               value={minRate}
               onChange={(e) => setMinRate(e.target.value)}
-              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/20 focus:border-[hsl(var(--primary))]"
             />
           </div>
           <span className="text-slate-500">-</span>
@@ -155,14 +155,14 @@ export default function Search() {
               placeholder="Max"
               value={maxRate}
               onChange={(e) => setMaxRate(e.target.value)}
-              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full pl-7 pr-3 py-2.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/20 focus:border-[hsl(var(--primary))]"
             />
           </div>
         </div>
       </div>
 
       <div>
-        <h3 className="font-semibold text-white mb-3 text-sm">Availability</h3>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Availability</h3>
         <div className="space-y-1">
           {['full-time', 'part-time', 'contract'].map((avail) => (
             <label key={avail} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 cursor-pointer hover:bg-white active:bg-slate-100 transition-colors">
@@ -170,7 +170,7 @@ export default function Search() {
                 type="checkbox"
                 checked={selectedAvailability.includes(avail)}
                 onChange={() => toggleFilter(avail, selectedAvailability, setSelectedAvailability)}
-                className="w-5 h-5 rounded border-gray-600 bg-white text-[hsl(var(--primary))] focus:ring-emerald-500 focus:ring-offset-0"
+                className="w-5 h-5 rounded border-slate-300 bg-white text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))]/20 focus:ring-offset-0"
               />
               {avail.charAt(0).toUpperCase() + avail.slice(1).replace('-', ' ')}
             </label>
@@ -179,7 +179,7 @@ export default function Search() {
       </div>
 
       <div>
-        <h3 className="font-semibold text-white mb-3 text-sm">Verification Tier</h3>
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm">Verification Tier</h3>
         <div className="space-y-1">
           {[
             { value: 'verified', label: '✓ Verified', color: 'text-[hsl(var(--primary))]' },
@@ -191,7 +191,7 @@ export default function Search() {
                 type="checkbox"
                 checked={selectedTiers.includes(tier.value)}
                 onChange={() => toggleFilter(tier.value, selectedTiers, setSelectedTiers)}
-                className="w-5 h-5 rounded border-gray-600 bg-white text-[hsl(var(--primary))] focus:ring-emerald-500 focus:ring-offset-0"
+                className="w-5 h-5 rounded border-slate-300 bg-white text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))]/20 focus:ring-offset-0"
               />
               <span className={tier.color}>{tier.label}</span>
             </label>
@@ -214,15 +214,15 @@ export default function Search() {
                 placeholder="Search skills, title..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-white border border-slate-200 text-white text-sm sm:text-base placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-white border border-slate-200 text-slate-900 text-sm sm:text-base placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]/20 focus:border-[hsl(var(--primary))] transition-all"
               />
             </div>
             <button
               onClick={() => setShowFilters(true)}
               className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
                 hasFilters 
-                  ? 'border-emerald-500 text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10' 
-                  : 'border-slate-200 text-slate-700 hover:bg-white'
+                  ? 'border-[hsl(var(--primary))]/40 text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10' 
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-50'
               }`}
             >
               <SlidersHorizontal className="h-5 w-5" />
@@ -244,8 +244,8 @@ export default function Search() {
                   onClick={() => setSearchQuery(skill.name)}
                   className={`px-3 py-1.5 text-xs sm:text-sm rounded-full border whitespace-nowrap transition-colors ${
                     searchQuery === skill.name
-                      ? 'border-emerald-500 text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10'
-                      : 'border-slate-200 text-slate-600 hover:border-gray-600'
+                      ? 'border-[hsl(var(--primary))]/40 text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10'
+                      : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
                   {skill.name}
@@ -265,7 +265,7 @@ export default function Search() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-semibold">Filters</h2>
                 {hasFilters && (
-                  <button onClick={clearFilters} className="text-xs text-[hsl(var(--primary))] hover:text-emerald-300">
+                  <button onClick={clearFilters} className="text-xs text-[hsl(var(--primary))] hover:opacity-80">
                     Clear all
                   </button>
                 )}
@@ -330,7 +330,7 @@ export default function Search() {
                 <div className="text-slate-600 mb-4">No VAs found matching your criteria</div>
                 <button
                   onClick={() => { setSearchQuery(''); clearFilters() }}
-                  className="text-[hsl(var(--primary))] hover:text-emerald-300 text-sm font-medium"
+                  className="text-[hsl(var(--primary))] hover:opacity-80 text-sm font-medium"
                 >
                   Clear all filters
                 </button>
@@ -341,7 +341,7 @@ export default function Search() {
                   <Link
                     key={va.id}
                     to={`/va/${va.id}`}
-                    className="block p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 bg-white/30 hover:border-emerald-500/50 active:bg-white/60 transition-all"
+                    className="block p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 bg-white/70 hover:border-[hsl(var(--primary))]/40 active:bg-white transition-all"
                   >
                     <div className="flex gap-3 sm:gap-4">
                       {/* Avatar */}
@@ -352,7 +352,7 @@ export default function Search() {
                       {/* Content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
-                          <span className="text-base sm:text-lg font-semibold text-white truncate">
+                          <span className="text-base sm:text-lg font-semibold text-slate-900 truncate">
                             {va.profile?.full_name || 'VA'}
                           </span>
                           <VerificationBadge status={va.verification_status} />
@@ -403,7 +403,7 @@ export default function Search() {
                       
                       {/* Desktop: Action buttons */}
                       <div className="hidden sm:flex flex-col gap-2 items-end justify-center">
-                        <span className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 group-hover:border-emerald-500">
+                        <span className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 group-hover:border-[hsl(var(--primary))]/40">
                           View Profile
                         </span>
                       </div>

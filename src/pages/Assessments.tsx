@@ -176,7 +176,7 @@ export default function Assessments() {
           <p className="text-gray-400 mb-6">Skill assessments are available for Virtual Assistants.</p>
           <Link
             to="/va/signup"
-            className="px-6 py-3 bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-500 text-gray-950 font-semibold rounded-lg"
+            className="px-6 py-3 bg-[hsl(var(--primary))] text-gray-950 font-semibold rounded-lg"
           >
             Sign Up as VA
           </Link>
@@ -204,7 +204,7 @@ export default function Assessments() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-lg bg-gradient-to-r from-[hsl(var(--primary))]/20 to-cyan-500/20">
+            <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/15">
               <IconAward className="h-6 w-6 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-100">Skill Assessments</h1>
@@ -291,7 +291,7 @@ export default function Assessments() {
                     ) : assessment.userStatus.canTake ? (
                       <Link
                         to={`/assessments/${assessment.id}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-500 text-gray-950 font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(var(--primary))] text-gray-950 font-semibold rounded-lg hover:opacity-90 transition-opacity"
                       >
                         Start
                         <IconChevronRight className="h-4 w-4" />

@@ -210,7 +210,7 @@ export default function JobDetail() {
           {/* Header Card */}
           <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
             <div className="flex items-start gap-4">
-              <div className="hidden sm:flex h-14 w-14 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 items-center justify-center flex-shrink-0">
+              <div className="hidden sm:flex h-14 w-14 rounded-xl bg-[hsl(var(--primary))]/10 items-center justify-center flex-shrink-0">
                 <IconBriefcase className="h-7 w-7 text-[hsl(var(--primary))]" />
               </div>
               <div className="flex-1 min-w-0">
@@ -343,7 +343,7 @@ export default function JobDetail() {
                       <div className="p-4 sm:p-5">
                         <div className="flex items-start gap-3 sm:gap-4">
                           {/* Avatar */}
-                          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-lg font-bold flex-shrink-0">
+                          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-lg font-bold flex-shrink-0">
                             {app.va.profile?.full_name?.[0]?.toUpperCase() || 'V'}
                           </div>
 

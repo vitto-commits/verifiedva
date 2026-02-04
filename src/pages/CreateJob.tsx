@@ -298,7 +298,7 @@ export default function CreateJob() {
                           onClick={() => setExperienceLevel(option.value as typeof experienceLevel)}
                           className={`w-full p-3 rounded-xl border text-left transition-colors flex items-center justify-between ${
                             experienceLevel === option.value
-                              ? 'border-emerald-500 bg-[hsl(var(--primary))]/10'
+                              ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10'
                               : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                           }`}
                         >

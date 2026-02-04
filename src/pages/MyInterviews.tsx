@@ -238,7 +238,7 @@ export default function MyInterviews() {
               {activeTab === 'upcoming' && (
                 <Link
                   to={isVA ? '/availability' : '/search'}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium"
                 >
                   {isVA ? 'Set Availability' : 'Browse VAs'}
                 </Link>

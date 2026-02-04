@@ -194,7 +194,7 @@ export default function Messages() {
                 >
                   {/* Avatar */}
                   <div className="relative flex-shrink-0">
-                    <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-lg font-bold">
+                    <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-lg font-bold">
                       {conv.other_user.full_name?.[0]?.toUpperCase() || '?'}
                     </div>
                     {conv.unread_count > 0 && (

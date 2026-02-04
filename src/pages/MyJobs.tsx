@@ -167,7 +167,7 @@ export default function MyJobs() {
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     {/* Icon */}
-                    <div className="hidden sm:flex h-12 w-12 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 items-center justify-center flex-shrink-0">
+                    <div className="hidden sm:flex h-12 w-12 rounded-xl bg-[hsl(var(--primary))]/10 items-center justify-center flex-shrink-0">
                       <IconBriefcase className="h-6 w-6 text-[hsl(var(--primary))]" />
                     </div>
 

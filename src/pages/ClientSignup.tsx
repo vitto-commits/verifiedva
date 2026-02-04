@@ -200,7 +200,7 @@ export default function ClientSignup() {
                   type="checkbox"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-white text-[hsl(var(--primary))] focus:ring-emerald-500 focus:ring-offset-0"
+                  className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-white text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))] focus:ring-offset-0"
                 />
                 <span>
                   I agree to the{' '}

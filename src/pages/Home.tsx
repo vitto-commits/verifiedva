@@ -28,7 +28,7 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--primary))]/6 via-transparent to-[hsl(var(--secondary))]/8" />
+        <div className="absolute inset-0 bg-[hsl(var(--primary))]/5" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] md:w-[800px] h-[500px] md:h-[800px] bg-[hsl(var(--primary))]/5 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 lg:py-32 relative">
@@ -80,7 +80,7 @@ export default function Home() {
             {[
               { icon: IconUsers, value: '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
               { icon: IconStar, value: '4.9', label: 'Avg Rating', tint: 'bg-amber-500/10 text-amber-700' },
-              { icon: IconDollar, value: '60%', label: 'Cost Savings', tint: 'bg-emerald-500/10 text-emerald-700' },
+              { icon: IconDollar, value: '60%', label: 'Cost Savings', tint: 'bg-[hsl(var(--primary))]/10 text-emerald-700' },
               { icon: IconZap, value: '24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
@@ -224,14 +224,14 @@ export default function Home() {
       {/* CTA */}
       <section className="py-12 sm:py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center bg-gradient-to-br to-[hsl(var(--secondary))]/10 to-[hsl(var(--secondary))]/10 border border-emerald-500/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12">
+          <div className="max-w-3xl mx-auto text-center bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Ready to find your VA?</h2>
             <p className="text-sm sm:text-base text-slate-600 mb-6 sm:mb-8 max-w-xl mx-auto">
               Join businesses saving 60-70% on talent costs with verified Filipino virtual assistants.
             </p>
             <Link 
               to="/search" 
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25"
+              className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20"
             >
               <IconSearch className="h-5 w-5" />
               Start Searching

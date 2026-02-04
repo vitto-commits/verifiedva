@@ -37,7 +37,7 @@ const VerificationBadge = ({ status }: { status: string }) => {
     pending: { label: 'Pending', bg: 'bg-gray-500/20', text: 'text-slate-600' },
     verified: { label: '✓ Verified', bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]' },
     pro: { label: '✓✓ Pro', bg: 'bg-blue-500/20', text: 'text-blue-400' },
-    elite: { label: '✓✓✓ Elite', bg: 'bg-purple-500/20', text: 'text-purple-400' },
+    elite: { label: '✓✓✓ Elite', bg: 'bg-[hsl(var(--secondary))]/20', text: 'text-purple-400' },
   }
   const c = config[status] || config.pending
   return (
@@ -532,7 +532,7 @@ export default function Search() {
                   >
                     <div className="flex gap-3 sm:gap-4">
                       {/* Avatar */}
-                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-lg sm:text-xl font-bold text-white flex-shrink-0">
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-lg sm:text-xl font-bold text-white flex-shrink-0">
                         {va.profile?.full_name?.[0]?.toUpperCase() || 'V'}
                       </div>
                       
@@ -659,7 +659,7 @@ export default function Search() {
             <div className="p-4 border-t border-slate-200 bg-white">
               <button
                 onClick={() => setShowFilters(false)}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold active:scale-[0.98] transition-transform"
+                className="w-full py-3.5 rounded-xl bg-[hsl(var(--primary))] text-white font-semibold active:scale-[0.98] transition-transform"
               >
                 Show {vas.length} result{vas.length !== 1 ? 's' : ''}
               </button>

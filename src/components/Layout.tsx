@@ -76,10 +76,10 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex h-14 sm:h-16 items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 -ml-1 p-1">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] text-white font-bold text-xs">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--primary))] text-white font-bold text-xs">
                 VA
               </div>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--secondary))] bg-clip-text text-transparent">
+              <span className="text-lg sm:text-xl font-bold text-[hsl(var(--primary))]">
                 Marketplace
               </span>
             </Link>
@@ -114,7 +114,7 @@ export default function Layout({ children }: LayoutProps) {
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 rounded-lg p-1.5 sm:px-3 sm:py-2 hover:bg-slate-100 transition-colors active:scale-95"
                   >
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-sm font-medium">
+                    <div className="h-9 w-9 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-sm font-medium">
                       {profile?.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
                     </div>
                     <span className="hidden sm:block text-sm text-slate-700 max-w-[120px] truncate">
@@ -235,7 +235,7 @@ export default function Layout({ children }: LayoutProps) {
                   </Link>
                   <Link
                     to="/client/signup"
-                    className="hidden md:inline-flex items-center justify-center rounded-lg bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] px-4 py-2 text-sm font-medium text-white hover:from-emerald-600 hover:to-cyan-600 transition-all active:scale-95"
+                    className="hidden md:inline-flex items-center justify-center rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition-all active:scale-95"
                   >
                     Get Started
                   </Link>
@@ -386,7 +386,7 @@ export default function Layout({ children }: LayoutProps) {
               {user ? (
                 <>
                   <div className="flex items-center gap-3 px-4 py-2 text-slate-600">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center font-medium">
+                    <div className="h-10 w-10 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center font-medium">
                       {profile?.full_name?.[0]?.toUpperCase() || 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -410,7 +410,7 @@ export default function Layout({ children }: LayoutProps) {
                 <>
                   <Link
                     to="/client/signup"
-                    className="block w-full text-center rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] px-4 py-3.5 text-base font-medium text-white active:scale-[0.98] transition-transform"
+                    className="block w-full text-center rounded-xl bg-[hsl(var(--primary))] px-4 py-3.5 text-base font-medium text-white active:scale-[0.98] transition-transform"
                   >
                     Get Started
                   </Link>
@@ -435,7 +435,7 @@ export default function Layout({ children }: LayoutProps) {
         <div className="container mx-auto px-4 py-6 sm:py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] text-white text-xs font-bold">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-[hsl(var(--primary))] text-white text-xs font-bold">
                 VA
               </div>
               <span className="text-sm text-slate-600">© 2026 VA Marketplace</span>

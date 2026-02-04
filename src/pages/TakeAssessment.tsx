@@ -288,7 +288,7 @@ export default function TakeAssessment() {
           ) : config ? (
             <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 md:p-8">
               <div className="text-center mb-8">
-                <div className="inline-flex p-3 rounded-xl bg-gradient-to-r from-[hsl(var(--primary))]/20 to-cyan-500/20 mb-4">
+                <div className="inline-flex p-3 rounded-xl bg-[hsl(var(--primary))]/15 mb-4">
                   <IconAward className="h-8 w-8 text-[hsl(var(--primary))]" />
                 </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-100 mb-2">
@@ -329,7 +329,7 @@ export default function TakeAssessment() {
 
               <button
                 onClick={startAssessment}
-                className="w-full py-3 bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-500 text-gray-950 font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                className="w-full py-3 bg-[hsl(var(--primary))] text-gray-950 font-semibold rounded-lg hover:opacity-90 transition-opacity"
               >
                 Start Assessment
               </button>
@@ -392,7 +392,7 @@ export default function TakeAssessment() {
               {results.passed && (
                 <Link
                   to="/dashboard"
-                  className="flex-1 py-3 bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-500 text-gray-950 font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex-1 py-3 bg-[hsl(var(--primary))] text-gray-950 font-semibold rounded-lg hover:opacity-90 transition-opacity"
                 >
                   View Profile
                 </Link>
@@ -450,7 +450,7 @@ export default function TakeAssessment() {
           </div>
           <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-500 transition-all duration-300"
+              className="h-full bg-[hsl(var(--primary))] transition-all duration-300"
               style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
             />
           </div>
@@ -517,7 +517,7 @@ export default function TakeAssessment() {
           {currentIndex === questions.length - 1 ? (
             <button
               onClick={submitAssessment}
-              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-500 text-gray-950 font-semibold hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-[hsl(var(--primary))] text-gray-950 font-semibold hover:opacity-90 transition-opacity"
             >
               Submit Assessment
             </button>

@@ -387,7 +387,7 @@ export default function Admin() {
                       <tr key={va.id} className="hover:bg-slate-50">
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-cyan-500 flex items-center justify-center text-white font-bold">
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-white font-bold">
                               {va.profile?.full_name?.[0] || '?'}
                             </div>
                             <div>
@@ -503,7 +503,7 @@ export default function Admin() {
                         <td className="px-4 py-3">
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                             u.user_type === 'va' 
-                              ? 'bg-emerald-500/10 text-emerald-600' 
+                              ? 'bg-[hsl(var(--primary))]/10 text-emerald-600' 
                               : 'bg-blue-500/10 text-blue-600'
                           }`}>
                             {u.user_type === 'va' ? 'VA' : 'Client'}
@@ -514,7 +514,7 @@ export default function Admin() {
                         </td>
                         <td className="px-4 py-3">
                           {u.is_admin ? (
-                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600">
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-[hsl(var(--secondary))]/10 text-purple-600">
                               Admin
                             </span>
                           ) : (
@@ -529,7 +529,7 @@ export default function Admin() {
                               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
                                 u.is_admin
                                   ? 'bg-red-500/10 text-red-600 hover:bg-red-500/20'
-                                  : 'bg-purple-500/10 text-purple-600 hover:bg-purple-500/20'
+                                  : 'bg-[hsl(var(--secondary))]/10 text-purple-600 hover:bg-[hsl(var(--secondary))]/20'
                               }`}
                             >
                               {updating === u.id ? (
@@ -571,12 +571,12 @@ function StatCard({ label, value, icon: Icon, color }: {
 }) {
   const colors: Record<string, string> = {
     blue: 'bg-blue-500/10 text-blue-600',
-    emerald: 'bg-emerald-500/10 text-emerald-600',
+    emerald: 'bg-[hsl(var(--primary))]/10 text-emerald-600',
     green: 'bg-green-500/10 text-green-600',
     yellow: 'bg-yellow-500/10 text-yellow-600',
-    purple: 'bg-purple-500/10 text-purple-600',
+    purple: 'bg-[hsl(var(--secondary))]/10 text-purple-600',
     indigo: 'bg-indigo-500/10 text-indigo-600',
-    cyan: 'bg-cyan-500/10 text-cyan-600',
+    cyan: 'bg-[hsl(var(--secondary))]/10 text-cyan-600',
     pink: 'bg-pink-500/10 text-pink-600'
   }
 

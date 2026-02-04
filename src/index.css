@@ -2,13 +2,14 @@
 @import "tailwindcss";
 
 :root {
-  /* Vertice-inspired tokens */
-  --background: 0 0% 99%;
-  --foreground: 220 20% 10%;
-  --muted: 220 15% 95%;
-  --border: 220 15% 88%;
-  --primary: 195 85% 35%; /* teal */
-  --secondary: 15 90% 65%; /* coral */
+  /* Warm tones palette */
+  --background: 30 20% 99%;
+  --foreground: 20 20% 12%;
+  --muted: 30 15% 95%;
+  --border: 25 15% 88%;
+  --primary: 24 95% 53%; /* warm orange */
+  --secondary: 12 80% 45%; /* burnt sienna */
+  --accent: 35 100% 50%; /* amber */
   --radius: 0.75rem;
 }
 

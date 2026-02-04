@@ -18,7 +18,7 @@ const VerificationBadge = ({ status, compact = false }: { status: string; compac
     pending: { label: 'Pending', bg: 'bg-gray-500/20', text: 'text-slate-600', desc: 'Identity not yet verified' },
     verified: { label: '✓ Verified', bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]', desc: 'Identity & education confirmed' },
     pro: { label: '✓✓ Pro', bg: 'bg-blue-500/20', text: 'text-blue-400', desc: 'Skills tested & 2+ references' },
-    elite: { label: '✓✓✓ Elite', bg: 'bg-purple-500/20', text: 'text-purple-400', desc: 'Background check & interview' },
+    elite: { label: '✓✓✓ Elite', bg: 'bg-[hsl(var(--secondary))]/20', text: 'text-purple-400', desc: 'Background check & interview' },
   }
   const c = config[status] || config.pending
 
@@ -202,7 +202,7 @@ export default function VAProfile() {
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                   {/* Avatar + Mobile badge */}
                   <div className="flex items-start gap-4 sm:block">
-                    <div className="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-2xl sm:text-3xl font-bold text-white flex-shrink-0">
+                    <div className="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-2xl sm:text-3xl font-bold text-white flex-shrink-0">
                       {va.profile?.full_name?.[0]?.toUpperCase() || 'V'}
                     </div>
                     {/* Mobile: Name + Badge */}

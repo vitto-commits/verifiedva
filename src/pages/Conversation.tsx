@@ -231,7 +231,7 @@ export default function Conversation() {
               <IconArrowLeft className="h-5 w-5" />
             </Link>
 
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center font-bold flex-shrink-0">
+            <div className="h-10 w-10 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center font-bold flex-shrink-0">
               {otherUser?.full_name?.[0]?.toUpperCase() || '?'}
             </div>
 
@@ -278,7 +278,7 @@ export default function Conversation() {
                         className={`flex gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}
                       >
                         {!isMe && showAvatar && (
-                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-xs font-bold flex-shrink-0">
+                          <div className="h-8 w-8 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-xs font-bold flex-shrink-0">
                             {otherUser?.full_name?.[0]?.toUpperCase() || '?'}
                           </div>
                         )}

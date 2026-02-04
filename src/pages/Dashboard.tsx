@@ -102,7 +102,7 @@ export default function Dashboard() {
       pending: { icon: IconClock, color: 'text-yellow-400', bg: 'bg-yellow-500/10', label: 'Pending', desc: 'Complete verification to appear in search' },
       verified: { icon: IconCheckCircle, color: 'text-[hsl(var(--primary))]', bg: 'bg-[hsl(var(--primary))]/10', label: 'Verified', desc: 'Your identity has been confirmed' },
       pro: { icon: IconCheckCircle, color: 'text-blue-400', bg: 'bg-blue-500/10', label: 'Pro', desc: 'Skills tested & references checked' },
-      elite: { icon: IconCheckCircle, color: 'text-purple-400', bg: 'bg-purple-500/10', label: 'Elite', desc: 'Maximum verification achieved' },
+      elite: { icon: IconCheckCircle, color: 'text-purple-400', bg: 'bg-[hsl(var(--secondary))]/10', label: 'Elite', desc: 'Maximum verification achieved' },
     }
     return configs[status] || configs.pending
   }
@@ -134,7 +134,7 @@ export default function Dashboard() {
           <div className="lg:hidden mb-4">
             <div className="bg-white/70 border border-slate-200 rounded-xl p-4">
               <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-lg font-bold flex-shrink-0">
+                <div className="h-12 w-12 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-lg font-bold flex-shrink-0">
                   {profile.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -308,7 +308,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <Link
                       to="/jobs/new"
-                      className="p-4 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 border border-[hsl(var(--primary))]/30 hover:border-emerald-500/50 active:bg-[hsl(var(--primary))]/10 transition-colors text-center"
+                      className="p-4 rounded-xl bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/30 hover:border-[hsl(var(--primary))]/50 active:bg-[hsl(var(--primary))]/10 transition-colors text-center"
                     >
                       <div className="text-2xl mb-2">📝</div>
                       <div className="font-medium text-sm sm:text-base text-[hsl(var(--primary))]">Post a Job</div>
@@ -345,7 +345,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <Link
                       to="/jobs"
-                      className="p-4 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 border border-[hsl(var(--primary))]/30 hover:border-emerald-500/50 active:bg-[hsl(var(--primary))]/10 transition-colors text-center"
+                      className="p-4 rounded-xl bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/30 hover:border-[hsl(var(--primary))]/50 active:bg-[hsl(var(--primary))]/10 transition-colors text-center"
                     >
                       <IconSearch className="h-6 w-6 mx-auto mb-2 text-[hsl(var(--primary))]" />
                       <div className="font-medium text-sm sm:text-base text-[hsl(var(--primary))]">Browse Jobs</div>
@@ -359,7 +359,7 @@ export default function Dashboard() {
                     </Link>
                     <Link
                       to="/assessments"
-                      className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-purple-500/30 hover:border-purple-500/50 active:bg-purple-500/10 transition-colors text-center"
+                      className="p-4 rounded-xl bg-gradient-to-br from-[hsl(var(--secondary))]/10 to-[hsl(var(--secondary))]/10 border border-[hsl(var(--secondary))]/30 hover:border-[hsl(var(--secondary))]/50 active:bg-[hsl(var(--secondary))]/10 transition-colors text-center"
                     >
                       <IconAward className="h-6 w-6 mx-auto mb-2 text-purple-400" />
                       <div className="font-medium text-sm sm:text-base text-purple-400">Skill Tests</div>
@@ -409,7 +409,7 @@ export default function Dashboard() {
               {isClient && (
                 <Link
                   to="/jobs/new"
-                  className="block w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold text-center hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.99] transition-all"
+                  className="block w-full py-3.5 sm:py-4 rounded-xl bg-[hsl(var(--primary))] text-white font-semibold text-center hover:opacity-90 active:scale-[0.99] transition-all"
                 >
                   Post a Job →
                 </Link>
@@ -421,7 +421,7 @@ export default function Dashboard() {
               {/* Account Card */}
               <div className="bg-white/70 border border-slate-200 rounded-2xl p-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-14 w-14 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-xl font-bold">
+                  <div className="h-14 w-14 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-xl font-bold">
                     {profile.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
                   </div>
                   <div className="min-w-0">
@@ -450,7 +450,7 @@ export default function Dashboard() {
                         </div>
                         <p className="text-sm text-slate-600">{status.desc}</p>
                         {vaProfile.verification_status === 'pending' && (
-                          <button className="w-full mt-3 px-4 py-2.5 rounded-xl border border-emerald-500 text-[hsl(var(--primary))] text-sm font-medium hover:bg-[hsl(var(--primary))]/10 active:bg-[hsl(var(--primary))]/20 transition-colors">
+                          <button className="w-full mt-3 px-4 py-2.5 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium hover:bg-[hsl(var(--primary))]/10 active:bg-[hsl(var(--primary))]/20 transition-colors">
                             Start Verification
                           </button>
                         )}
@@ -491,7 +491,7 @@ export default function Dashboard() {
                     })()}
                   </div>
                   {vaProfile.verification_status === 'pending' && (
-                    <button className="px-4 py-2 rounded-xl border border-emerald-500 text-[hsl(var(--primary))] text-sm font-medium active:bg-[hsl(var(--primary))]/10">
+                    <button className="px-4 py-2 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium active:bg-[hsl(var(--primary))]/10">
                       Verify
                     </button>
                   )}

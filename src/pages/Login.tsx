@@ -36,7 +36,7 @@ export default function Login() {
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-white font-bold text-lg">
+              <div className="h-12 w-12 rounded-xl bg-[hsl(var(--primary))] flex items-center justify-center text-white font-bold text-lg">
                 VA
               </div>
             </div>

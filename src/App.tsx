@@ -15,6 +15,9 @@ import Conversation from './pages/Conversation'
 import BrowseJobs from './pages/BrowseJobs'
 import JobApply from './pages/JobApply'
 import MyApplications from './pages/MyApplications'
+import Availability from './pages/Availability'
+import BookInterview from './pages/BookInterview'
+import MyInterviews from './pages/MyInterviews'
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
           <Route path="/my-applications" element={<MyApplications />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/messages/:id" element={<Conversation />} />
+          <Route path="/availability" element={<Availability />} />
+          <Route path="/book/:vaId" element={<BookInterview />} />
+          <Route path="/my-interviews" element={<MyInterviews />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

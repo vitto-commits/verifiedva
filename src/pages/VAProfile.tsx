@@ -324,6 +324,14 @@ export default function VAProfile() {
                   )}
                 </button>
 
+                <Link
+                  to={`/book/${va.id}`}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gray-700 text-white font-medium hover:bg-gray-600 active:scale-[0.98] transition-all"
+                >
+                  <Calendar className="h-5 w-5" />
+                  Schedule Interview
+                </Link>
+
                 <div className="space-y-4 mt-6">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500 flex items-center gap-2">

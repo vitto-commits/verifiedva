@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Clock, Plus, Trash2, Loader2, ArrowLeft } from 'lucide-react'
 import Layout from '../components/Layout'
+import { Button, Card, CardContent } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 
@@ -151,7 +152,7 @@ export default function Availability() {
           {/* Header */}
           <button
             onClick={() => navigate('/dashboard')}
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Dashboard
@@ -165,66 +166,76 @@ export default function Availability() {
           </div>
 
           {/* Timezone */}
-          <div className="bg-white/70 border border-slate-200 rounded-xl p-4 mb-6">
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Your Timezone
-            </label>
-            <select
-              value={timezone}
-              onChange={(e) => setTimezone(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))]"
-            >
-              {Intl.supportedValuesOf('timeZone').map(tz => (
-                <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
-              ))}
-            </select>
-          </div>
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Your Timezone
+              </label>
+              <select
+                value={timezone}
+                onChange={(e) => setTimezone(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
+              >
+                {Intl.supportedValuesOf('timeZone').map((tz) => (
+                  <option key={tz} value={tz}>
+                    {tz.replace(/_/g, ' ')}
+                  </option>
+                ))}
+              </select>
+            </CardContent>
+          </Card>
 
           {/* Add New Slot */}
-          <div className="bg-white/70 border border-slate-200 rounded-xl p-4 mb-6">
-            <h2 className="font-semibold mb-4">Add Available Time</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-              <select
-                value={newDay}
-                onChange={(e) => setNewDay(parseInt(e.target.value))}
-                className="px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))]"
-              >
-                {DAYS.map((day, idx) => (
-                  <option key={idx} value={idx}>{day}</option>
-                ))}
-              </select>
-              <select
-                value={newStart}
-                onChange={(e) => setNewStart(e.target.value)}
-                className="px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))]"
-              >
-                {TIME_OPTIONS.map(t => (
-                  <option key={t} value={t}>{formatTime(t)}</option>
-                ))}
-              </select>
-              <select
-                value={newEnd}
-                onChange={(e) => setNewEnd(e.target.value)}
-                className="px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-white focus:outline-none focus:border-[hsl(var(--primary))]"
-              >
-                {TIME_OPTIONS.map(t => (
-                  <option key={t} value={t}>{formatTime(t)}</option>
-                ))}
-              </select>
-              <button
-                onClick={addSlot}
-                disabled={saving}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[hsl(var(--primary))] text-white font-medium hover:bg-emerald-600 disabled:opacity-50"
-              >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-                Add
-              </button>
-            </div>
-          </div>
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <h2 className="font-semibold mb-4">Add Available Time</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <select
+                  value={newDay}
+                  onChange={(e) => setNewDay(parseInt(e.target.value))}
+                  className="px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
+                >
+                  {DAYS.map((day, idx) => (
+                    <option key={idx} value={idx}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={newStart}
+                  onChange={(e) => setNewStart(e.target.value)}
+                  className="px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
+                >
+                  {TIME_OPTIONS.map((t) => (
+                    <option key={t} value={t}>
+                      {formatTime(t)}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={newEnd}
+                  onChange={(e) => setNewEnd(e.target.value)}
+                  className="px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
+                >
+                  {TIME_OPTIONS.map((t) => (
+                    <option key={t} value={t}>
+                      {formatTime(t)}
+                    </option>
+                  ))}
+                </select>
+
+                <Button onClick={addSlot} disabled={saving} className="rounded-lg">
+                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                  Add
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Current Availability */}
-          <div className="bg-white/70 border border-slate-200 rounded-xl p-4">
-            <h2 className="font-semibold mb-4">Your Weekly Availability</h2>
+          <Card>
+            <CardContent className="p-4">
+              <h2 className="font-semibold mb-4">Your Weekly Availability</h2>
             
             {slots.length === 0 ? (
               <div className="text-center py-8 text-slate-500">
@@ -263,7 +274,8 @@ export default function Availability() {
                 ))}
               </div>
             )}
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Info */}
           <p className="mt-4 text-sm text-slate-500 text-center">

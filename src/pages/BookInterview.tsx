@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, Calendar, Clock, Loader2, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react'
 import Layout from '../components/Layout'
+import { Button, Card, CardContent, Textarea } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 
@@ -257,21 +258,15 @@ export default function BookInterview() {
             <p className="text-slate-600 mb-2">
               Your interview with {va?.profile?.full_name || 'the VA'} is confirmed.
             </p>
-            <p className="text-lg font-medium text-white mb-6">
+            <p className="text-lg font-medium text-slate-900 mb-6">
               {selectedDate?.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} at {selectedTime && formatTime(selectedTime)}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                to="/my-interviews"
-                className="px-6 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
-              >
-                View My Interviews
+              <Link to="/my-interviews">
+                <Button size="lg">View My Interviews</Button>
               </Link>
-              <Link
-                to="/search"
-                className="px-6 py-3 rounded-xl bg-white text-white font-medium hover:bg-slate-100"
-              >
-                Browse More VAs
+              <Link to="/search">
+                <Button size="lg" variant="outline">Browse More VAs</Button>
               </Link>
             </div>
           </div>
@@ -290,7 +285,7 @@ export default function BookInterview() {
           {/* Back */}
           <Link
             to={`/va/${vaId}`}
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Profile
@@ -311,17 +306,20 @@ export default function BookInterview() {
           )}
 
           {availability.length === 0 ? (
-            <div className="bg-white/70 border border-slate-200 rounded-xl p-8 text-center">
-              <Calendar className="h-10 w-10 text-slate-500 mx-auto mb-3" />
-              <h3 className="font-medium mb-2">No Availability Set</h3>
-              <p className="text-slate-600 text-sm">
-                This VA hasn't set their interview availability yet.
-              </p>
-            </div>
+            <Card>
+              <CardContent className="p-8 text-center">
+                <Calendar className="h-10 w-10 text-slate-500 mx-auto mb-3" />
+                <h3 className="font-medium mb-2">No Availability Set</h3>
+                <p className="text-slate-600 text-sm">
+                  This VA hasn't set their interview availability yet.
+                </p>
+              </CardContent>
+            </Card>
           ) : (
             <div className="space-y-6">
               {/* Week Calendar */}
-              <div className="bg-white/70 border border-slate-200 rounded-xl p-4">
+              <Card>
+                <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <button
                     onClick={prevWeek}
@@ -355,9 +353,9 @@ export default function BookInterview() {
                           isSelected
                             ? 'bg-[hsl(var(--primary))] text-white'
                             : available
-                            ? 'bg-slate-50 hover:bg-slate-100 text-white'
+                            ? 'bg-slate-50 hover:bg-slate-100 text-slate-900'
                             : 'bg-white/30 text-slate-500 cursor-not-allowed'
-                        } ${isToday && !isSelected ? 'ring-1 ring-emerald-500/50' : ''}`}
+                        } ${isToday && !isSelected ? 'ring-1 ring-[hsl(var(--primary))]/30' : ''}`}
                       >
                         <span className="text-xs text-inherit opacity-70">{DAYS[idx]}</span>
                         <span className="text-lg sm:text-xl font-medium">{date.getDate()}</span>
@@ -365,83 +363,80 @@ export default function BookInterview() {
                     )
                   })}
                 </div>
-              </div>
+              </CardContent>
+              </Card>
 
               {/* Time Slots */}
               {selectedDate && (
-                <div className="bg-white/70 border border-slate-200 rounded-xl p-4">
-                  <h3 className="font-medium mb-3">
-                    Available times for {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-                  </h3>
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="font-medium mb-3">
+                      Available times for{' '}
+                      {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                    </h3>
 
-                  {timeSlots.length === 0 ? (
-                    <p className="text-slate-500 text-sm py-4 text-center">
-                      No available slots for this date
-                    </p>
-                  ) : (
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                      {timeSlots.map(time => (
-                        <button
-                          key={time}
-                          onClick={() => setSelectedTime(time)}
-                          className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                            selectedTime === time
-                              ? 'bg-[hsl(var(--primary))] text-white'
-                              : 'bg-slate-50 hover:bg-slate-100 text-slate-700'
-                          }`}
-                        >
-                          {formatTime(time)}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                    {timeSlots.length === 0 ? (
+                      <p className="text-slate-500 text-sm py-4 text-center">No available slots for this date</p>
+                    ) : (
+                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                        {timeSlots.map((time) => (
+                          <button
+                            key={time}
+                            onClick={() => setSelectedTime(time)}
+                            className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                              selectedTime === time
+                                ? 'bg-[hsl(var(--primary))] text-white'
+                                : 'bg-slate-50 hover:bg-slate-100 text-slate-700'
+                            }`}
+                          >
+                            {formatTime(time)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               )}
 
               {/* Notes & Book */}
               {selectedDate && selectedTime && (
-                <div className="bg-white/70 border border-slate-200 rounded-xl p-4 space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Notes (optional)
-                    </label>
-                    <textarea
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      placeholder="Anything you'd like to discuss..."
-                      rows={3}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] resize-none"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-[hsl(var(--primary))]/10 border border-emerald-500/20">
-                    <Clock className="h-5 w-5 text-[hsl(var(--primary))] flex-shrink-0" />
-                    <div className="text-sm">
-                      <span className="font-medium text-[hsl(var(--primary))]">Selected: </span>
-                      <span className="text-slate-700">
-                        {selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at {formatTime(selectedTime)}
-                      </span>
+                <Card>
+                  <CardContent className="p-4 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Notes (optional)</label>
+                      <Textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="Anything you'd like to discuss..."
+                        rows={3}
+                      />
                     </div>
-                  </div>
 
-                  <button
-                    onClick={handleBook}
-                    disabled={booking}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold text-lg disabled:opacity-50"
-                  >
-                    {booking ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                        Booking...
-                      </>
-                    ) : (
-                      <>
-                        <Calendar className="h-5 w-5" />
-                        Confirm Interview
-                      </>
-                    )}
-                  </button>
-                </div>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20">
+                      <Clock className="h-5 w-5 text-[hsl(var(--primary))] flex-shrink-0" />
+                      <div className="text-sm">
+                        <span className="font-medium text-[hsl(var(--primary))]">Selected: </span>
+                        <span className="text-slate-700">
+                          {selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at {formatTime(selectedTime)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Button onClick={handleBook} disabled={booking} size="lg" className="w-full">
+                      {booking ? (
+                        <>
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                          Booking...
+                        </>
+                      ) : (
+                        <>
+                          <Calendar className="h-5 w-5" />
+                          Confirm Interview
+                        </>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
               )}
             </div>
           )}

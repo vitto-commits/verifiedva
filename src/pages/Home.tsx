@@ -182,7 +182,7 @@ export default function Home() {
                   <Link
                     key={va.id}
                     to={`/va/${va.id}`}
-                    className="group bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-emerald-500/50 active:bg-white/80 transition-all"
+                    className="group bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-[hsl(var(--primary))]/30 active:bg-white/80 transition-all"
                   >
                     <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
                       <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-lg sm:text-xl font-bold flex-shrink-0">

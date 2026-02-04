@@ -163,7 +163,7 @@ export default function MyJobs() {
               {jobs.map((job) => (
                 <div
                   key={job.id}
-                  className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:border-gray-600 transition-colors"
+                  className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:border-slate-300 hover:bg-white transition-colors"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     {/* Icon */}

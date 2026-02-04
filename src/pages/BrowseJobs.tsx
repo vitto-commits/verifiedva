@@ -246,7 +246,7 @@ export default function BrowseJobs() {
                 <Link
                   key={job.id}
                   to={`/jobs/${job.id}/apply`}
-                  className="block bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-gray-600 active:bg-white transition-colors"
+                  className="block bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-slate-300 hover:bg-white active:bg-white transition-colors"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">

@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, User, LogOut, Search, UserPlus } from 'lucide-react'
+import { Menu, X, User, LogOut, Search, UserPlus, Briefcase } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../lib/auth-context'
 
@@ -116,6 +116,16 @@ export default function Layout({ children }: LayoutProps) {
                           <User className="h-5 w-5" />
                           Dashboard
                         </Link>
+                        {profile?.user_type === 'client' && (
+                          <Link
+                            to="/my-jobs"
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 active:bg-gray-700"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <Briefcase className="h-5 w-5" />
+                            My Jobs
+                          </Link>
+                        )}
                         <button
                           onClick={() => {
                             setUserMenuOpen(false)
@@ -210,6 +220,19 @@ export default function Layout({ children }: LayoutProps) {
                     <User className="h-6 w-6" />
                     Dashboard
                   </Link>
+                  {profile?.user_type === 'client' && (
+                    <Link
+                      to="/my-jobs"
+                      className={`flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors ${
+                        location.pathname === '/my-jobs' || location.pathname.startsWith('/jobs')
+                          ? 'bg-emerald-500/10 text-emerald-400' 
+                          : 'text-gray-300 hover:bg-gray-800 active:bg-gray-700'
+                      }`}
+                    >
+                      <Briefcase className="h-6 w-6" />
+                      My Jobs
+                    </Link>
+                  )}
                 </>
               )}
             </nav>

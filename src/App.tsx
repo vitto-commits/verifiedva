@@ -7,6 +7,9 @@ import VASignup from './pages/VASignup'
 import ClientSignup from './pages/ClientSignup'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
+import MyJobs from './pages/MyJobs'
+import CreateJob from './pages/CreateJob'
+import JobDetail from './pages/JobDetail'
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
           <Route path="/client/signup" element={<ClientSignup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/my-jobs" element={<MyJobs />} />
+          <Route path="/jobs/new" element={<CreateJob />} />
+          <Route path="/jobs/:id" element={<JobDetail />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

@@ -298,10 +298,24 @@ export default function Dashboard() {
                   <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Actions</h2>
                   <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <Link
+                      to="/jobs/new"
+                      className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 hover:border-emerald-500/50 active:bg-emerald-500/10 transition-colors text-center"
+                    >
+                      <div className="text-2xl mb-2">📝</div>
+                      <div className="font-medium text-sm sm:text-base text-emerald-400">Post a Job</div>
+                    </Link>
+                    <Link
+                      to="/my-jobs"
+                      className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"
+                    >
+                      <div className="text-2xl mb-2">📋</div>
+                      <div className="font-medium text-sm sm:text-base">My Jobs</div>
+                    </Link>
+                    <Link
                       to="/search"
                       className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"
                     >
-                      <Search className="h-6 w-6 mx-auto mb-2 text-emerald-400" />
+                      <Search className="h-6 w-6 mx-auto mb-2 text-gray-400" />
                       <div className="font-medium text-sm sm:text-base">Browse VAs</div>
                     </Link>
                     <div className="p-4 rounded-xl bg-gray-700/30 text-center opacity-50">
@@ -316,10 +330,10 @@ export default function Dashboard() {
               {/* CTA for Client */}
               {isClient && (
                 <Link
-                  to="/search"
+                  to="/jobs/new"
                   className="block w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold text-center hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.99] transition-all"
                 >
-                  Find VAs →
+                  Post a Job →
                 </Link>
               )}
             </div>

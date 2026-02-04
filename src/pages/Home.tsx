@@ -106,16 +106,16 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8 sm:py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {[
-              { icon: Users, value: stats.vaCount > 0 ? `${stats.vaCount}+` : '500+', label: 'Verified VAs', color: 'from-[hsl(var(--primary))] to-emerald-500' },
-              { icon: Star, value: '4.9', label: 'Avg Rating', color: 'from-amber-400 to-orange-500' },
-              { icon: DollarSign, value: '60%', label: 'Cost Savings', color: 'from-green-400 to-emerald-500' },
-              { icon: Zap, value: '24h', label: 'Avg Response', color: 'from-blue-400 to-[hsl(var(--secondary))]' },
+              { icon: Users, value: stats.vaCount > 0 ? `${stats.vaCount}+` : '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
+              { icon: Star, value: '4.9', label: 'Avg Rating', tint: 'bg-amber-500/10 text-amber-700' },
+              { icon: DollarSign, value: '60%', label: 'Cost Savings', tint: 'bg-emerald-500/10 text-emerald-700' },
+              { icon: Zap, value: '24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br ${stat.color} bg-opacity-20 mb-2 sm:mb-3`}>
-                  <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl ${stat.tint} mb-2 sm:mb-3`}>
+                  <stat.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{stat.value}</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900">{stat.value}</div>
                 <div className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1">{stat.label}</div>
               </div>
             ))}
@@ -137,33 +137,29 @@ export default function Home() {
             {[
               {
                 icon: Shield,
-                title: 'Pre-Verified',
-                desc: 'Every VA passes identity, education, and reference checks before listing.',
-                gradient: 'to-[hsl(var(--secondary))] to-teal-500',
+                title: 'Pre-verified experience',
+                desc: 'Every VA passes identity and reference checks before listing.',
+                tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]',
               },
               {
                 icon: Globe,
-                title: 'Filipino Talent',
+                title: 'Filipino talent',
                 desc: 'Access skilled professionals with excellent English and strong work ethic.',
-                gradient: 'from-blue-500 to-[hsl(var(--secondary))]',
+                tint: 'bg-slate-100 text-slate-700',
               },
               {
                 icon: DollarSign,
-                title: 'Save 60-70%',
-                desc: 'Get quality work at a fraction of US rates. No middleman fees.',
-                gradient: 'from-purple-500 to-pink-500',
+                title: 'Lower costs',
+                desc: 'Save 60–70% on talent costs without sacrificing quality.',
+                tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]',
               },
             ].map((feature) => (
-              <div key={feature.title} className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl sm:rounded-2xl" />
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 rounded-xl sm:rounded-2xl transition-opacity`} />
-                <div className="relative p-5 sm:p-6 md:p-8">
-                  <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br ${feature.gradient} mb-3 sm:mb-4`}>
-                    <feature.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2">{feature.title}</h3>
-                  <p className="text-sm sm:text-base text-slate-600">{feature.desc}</p>
+              <div key={feature.title} className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8">
+                <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl ${feature.tint} mb-3 sm:mb-4`}>
+                  <feature.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
+                <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2 text-slate-900">{feature.title}</h3>
+                <p className="text-sm sm:text-base text-slate-600">{feature.desc}</p>
               </div>
             ))}
           </div>

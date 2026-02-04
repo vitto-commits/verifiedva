@@ -1,38 +1,20 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Search, Shield, CheckCircle, Star, ArrowRight, Users, ChevronDown, Zap, Globe, DollarSign } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
-import { supabase } from '../lib/supabase'
-import type { VA } from '../types/database'
+import { useAuth } from '../lib/auth-context'
 
 export default function Home() {
+  const navigate = useNavigate()
+  const { user, loading } = useAuth()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const [featuredVAs, setFeaturedVAs] = useState<(VA & { profile?: { full_name: string; avatar_url: string | null } })[]>([])
-  const [stats, setStats] = useState({ vaCount: 0, skillCount: 0 })
 
+  // Redirect logged-in users to dashboard
   useEffect(() => {
-    const fetchFeaturedVAs = async () => {
-      const { data } = await supabase
-        .from('vas')
-        .select(`*, profile:profiles(full_name, avatar_url)`)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .limit(3)
-      
-      if (data) setFeaturedVAs(data as any)
+    if (!loading && user) {
+      navigate('/dashboard', { replace: true })
     }
-
-    const fetchStats = async () => {
-      const [{ count: vaCount }, { count: skillCount }] = await Promise.all([
-        supabase.from('vas').select('*', { count: 'exact', head: true }),
-        supabase.from('skills').select('*', { count: 'exact', head: true }),
-      ])
-      setStats({ vaCount: vaCount || 0, skillCount: skillCount || 0 })
-    }
-
-    fetchFeaturedVAs()
-    fetchStats()
-  }, [])
+  }, [user, loading, navigate])
 
   const faqs = [
     { q: "How do you verify VAs?", a: "Every VA goes through identity verification, skill assessment, and reference checks. Higher tiers include background checks and video interviews." },
@@ -40,16 +22,6 @@ export default function Home() {
     { q: "How much does it cost?", a: "Browsing and connecting with VAs is free. VAs set their own rates, typically $5-25/hr depending on skills and experience." },
     { q: "Can I hire directly?", a: "Yes! Once you find a VA you like, you can hire them directly. We don't take ongoing fees from your working relationship." },
   ]
-
-  const getVerificationBadge = (status: string) => {
-    const badges: Record<string, { bg: string; text: string; label: string }> = {
-      pending: { bg: 'bg-gray-500/20', text: 'text-slate-600', label: 'Pending' },
-      verified: { bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]', label: '✓ Verified' },
-      pro: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: '✓✓ Pro' },
-      elite: { bg: 'bg-purple-500/20', text: 'text-purple-400', label: '✓✓✓ Elite' },
-    }
-    return badges[status] || badges.pending
-  }
 
   return (
     <Layout>
@@ -106,7 +78,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8 sm:py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {[
-              { icon: Users, value: stats.vaCount > 0 ? `${stats.vaCount}+` : '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
+              { icon: Users, value: '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
               { icon: Star, value: '4.9', label: 'Avg Rating', tint: 'bg-amber-500/10 text-amber-700' },
               { icon: DollarSign, value: '60%', label: 'Cost Savings', tint: 'bg-emerald-500/10 text-emerald-700' },
               { icon: Zap, value: '24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
@@ -165,66 +137,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Featured VAs */}
-      {featuredVAs.length > 0 && (
-        <section className="py-12 sm:py-16 md:py-24 bg-white/50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-10 sm:mb-16">
-              <p className="text-[hsl(var(--primary))] font-semibold text-sm sm:text-base mb-2 sm:mb-3">FEATURED TALENT</p>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Meet Our VAs</h2>
-            </div>
-            
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
-              {featuredVAs.map((va) => {
-                const badge = getVerificationBadge(va.verification_status)
-                return (
-                  <Link
-                    key={va.id}
-                    to={`/va/${va.id}`}
-                    className="group bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-[hsl(var(--primary))]/30 active:bg-white/80 transition-all"
-                  >
-                    <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center text-lg sm:text-xl font-bold flex-shrink-0">
-                        {va.profile?.full_name?.[0] || 'V'}
-                      </div>
-                      <div className="min-w-0">
-                        <h3 className="font-semibold text-base sm:text-lg group-hover:text-[hsl(var(--primary))] transition-colors truncate">
-                          {va.profile?.full_name || 'VA'}
-                        </h3>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${badge.bg} ${badge.text}`}>
-                          {badge.label}
-                        </span>
-                      </div>
-                    </div>
-                    {va.headline && (
-                      <p className="text-slate-600 text-sm mb-3 line-clamp-2">{va.headline}</p>
-                    )}
-                    <div className="flex items-center justify-between text-sm">
-                      {va.hourly_rate && (
-                        <span className="text-[hsl(var(--primary))] font-semibold">${va.hourly_rate}/hr</span>
-                      )}
-                      {va.years_experience > 0 && (
-                        <span className="text-slate-500">{va.years_experience} yrs exp</span>
-                      )}
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-            
-            <div className="text-center mt-8 sm:mt-10">
-              <Link
-                to="/search"
-                className="inline-flex items-center gap-2 text-[hsl(var(--primary))] hover:text-emerald-300 active:text-[hsl(var(--primary))] font-medium py-2"
-              >
-                View all VAs
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Verification Tiers */}
       <section className="py-12 sm:py-16 md:py-24">

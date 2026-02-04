@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Clock, DollarSign, Briefcase, Filter, X, Loader2, ChevronRight } from 'lucide-react'
 import Layout from '../components/Layout'
+import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 
@@ -155,15 +156,18 @@ export default function BrowseJobs() {
 
   if (authLoading || loading) {
     return (
-      <Layout>
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
-        </div>
-      </Layout>
+      <AuthGuard requireType="va">
+        <Layout>
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          </div>
+        </Layout>
+      </AuthGuard>
     )
   }
 
   return (
+    <AuthGuard requireType="va">
     <Layout>
       <div className="container mx-auto px-4 py-4 sm:py-8">
         {/* Header */}
@@ -398,5 +402,6 @@ export default function BrowseJobs() {
         </div>
       )}
     </Layout>
+    </AuthGuard>
   )
 }

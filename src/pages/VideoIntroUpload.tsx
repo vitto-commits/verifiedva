@@ -4,6 +4,7 @@ import { ArrowLeft, Upload, Video, Trash2, Loader2, CheckCircle2, AlertCircle } 
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
+import { getSignedVideoUrl, uploadVideo, deleteVideo } from '../lib/storage'
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
 const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/quicktime']
@@ -31,10 +32,14 @@ export default function VideoIntroUpload() {
   }, [user, profile, authLoading, navigate])
 
   useEffect(() => {
-    if (vaProfile?.video_intro_url) {
-      setCurrentVideoUrl(vaProfile.video_intro_url)
+    const fetchSignedUrl = async () => {
+      if (vaProfile?.video_intro_url) {
+        const signedUrl = await getSignedVideoUrl(vaProfile.video_intro_url)
+        setCurrentVideoUrl(signedUrl)
+      }
     }
-  }, [vaProfile])
+    fetchSignedUrl()
+  }, [vaProfile?.video_intro_url])
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -58,42 +63,31 @@ export default function VideoIntroUpload() {
     setUploading(true)
 
     try {
-      // Generate unique filename
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${user!.id}/${Date.now()}.${fileExt}`
-
       // Delete old video if exists
-      if (currentVideoUrl) {
-        const oldPath = currentVideoUrl.split('/video-intros/')[1]
-        if (oldPath) {
-          await supabase.storage.from('video-intros').remove([oldPath])
-        }
+      if (vaProfile.video_intro_url) {
+        await deleteVideo(vaProfile.video_intro_url)
       }
 
       // Upload new video
-      const { error: uploadError } = await supabase.storage
-        .from('video-intros')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false,
-        })
+      const { path, error: uploadError } = await uploadVideo(user!.id, file)
+      if (uploadError || !path) throw uploadError || new Error('Upload failed')
 
-      if (uploadError) throw uploadError
-
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('video-intros')
-        .getPublicUrl(fileName)
-
-      // Update VA profile
+      // Store the path in the database (we'll generate signed URLs when needed)
+      // Store as full path reference for consistency
+      const storedPath = `video-intros/${path}`
+      
+      // Update VA profile with path reference
       const { error: updateError } = await supabase
         .from('vas')
-        .update({ video_intro_url: publicUrl })
+        .update({ video_intro_url: storedPath })
         .eq('id', vaProfile.id)
 
       if (updateError) throw updateError
 
-      setCurrentVideoUrl(publicUrl)
+      // Fetch signed URL for display
+      const signedUrl = await getSignedVideoUrl(storedPath)
+      setCurrentVideoUrl(signedUrl)
+      
       setSuccess('Video intro uploaded successfully!')
       await refreshProfile()
     } catch (err: any) {
@@ -116,10 +110,9 @@ export default function VideoIntroUpload() {
     setSuccess('')
 
     try {
-      // Delete from storage
-      const path = currentVideoUrl.split('/video-intros/')[1]
-      if (path) {
-        await supabase.storage.from('video-intros').remove([path])
+      // Delete from storage (use stored path from profile, not signed URL)
+      if (vaProfile.video_intro_url) {
+        await deleteVideo(vaProfile.video_intro_url)
       }
 
       // Update VA profile

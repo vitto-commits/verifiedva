@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Briefcase, Clock, DollarSign, MapPin, Loader2, MessageCircle, CheckCircle, X, ChevronDown, ExternalLink } from 'lucide-react'
 import Layout from '../components/Layout'
+import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
@@ -163,25 +164,29 @@ export default function JobDetail() {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
-        </div>
-      </Layout>
+      <AuthGuard>
+        <Layout>
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          </div>
+        </Layout>
+      </AuthGuard>
     )
   }
 
   if (!job) {
     return (
-      <Layout>
-        <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-          <div className="text-4xl mb-4">😕</div>
-          <p className="text-slate-600 mb-4">Job not found</p>
-          <Link to="/my-jobs" className="text-[hsl(var(--primary))] hover:opacity-80">
-            ← Back to My Jobs
-          </Link>
-        </div>
-      </Layout>
+      <AuthGuard>
+        <Layout>
+          <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
+            <div className="text-4xl mb-4">😕</div>
+            <p className="text-slate-600 mb-4">Job not found</p>
+            <Link to="/my-jobs" className="text-[hsl(var(--primary))] hover:opacity-80">
+              ← Back to My Jobs
+            </Link>
+          </div>
+        </Layout>
+      </AuthGuard>
     )
   }
 
@@ -189,6 +194,7 @@ export default function JobDetail() {
   const shortlistedCount = applications.filter(a => a.status === 'shortlisted').length
 
   return (
+    <AuthGuard>
     <Layout>
       <div className="container mx-auto px-4 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto">
@@ -451,5 +457,6 @@ export default function JobDetail() {
         </div>
       </div>
     </Layout>
+    </AuthGuard>
   )
 }

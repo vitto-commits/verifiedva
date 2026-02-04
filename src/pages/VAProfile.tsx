@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { MapPin, MessageCircle, Globe, Briefcase, Loader2, ArrowLeft, Clock, Calendar, ChevronRight } from 'lucide-react'
 import Layout from '../components/Layout'
+import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
+import { getSignedVideoUrl } from '../lib/storage'
 import type { VA, Skill, Profile } from '../types/database'
 
 interface VAWithDetails extends VA {
@@ -44,6 +46,7 @@ export default function VAProfile() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [startingChat, setStartingChat] = useState(false)
+  const [signedVideoUrl, setSignedVideoUrl] = useState<string | null>(null)
 
   const handleStartConversation = async () => {
     if (!user || !va) {
@@ -124,31 +127,46 @@ export default function VAProfile() {
     fetchVA()
   }, [id])
 
+  // Fetch signed video URL when VA data is loaded
+  useEffect(() => {
+    const fetchSignedUrl = async () => {
+      if (va?.video_intro_url) {
+        const url = await getSignedVideoUrl(va.video_intro_url)
+        setSignedVideoUrl(url)
+      }
+    }
+    fetchSignedUrl()
+  }, [va?.video_intro_url])
+
   if (loading) {
     return (
-      <Layout>
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
-        </div>
-      </Layout>
+      <AuthGuard>
+        <Layout>
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          </div>
+        </Layout>
+      </AuthGuard>
     )
   }
 
   if (error || !va) {
     return (
-      <Layout>
-        <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-          <div className="text-4xl mb-4">😕</div>
-          <p className="text-slate-600 mb-4 text-center">{error || 'VA not found'}</p>
-          <Link 
-            to="/search" 
-            className="flex items-center gap-2 text-[hsl(var(--primary))] hover:text-emerald-300 font-medium"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to search
-          </Link>
-        </div>
-      </Layout>
+      <AuthGuard>
+        <Layout>
+          <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
+            <div className="text-4xl mb-4">😕</div>
+            <p className="text-slate-600 mb-4 text-center">{error || 'VA not found'}</p>
+            <Link 
+              to="/search" 
+              className="flex items-center gap-2 text-[hsl(var(--primary))] hover:opacity-80 font-medium"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to search
+            </Link>
+          </div>
+        </Layout>
+      </AuthGuard>
     )
   }
 
@@ -160,6 +178,7 @@ export default function VAProfile() {
   }, {} as Record<string, typeof va.va_skills>)
 
   return (
+    <AuthGuard>
     <Layout>
       {/* Mobile-friendly padding bottom for sticky CTA */}
       <div className="pb-24 lg:pb-0">
@@ -260,16 +279,15 @@ export default function VAProfile() {
               )}
 
               {/* Video Intro */}
-              {va.video_intro_url && (
+              {signedVideoUrl && (
                 <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
                   <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Video Introduction</h2>
                   <div className="relative rounded-xl overflow-hidden bg-white aspect-video">
                     <video
-                      src={va.video_intro_url}
+                      src={signedVideoUrl}
                       className="w-full h-full object-cover"
                       controls
                       playsInline
-                      poster=""
                     />
                   </div>
                 </div>
@@ -412,5 +430,6 @@ export default function VAProfile() {
         </div>
       </div>
     </Layout>
+    </AuthGuard>
   )
 }

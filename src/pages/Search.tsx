@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Search as SearchIcon, SlidersHorizontal, MapPin, Clock, DollarSign, Loader2, X, ChevronDown } from 'lucide-react'
 import Layout from '../components/Layout'
+import AuthGuard from '../components/AuthGuard'
 import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
 
@@ -202,6 +203,7 @@ export default function Search() {
   )
 
   return (
+    <AuthGuard>
     <Layout>
       {/* Search Header */}
       <div className="sticky top-14 sm:top-16 z-30 border-b border-slate-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -473,5 +475,6 @@ export default function Search() {
         </div>
       )}
     </Layout>
+    </AuthGuard>
   )
 }

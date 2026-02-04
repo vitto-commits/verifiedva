@@ -259,6 +259,22 @@ export default function VAProfile() {
                 </div>
               )}
 
+              {/* Video Intro */}
+              {va.video_intro_url && (
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                  <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Video Introduction</h2>
+                  <div className="relative rounded-xl overflow-hidden bg-gray-900 aspect-video">
+                    <video
+                      src={va.video_intro_url}
+                      className="w-full h-full object-cover"
+                      controls
+                      playsInline
+                      poster=""
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Skills */}
               {va.va_skills && va.va_skills.length > 0 && (
                 <div className="bg-gray-800/50 border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6">

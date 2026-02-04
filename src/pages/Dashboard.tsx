@@ -356,6 +356,13 @@ export default function Dashboard() {
                       <div className="font-medium text-sm sm:text-base">Set Availability</div>
                     </Link>
                     <Link
+                      to="/video-intro"
+                      className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"
+                    >
+                      <div className="text-2xl mb-2">🎥</div>
+                      <div className="font-medium text-sm sm:text-base">Video Intro</div>
+                    </Link>
+                    <Link
                       to="/my-interviews"
                       className="p-4 rounded-xl bg-gray-700/50 hover:bg-gray-700 active:bg-gray-600 transition-colors text-center"
                     >

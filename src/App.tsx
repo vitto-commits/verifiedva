@@ -18,6 +18,7 @@ import MyApplications from './pages/MyApplications'
 import Availability from './pages/Availability'
 import BookInterview from './pages/BookInterview'
 import MyInterviews from './pages/MyInterviews'
+import VideoIntroUpload from './pages/VideoIntroUpload'
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="/availability" element={<Availability />} />
           <Route path="/book/:vaId" element={<BookInterview />} />
           <Route path="/my-interviews" element={<MyInterviews />} />
+          <Route path="/video-intro" element={<VideoIntroUpload />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

@@ -25,6 +25,7 @@ export interface VA {
   verification_status: VerificationStatus
   portfolio_url: string | null
   resume_url: string | null
+  video_intro_url: string | null
   is_active: boolean
   created_at: string
   updated_at: string

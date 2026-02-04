@@ -192,8 +192,8 @@ export default function MyApplications() {
               onClick={() => setActiveTab(tab)}
               className={`flex-1 min-w-[80px] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === tab
-                  ? 'bg-slate-100 text-white'
-                  : 'text-slate-600 hover:text-white'
+                  ? 'bg-slate-100 text-slate-900'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)} ({counts[tab]})
@@ -218,7 +218,7 @@ export default function MyApplications() {
             {activeTab === 'all' && (
               <Link
                 to="/jobs"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90"
               >
                 Browse Jobs
               </Link>

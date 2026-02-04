@@ -184,7 +184,7 @@ export default function BrowseJobs() {
                 placeholder="Search jobs or skills..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
               />
             </div>
             <button
@@ -207,7 +207,7 @@ export default function BrowseJobs() {
               {budgetType && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs">
                   {budgetType === 'hourly' ? 'Hourly' : 'Fixed Price'}
-                  <button onClick={() => setBudgetType('')} className="hover:text-white">
+                  <button onClick={() => setBudgetType('')} className="hover:text-slate-900">
                     <X className="h-3 w-3" />
                   </button>
                 </span>
@@ -215,7 +215,7 @@ export default function BrowseJobs() {
               {minBudget && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs">
                   ${minBudget}+ min
-                  <button onClick={() => setMinBudget('')} className="hover:text-white">
+                  <button onClick={() => setMinBudget('')} className="hover:text-slate-900">
                     <X className="h-3 w-3" />
                   </button>
                 </span>
@@ -320,7 +320,7 @@ export default function BrowseJobs() {
               <h2 className="text-lg font-semibold">Filters</h2>
               <button
                 onClick={() => setShowFilters(false)}
-                className="p-2 -mr-2 text-slate-600 hover:text-white"
+                className="p-2 -mr-2 text-slate-600 hover:text-slate-900"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -389,7 +389,7 @@ export default function BrowseJobs() {
               </button>
               <button
                 onClick={() => setShowFilters(false)}
-                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
+                className="flex-1 px-4 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90"
               >
                 Apply Filters
               </button>

@@ -209,7 +209,7 @@ export default function Conversation() {
           <div className="max-w-2xl mx-auto flex items-center gap-3">
             <Link
               to="/messages"
-              className="p-2 -ml-2 rounded-lg hover:bg-white text-slate-600"
+              className="p-2 -ml-2 rounded-lg hover:bg-slate-50 text-slate-600"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
@@ -228,7 +228,7 @@ export default function Conversation() {
             {otherUser?.va_id && (
               <Link
                 to={`/va/${otherUser.va_id}`}
-                className="p-2 rounded-lg hover:bg-white text-slate-600"
+                className="p-2 rounded-lg hover:bg-slate-50 text-slate-600"
                 title="View Profile"
               >
                 <ExternalLink className="h-5 w-5" />
@@ -244,9 +244,9 @@ export default function Conversation() {
               <div key={date}>
                 {/* Date divider */}
                 <div className="flex items-center gap-4 my-4">
-                  <div className="flex-1 h-px bg-white" />
+                  <div className="flex-1 h-px bg-slate-200" />
                   <span className="text-xs text-slate-500">{formatDate(msgs[0].created_at)}</span>
-                  <div className="flex-1 h-px bg-white" />
+                  <div className="flex-1 h-px bg-slate-200" />
                 </div>
 
                 {/* Messages for this date */}
@@ -275,7 +275,7 @@ export default function Conversation() {
                           }`}
                         >
                           <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
-                          <div className={`text-xs mt-1 ${isMe ? 'text-emerald-200' : 'text-slate-500'}`}>
+                          <div className={`text-xs mt-1 ${isMe ? 'text-white/80' : 'text-slate-500'}`}>
                             {formatTime(msg.created_at)}
                           </div>
                         </div>
@@ -306,13 +306,13 @@ export default function Conversation() {
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
               rows={1}
-              className="flex-1 px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 resize-none text-base"
+              className="flex-1 px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 resize-none text-base"
               style={{ minHeight: '48px', maxHeight: '120px' }}
             />
             <button
               onClick={handleSend}
               disabled={!newMessage.trim() || sending}
-              className="px-4 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-transform"
+              className="px-4 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-transform"
             >
               {sending ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

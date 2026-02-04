@@ -177,7 +177,7 @@ export default function JobDetail() {
         <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
           <div className="text-4xl mb-4">😕</div>
           <p className="text-slate-600 mb-4">Job not found</p>
-          <Link to="/my-jobs" className="text-[hsl(var(--primary))] hover:text-emerald-300">
+          <Link to="/my-jobs" className="text-[hsl(var(--primary))] hover:opacity-80">
             ← Back to My Jobs
           </Link>
         </div>
@@ -195,7 +195,7 @@ export default function JobDetail() {
           {/* Back */}
           <Link 
             to="/my-jobs" 
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4 py-1 text-sm"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 py-1 text-sm"
           >
             <ArrowLeft className="h-4 w-4" />
             My Jobs
@@ -236,8 +236,8 @@ export default function JobDetail() {
                 onClick={() => setTab('applicants')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   tab === 'applicants'
-                    ? 'bg-slate-100 text-white'
-                    : 'text-slate-600 hover:text-white'
+                    ? 'bg-slate-100 text-slate-900'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Applicants
@@ -251,8 +251,8 @@ export default function JobDetail() {
                 onClick={() => setTab('details')}
                 className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   tab === 'details'
-                    ? 'bg-slate-100 text-white'
-                    : 'text-slate-600 hover:text-white'
+                    ? 'bg-slate-100 text-slate-900'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Job Details
@@ -286,15 +286,15 @@ export default function JobDetail() {
                 <div className="grid sm:grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-slate-500">Experience Level</span>
-                    <p className="text-white capitalize">{job.experience_level}</p>
+                    <p className="text-slate-900 capitalize">{job.experience_level}</p>
                   </div>
                   <div>
                     <span className="text-slate-500">Job Type</span>
-                    <p className="text-white capitalize">{job.job_type.replace('-', ' ')}</p>
+                    <p className="text-slate-900 capitalize">{job.job_type.replace('-', ' ')}</p>
                   </div>
                   <div>
                     <span className="text-slate-500">Budget Type</span>
-                    <p className="text-white capitalize">{job.budget_type}</p>
+                    <p className="text-slate-900 capitalize">{job.budget_type}</p>
                   </div>
                 </div>
               </div>
@@ -307,7 +307,7 @@ export default function JobDetail() {
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-3 mb-4 sm:mb-6">
                 <div className="bg-white/70 border border-slate-200 rounded-xl p-3 text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-white">{applications.length}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-slate-900">{applications.length}</div>
                   <div className="text-xs text-slate-500">Total</div>
                 </div>
                 <div className="bg-white/70 border border-slate-200 rounded-xl p-3 text-center">
@@ -348,7 +348,7 @@ export default function JobDetail() {
                                 <div className="flex items-center gap-2 mb-0.5">
                                   <Link
                                     to={`/va/${app.va.id}`}
-                                    className="font-semibold text-white hover:text-[hsl(var(--primary))] transition-colors"
+                                    className="font-semibold text-slate-900 hover:text-[hsl(var(--primary))] transition-colors"
                                   >
                                     {app.va.profile?.full_name || 'VA'}
                                   </Link>
@@ -384,7 +384,7 @@ export default function JobDetail() {
                         {/* Expand toggle */}
                         <button
                           onClick={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
-                          className="flex items-center gap-1 mt-3 text-sm text-slate-600 hover:text-white"
+                          className="flex items-center gap-1 mt-3 text-sm text-slate-600 hover:text-slate-900"
                         >
                           <ChevronDown className={`h-4 w-4 transition-transform ${expandedApp === app.id ? 'rotate-180' : ''}`} />
                           {expandedApp === app.id ? 'Hide' : 'View'} cover letter
@@ -403,7 +403,7 @@ export default function JobDetail() {
                           <div className="flex flex-wrap gap-2">
                             <Link
                               to={`/va/${app.va.id}`}
-                              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-gray-600"
+                              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                             >
                               <ExternalLink className="h-4 w-4" />
                               View Profile
@@ -429,13 +429,13 @@ export default function JobDetail() {
                             {app.status === 'shortlisted' && (
                               <button
                                 onClick={() => handleApplicationStatus(app.id, 'hired')}
-                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white text-sm"
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[hsl(var(--primary))] text-white text-sm hover:bg-[hsl(var(--primary))]/90"
                               >
                                 <CheckCircle className="h-4 w-4" />
                                 Mark as Hired
                               </button>
                             )}
-                            <button className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-gray-600">
+                            <button className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-slate-300 hover:bg-slate-50">
                               <MessageCircle className="h-4 w-4" />
                               Message
                             </button>

@@ -113,7 +113,7 @@ export default function CreateJob() {
             {/* Back */}
             <Link 
               to="/my-jobs" 
-              className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4 sm:mb-6 py-1 text-sm"
+              className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 sm:mb-6 py-1 text-sm"
             >
               <ArrowLeft className="h-4 w-4" />
               My Jobs
@@ -164,7 +164,7 @@ export default function CreateJob() {
                       type="text"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                       placeholder="e.g., Executive Virtual Assistant for E-commerce Business"
                     />
                   </div>
@@ -174,7 +174,7 @@ export default function CreateJob() {
                     <textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 h-32 sm:h-40 resize-none text-base"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 h-32 sm:h-40 resize-none text-base"
                       placeholder="Describe the role, responsibilities, and what you're looking for in an ideal candidate..."
                     />
                     <p className="text-xs text-slate-500 mt-1.5">Include key tasks, tools used, and work schedule expectations</p>
@@ -194,8 +194,8 @@ export default function CreateJob() {
                           onClick={() => setJobType(option.value as typeof jobType)}
                           className={`p-3 rounded-xl border text-center transition-colors active:scale-[0.98] ${
                             jobType === option.value
-                              ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
-                              : 'border-slate-200 text-slate-600 hover:border-gray-600'
+                              ? 'border-[hsl(var(--primary))]/40 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                              : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                           }`}
                         >
                           <div className="font-medium text-sm">{option.label}</div>
@@ -228,8 +228,8 @@ export default function CreateJob() {
                         onClick={() => setBudgetType('hourly')}
                         className={`p-3 rounded-xl border text-center transition-colors ${
                           budgetType === 'hourly'
-                            ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
-                            : 'border-slate-200 text-slate-600'
+                            ? 'border-[hsl(var(--primary))]/40 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                            : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
                         <Clock className="h-5 w-5 mx-auto mb-1" />
@@ -240,8 +240,8 @@ export default function CreateJob() {
                         onClick={() => setBudgetType('fixed')}
                         className={`p-3 rounded-xl border text-center transition-colors ${
                           budgetType === 'fixed'
-                            ? 'border-emerald-500 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
-                            : 'border-slate-200 text-slate-600'
+                            ? 'border-[hsl(var(--primary))]/40 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                            : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
                         <DollarSign className="h-5 w-5 mx-auto mb-1" />
@@ -261,7 +261,7 @@ export default function CreateJob() {
                           type="number"
                           value={budgetMin}
                           onChange={(e) => setBudgetMin(e.target.value)}
-                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
+                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                           placeholder="Min"
                         />
                       </div>
@@ -272,7 +272,7 @@ export default function CreateJob() {
                           type="number"
                           value={budgetMax}
                           onChange={(e) => setBudgetMax(e.target.value)}
-                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
+                          className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                           placeholder="Max"
                         />
                       </div>
@@ -303,7 +303,7 @@ export default function CreateJob() {
                           }`}
                         >
                           <div>
-                            <div className={`font-medium text-sm ${experienceLevel === option.value ? 'text-[hsl(var(--primary))]' : 'text-white'}`}>
+                            <div className={`font-medium text-sm ${experienceLevel === option.value ? 'text-[hsl(var(--primary))]' : 'text-slate-900'}`}>
                               {option.label}
                             </div>
                             <div className="text-xs text-slate-500">{option.desc}</div>
@@ -386,7 +386,7 @@ export default function CreateJob() {
                       }
                       setStep(step + 1)
                     }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium text-sm active:scale-[0.98]"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[hsl(var(--primary))] text-white font-medium text-sm hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98]"
                   >
                     Continue
                     <ChevronRight className="h-4 w-4" />
@@ -395,7 +395,7 @@ export default function CreateJob() {
                   <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium text-sm active:scale-[0.98] disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[hsl(var(--primary))] text-white font-medium text-sm hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] disabled:opacity-50"
                   >
                     {loading ? (
                       <Loader2 className="h-5 w-5 animate-spin" />

@@ -135,7 +135,7 @@ export default function MyJobs() {
             </div>
             <Link
               to="/jobs/new"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium text-sm active:scale-[0.98]"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[hsl(var(--primary))] text-white font-medium text-sm hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98]"
             >
               <Plus className="h-5 w-5" />
               <span className="hidden sm:inline">Post Job</span>
@@ -152,7 +152,7 @@ export default function MyJobs() {
               <p className="text-slate-600 mb-6 text-sm">Post your first job to start finding VAs</p>
               <Link
                 to="/jobs/new"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium active:scale-[0.98]"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98]"
               >
                 <Plus className="h-5 w-5" />
                 Post Your First Job
@@ -177,7 +177,7 @@ export default function MyJobs() {
                         <div className="min-w-0">
                           <Link 
                             to={`/jobs/${job.id}`}
-                            className="text-base sm:text-lg font-semibold text-white hover:text-[hsl(var(--primary))] transition-colors line-clamp-1"
+                            className="text-base sm:text-lg font-semibold text-slate-900 hover:text-[hsl(var(--primary))] transition-colors line-clamp-1"
                           >
                             {job.title}
                           </Link>
@@ -267,7 +267,7 @@ export default function MyJobs() {
                     <div className="hidden sm:block">
                       <Link
                         to={`/jobs/${job.id}`}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-emerald-500 hover:text-[hsl(var(--primary))] transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-[hsl(var(--primary))]/40 hover:text-[hsl(var(--primary))] transition-colors"
                       >
                         View
                         <ChevronRight className="h-4 w-4" />

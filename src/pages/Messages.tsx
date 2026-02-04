@@ -163,7 +163,7 @@ export default function Messages() {
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20"
             />
           </div>
 
@@ -179,7 +179,7 @@ export default function Messages() {
               </p>
               <Link
                 to="/search"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90"
               >
                 Browse VAs
               </Link>
@@ -207,7 +207,7 @@ export default function Messages() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2 mb-0.5">
-                      <span className={`font-medium truncate ${conv.unread_count > 0 ? 'text-white' : 'text-slate-800'}`}>
+                      <span className={`font-medium truncate ${conv.unread_count > 0 ? 'text-slate-900' : 'text-slate-800'}`}>
                         {conv.other_user.full_name || 'User'}
                       </span>
                       {conv.last_message && (

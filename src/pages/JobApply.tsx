@@ -195,7 +195,7 @@ export default function JobApply() {
             <h1 className="text-xl font-bold mb-2">{error}</h1>
             <Link
               to="/jobs"
-              className="text-[hsl(var(--primary))] hover:text-emerald-300"
+              className="text-[hsl(var(--primary))] hover:opacity-80"
             >
               ← Back to Jobs
             </Link>
@@ -221,13 +221,13 @@ export default function JobApply() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/jobs"
-                className="px-6 py-3 rounded-xl bg-white text-white font-medium hover:bg-slate-100"
+                className="px-6 py-3 rounded-xl bg-white text-slate-900 font-medium hover:bg-slate-50 border border-slate-200"
               >
                 Browse More Jobs
               </Link>
               <Link
                 to="/my-applications"
-                className="px-6 py-3 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-medium"
+                className="px-6 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90"
               >
                 View My Applications
               </Link>
@@ -247,7 +247,7 @@ export default function JobApply() {
           {/* Back link */}
           <Link
             to="/jobs"
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-white mb-4 sm:mb-6"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 sm:mb-6"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Jobs
@@ -304,7 +304,7 @@ export default function JobApply() {
               </p>
               <Link
                 to="/my-applications"
-                className="text-[hsl(var(--primary))] hover:text-emerald-300 text-sm"
+                className="text-[hsl(var(--primary))] hover:opacity-80 text-sm"
               >
                 View My Applications →
               </Link>
@@ -338,7 +338,7 @@ export default function JobApply() {
                     onChange={(e) => setCoverLetter(e.target.value)}
                     placeholder="Introduce yourself and explain why you're a great fit for this role..."
                     rows={6}
-                    className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 resize-none text-base"
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 resize-none text-base"
                   />
                   <p className="mt-1.5 text-xs text-slate-500">
                     Highlight relevant experience and what makes you unique
@@ -359,7 +359,7 @@ export default function JobApply() {
                       placeholder={job.budget_min ? String(job.budget_min) : '0'}
                       min="0"
                       step="0.01"
-                      className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-white placeholder-gray-500 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
+                      className="w-full pl-8 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary))]/20 text-base"
                     />
                   </div>
                   <p className="mt-1.5 text-xs text-slate-500">
@@ -372,7 +372,7 @@ export default function JobApply() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] text-white font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-transform"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[hsl(var(--primary))] text-white font-semibold text-lg hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-transform"
               >
                 {submitting ? (
                   <>

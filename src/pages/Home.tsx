@@ -56,46 +56,42 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br to-[hsl(var(--secondary))]/10 via-transparent to-[hsl(var(--secondary))]/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--primary))]/6 via-transparent to-[hsl(var(--secondary))]/8" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] md:w-[800px] h-[500px] md:h-[800px] bg-[hsl(var(--primary))]/5 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 lg:py-32 relative">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[hsl(var(--primary))]/10 border border-emerald-500/20 text-[hsl(var(--primary))] text-xs sm:text-sm font-medium mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs sm:text-sm font-medium mb-6 sm:mb-8">
               <Shield className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Pre-Verified Filipino VAs
             </div>
             
             {/* Headline */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-              <span className="bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
-                Hire VAs You Can
-              </span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
+              Hiring virtual assistants
               <br />
-              <span className="bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-400 bg-clip-text text-transparent">
-                Actually Trust
-              </span>
+              <span className="text-[hsl(var(--primary))]">just got a whole lot easier.</span>
             </h1>
             
             {/* Subheadline */}
             <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-4">
-              Skip the guesswork. Every VA is verified before they appear in search. 
-              Find skilled talent with confirmed identity and references.
+              Pay only when you find the perfect match. World-class virtual assistants, handpicked by industry experts.
+              Fast, transparent hiring — built for operators.
             </p>
             
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
               <Link 
                 to="/search" 
-                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25"
+                className="flex items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] transition-all shadow-sm"
               >
                 <Search className="h-5 w-5" />
                 Find Your VA
               </Link>
               <Link 
                 to="/va/signup" 
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:bg-white/70 active:bg-white transition-all"
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-slate-900 hover:bg-slate-50 active:bg-slate-100 transition-all"
               >
                 I'm a VA
                 <ArrowRight className="h-5 w-5" />

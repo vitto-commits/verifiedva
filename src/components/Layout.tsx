@@ -38,17 +38,17 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-gray-800 bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-gray-950/80">
+      <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/90 backdrop-blur supports-[backdrop-filter]:bg-[hsl(var(--background))]/70">
         <div className="container mx-auto px-4">
           <div className="flex h-14 sm:h-16 items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 -ml-1 p-1">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 text-white font-bold text-xs">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] text-white font-bold text-xs">
                 VA
               </div>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">
+              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--secondary))] bg-clip-text text-transparent">
                 Marketplace
               </span>
             </Link>
@@ -76,12 +76,12 @@ export default function Layout({ children }: LayoutProps) {
             {/* Right side */}
             <div className="flex items-center gap-2 sm:gap-4">
               {loading ? (
-                <div className="h-9 w-9 rounded-full bg-gray-800 animate-pulse" />
+                <div className="h-9 w-9 rounded-full bg-slate-200 animate-pulse" />
               ) : user ? (
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 rounded-lg p-1.5 sm:px-3 sm:py-2 hover:bg-gray-800 transition-colors active:scale-95"
+                    className="flex items-center gap-2 rounded-lg p-1.5 sm:px-3 sm:py-2 hover:bg-slate-100 transition-colors active:scale-95"
                   >
                     <div className="h-9 w-9 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-sm font-medium">
                       {profile?.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
@@ -99,8 +99,8 @@ export default function Layout({ children }: LayoutProps) {
                         onClick={() => setUserMenuOpen(false)} 
                       />
                       {/* Menu */}
-                      <div className="absolute right-0 mt-2 w-56 rounded-xl bg-gray-900 border border-gray-800 shadow-xl py-2 z-50">
-                        <div className="px-4 py-2 border-b border-gray-800 mb-2">
+                      <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-xl py-2 z-50">
+                        <div className="px-4 py-2 border-b border-slate-200 mb-2">
                           <div className="font-medium text-white truncate">
                             {profile?.full_name || 'User'}
                           </div>
@@ -212,7 +212,7 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Mobile menu - Full screen overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-gray-950">
+        <div className="md:hidden fixed inset-0 z-40 bg-[hsl(var(--background))]">
           {/* Header spacer */}
           <div className="h-14" />
           

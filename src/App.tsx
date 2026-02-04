@@ -10,6 +10,8 @@ import Login from './pages/Login'
 import MyJobs from './pages/MyJobs'
 import CreateJob from './pages/CreateJob'
 import JobDetail from './pages/JobDetail'
+import Messages from './pages/Messages'
+import Conversation from './pages/Conversation'
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route path="/my-jobs" element={<MyJobs />} />
           <Route path="/jobs/new" element={<CreateJob />} />
           <Route path="/jobs/:id" element={<JobDetail />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages/:id" element={<Conversation />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

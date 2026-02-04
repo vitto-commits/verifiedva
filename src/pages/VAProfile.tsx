@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { MapPin, MessageCircle, Globe, Briefcase, Loader2, ArrowLeft, Clock, Calendar, ChevronRight } from 'lucide-react'
 import Layout from '../components/Layout'
+import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import type { VA, Skill, Profile } from '../types/database'
 
@@ -37,9 +38,62 @@ const VerificationBadge = ({ status, compact = false }: { status: string; compac
 
 export default function VAProfile() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const { user } = useAuth()
   const [va, setVa] = useState<VAWithDetails | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [startingChat, setStartingChat] = useState(false)
+
+  const handleStartConversation = async () => {
+    if (!user || !va) {
+      navigate('/login')
+      return
+    }
+
+    setStartingChat(true)
+
+    try {
+      // Get or create conversation
+      const { data: convId, error: convError } = await supabase
+        .rpc('get_or_create_conversation', {
+          user1: user.id,
+          user2: va.profile.id,
+        })
+
+      if (convError) {
+        // Fallback: try to find existing conversation
+        const { data: existing } = await supabase
+          .from('conversations')
+          .select('id')
+          .or(`and(participant_1.eq.${user.id},participant_2.eq.${va.profile.id}),and(participant_1.eq.${va.profile.id},participant_2.eq.${user.id})`)
+          .single()
+
+        if (existing) {
+          navigate(`/messages/${existing.id}`)
+          return
+        }
+
+        // Create new conversation
+        const { data: newConv, error: createError } = await supabase
+          .from('conversations')
+          .insert({
+            participant_1: user.id,
+            participant_2: va.profile.id,
+          })
+          .select('id')
+          .single()
+
+        if (createError) throw createError
+        navigate(`/messages/${newConv.id}`)
+      } else {
+        navigate(`/messages/${convId}`)
+      }
+    } catch (err) {
+      console.error('Failed to start conversation:', err)
+      setStartingChat(false)
+    }
+  }
 
   useEffect(() => {
     const fetchVA = async () => {
@@ -255,9 +309,19 @@ export default function VAProfile() {
                   </div>
                 )}
 
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all mb-3">
-                  <MessageCircle className="h-5 w-5" />
-                  Contact {va.profile?.full_name?.split(' ')[0] || 'VA'}
+                <button 
+                  onClick={handleStartConversation}
+                  disabled={startingChat}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all mb-3 disabled:opacity-50"
+                >
+                  {startingChat ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <>
+                      <MessageCircle className="h-5 w-5" />
+                      Contact {va.profile?.full_name?.split(' ')[0] || 'VA'}
+                    </>
+                  )}
                 </button>
 
                 <div className="space-y-4 mt-6">
@@ -306,10 +370,20 @@ export default function VAProfile() {
               <div className="text-xl font-bold text-emerald-400">${va.hourly_rate}<span className="text-sm font-normal text-gray-500">/hr</span></div>
             </div>
           )}
-          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold active:scale-[0.98] transition-transform">
-            <MessageCircle className="h-5 w-5" />
-            Contact
-            <ChevronRight className="h-4 w-4" />
+          <button 
+            onClick={handleStartConversation}
+            disabled={startingChat}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold active:scale-[0.98] transition-transform disabled:opacity-50"
+          >
+            {startingChat ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <>
+                <MessageCircle className="h-5 w-5" />
+                Contact
+                <ChevronRight className="h-4 w-4" />
+              </>
+            )}
           </button>
         </div>
       </div>

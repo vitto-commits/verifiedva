@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Check, ChevronRight, ChevronLeft, Eye, EyeOff, Loader2, User, Briefcase, Wrench } from 'lucide-react'
+import { IconCheck, IconChevronRight, IconChevronLeft, IconEye, IconEyeOff, IconLoader, IconUser, IconBriefcase, IconWrench } from '../components/icons'
 import Layout from '../components/Layout'
 import { Button, Input, Textarea } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
@@ -8,10 +8,10 @@ import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
 
 const steps = [
-  { id: 1, name: 'Account', icon: User },
-  { id: 2, name: 'Profile', icon: User },
-  { id: 3, name: 'Work', icon: Briefcase },
-  { id: 4, name: 'Skills', icon: Wrench },
+  { id: 1, name: 'Account', icon: IconUser },
+  { id: 2, name: 'Profile', icon: IconUser },
+  { id: 3, name: 'Work', icon: IconBriefcase },
+  { id: 4, name: 'Skills', icon: IconWrench },
 ]
 
 export default function VASignup() {
@@ -209,7 +209,7 @@ export default function VASignup() {
                     }`}
                   >
                     {step.id < currentStep ? (
-                      <Check className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <IconCheck className="h-4 w-4 sm:h-5 sm:w-5" />
                     ) : (
                       <step.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                     )}
@@ -259,7 +259,7 @@ export default function VASignup() {
                           className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-600 hover:text-slate-700"
                           tabIndex={-1}
                         >
-                          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          {showPassword ? <IconEyeOff className="h-5 w-5" /> : <IconEye className="h-5 w-5" />}
                         </button>
                       </div>
                     </div>
@@ -444,7 +444,7 @@ export default function VASignup() {
                     (currentStep === 1 || (currentStep === 2 && !user)) ? 'invisible' : ''
                   }`}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <IconChevronLeft className="h-4 w-4" />
                   <span className="hidden sm:inline">Back</span>
                 </button>
                 <Button
@@ -459,11 +459,11 @@ export default function VASignup() {
                   size="lg"
                 >
                   {loading ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <IconLoader className="h-5 w-5 animate-spin" />
                   ) : (
                     <>
                       {currentStep === steps.length ? 'Complete' : 'Continue'}
-                      <ChevronRight className="h-4 w-4" />
+                      <IconChevronRight className="h-4 w-4" />
                     </>
                   )}
                 </Button>

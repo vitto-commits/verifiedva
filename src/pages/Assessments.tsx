@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Award, CheckCircle, Clock, Lock, Loader2, ChevronRight, AlertCircle, Star } from 'lucide-react'
+import { IconAward, IconCheckCircle, IconClock, IconLock, IconLoader, IconChevronRight, IconAlertCircle, IconStar } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -161,7 +161,7 @@ export default function Assessments() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -171,7 +171,7 @@ export default function Assessments() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-          <AlertCircle className="h-12 w-12 text-yellow-400 mb-4" />
+          <IconAlertCircle className="h-12 w-12 text-yellow-400 mb-4" />
           <h1 className="text-2xl font-bold text-gray-100 mb-2">VA Access Only</h1>
           <p className="text-gray-400 mb-6">Skill assessments are available for Virtual Assistants.</p>
           <Link
@@ -205,7 +205,7 @@ export default function Assessments() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 rounded-lg bg-gradient-to-r from-[hsl(var(--primary))]/20 to-cyan-500/20">
-              <Award className="h-6 w-6 text-[hsl(var(--primary))]" />
+              <IconAward className="h-6 w-6 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-100">Skill Assessments</h1>
           </div>
@@ -218,14 +218,14 @@ export default function Assessments() {
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
             <div className="flex items-center gap-2 text-[hsl(var(--primary))] mb-1">
-              <CheckCircle className="h-5 w-5" />
+              <IconCheckCircle className="h-5 w-5" />
               <span className="text-2xl font-bold">{verifiedCount}</span>
             </div>
             <p className="text-sm text-gray-400">Skills Verified</p>
           </div>
           <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
             <div className="flex items-center gap-2 text-cyan-400 mb-1">
-              <Star className="h-5 w-5" />
+              <IconStar className="h-5 w-5" />
               <span className="text-2xl font-bold">{availableCount}</span>
             </div>
             <p className="text-sm text-gray-400">Available to Take</p>
@@ -236,7 +236,7 @@ export default function Assessments() {
         <div className="space-y-3">
           {assessments.length === 0 ? (
             <div className="text-center py-12 text-gray-400">
-              <Award className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <IconAward className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>No assessments available yet.</p>
             </div>
           ) : (
@@ -257,7 +257,7 @@ export default function Assessments() {
                       <h3 className="text-lg font-semibold text-gray-100">{assessment.name}</h3>
                       {assessment.userStatus.verified && (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))]">
-                          <CheckCircle className="h-3 w-3" />
+                          <IconCheckCircle className="h-3 w-3" />
                           Verified
                           {assessment.userStatus.score && ` · ${assessment.userStatus.score}%`}
                         </span>
@@ -276,7 +276,7 @@ export default function Assessments() {
                     {/* Cooldown message */}
                     {!assessment.userStatus.verified && !assessment.userStatus.canTake && assessment.userStatus.nextAvailable && (
                       <div className="flex items-center gap-2 mt-3 text-sm text-yellow-400">
-                        <Clock className="h-4 w-4" />
+                        <IconClock className="h-4 w-4" />
                         <span>Retry available in {formatTimeRemaining(assessment.userStatus.nextAvailable)}</span>
                       </div>
                     )}
@@ -286,7 +286,7 @@ export default function Assessments() {
                   <div className="flex-shrink-0">
                     {assessment.userStatus.verified ? (
                       <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
-                        <CheckCircle className="h-6 w-6 text-[hsl(var(--primary))]" />
+                        <IconCheckCircle className="h-6 w-6 text-[hsl(var(--primary))]" />
                       </div>
                     ) : assessment.userStatus.canTake ? (
                       <Link
@@ -294,11 +294,11 @@ export default function Assessments() {
                         className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[hsl(var(--primary))] to-cyan-500 text-gray-950 font-semibold rounded-lg hover:opacity-90 transition-opacity"
                       >
                         Start
-                        <ChevronRight className="h-4 w-4" />
+                        <IconChevronRight className="h-4 w-4" />
                       </Link>
                     ) : (
                       <div className="p-2 rounded-lg bg-gray-800">
-                        <Lock className="h-6 w-6 text-gray-500" />
+                        <IconLock className="h-6 w-6 text-gray-500" />
                       </div>
                     )}
                   </div>

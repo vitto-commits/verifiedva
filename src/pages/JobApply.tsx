@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, DollarSign, Clock, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { IconArrowLeft, IconDollar, IconClock, IconLoader, IconCheckCircle, IconAlertCircle } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -193,7 +193,7 @@ export default function JobApply() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -205,7 +205,7 @@ export default function JobApply() {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-2xl mx-auto text-center">
             <div className="inline-flex p-4 rounded-2xl bg-red-500/10 mb-4">
-              <AlertCircle className="h-8 w-8 text-red-400" />
+              <IconAlertCircle className="h-8 w-8 text-red-400" />
             </div>
             <h1 className="text-xl font-bold mb-2">{error}</h1>
             <Link
@@ -226,7 +226,7 @@ export default function JobApply() {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-lg mx-auto text-center">
             <div className="inline-flex p-4 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
-              <CheckCircle2 className="h-12 w-12 text-[hsl(var(--primary))]" />
+              <IconCheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Application Submitted!</h1>
             <p className="text-slate-600 mb-6">
@@ -264,7 +264,7 @@ export default function JobApply() {
             to="/jobs"
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 sm:mb-6"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <IconArrowLeft className="h-4 w-4" />
             Back to Jobs
           </Link>
 
@@ -277,11 +277,11 @@ export default function JobApply() {
 
             <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-600 mb-4">
               <span className="flex items-center gap-1.5">
-                <DollarSign className="h-4 w-4" />
+                <IconDollar className="h-4 w-4" />
                 {formatBudget(job)}
               </span>
               <span className="flex items-center gap-1.5">
-                <Clock className="h-4 w-4" />
+                <IconClock className="h-4 w-4" />
                 Posted {formatDate(job.created_at)}
               </span>
             </div>
@@ -312,7 +312,7 @@ export default function JobApply() {
           {/* Application Form */}
           {alreadyApplied ? (
             <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
-              <CheckCircle2 className="h-8 w-8 text-blue-400 mx-auto mb-3" />
+              <IconCheckCircle className="h-8 w-8 text-blue-400 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Already Applied</h3>
               <p className="text-slate-600 text-sm mb-4">
                 You've already submitted an application for this job.
@@ -326,7 +326,7 @@ export default function JobApply() {
             </div>
           ) : job.status !== 'open' ? (
             <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
-              <AlertCircle className="h-8 w-8 text-slate-500 mx-auto mb-3" />
+              <IconAlertCircle className="h-8 w-8 text-slate-500 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Job No Longer Available</h3>
               <p className="text-slate-600 text-sm">
                 This position has been {job.status === 'filled' ? 'filled' : 'closed'}.
@@ -391,7 +391,7 @@ export default function JobApply() {
               >
                 {submitting ? (
                   <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <IconLoader className="h-5 w-5 animate-spin" />
                     Submitting...
                   </>
                 ) : (

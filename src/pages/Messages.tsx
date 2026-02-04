@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { MessageCircle, Search, Loader2 } from 'lucide-react'
+import { IconMessage, IconSearch, IconLoader } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -139,7 +139,7 @@ export default function Messages() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -157,7 +157,7 @@ export default function Messages() {
 
           {/* Search */}
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+            <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
             <input
               type="text"
               placeholder="Search conversations..."
@@ -171,7 +171,7 @@ export default function Messages() {
           {filteredConversations.length === 0 ? (
             <div className="text-center py-16">
               <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
-                <MessageCircle className="h-8 w-8 text-slate-500" />
+                <IconMessage className="h-8 w-8 text-slate-500" />
               </div>
               <h3 className="text-lg font-medium mb-2">No messages yet</h3>
               <p className="text-slate-600 text-sm mb-6">

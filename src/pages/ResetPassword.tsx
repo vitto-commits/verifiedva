@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Lock, Eye, EyeOff, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { IconLock, IconEye, IconEyeOff, IconLoader, IconCheckCircle, IconAlertCircle } from '../components/icons'
 import Layout from '../components/Layout'
 import { supabase } from '../lib/supabase'
 
@@ -88,7 +88,7 @@ export default function ResetPassword() {
     return (
       <Layout>
         <div className="min-h-[70vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -101,7 +101,7 @@ export default function ResetPassword() {
         <div className="min-h-[70vh] flex items-center justify-center px-4">
           <div className="w-full max-w-md text-center">
             <div className="inline-flex p-4 rounded-2xl bg-red-500/10 mb-6">
-              <AlertCircle className="h-12 w-12 text-red-500" />
+              <IconAlertCircle className="h-12 w-12 text-red-500" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Invalid or Expired Link</h1>
             <p className="text-slate-600 mb-6">
@@ -126,14 +126,14 @@ export default function ResetPassword() {
         <div className="min-h-[70vh] flex items-center justify-center px-4">
           <div className="w-full max-w-md text-center">
             <div className="inline-flex p-4 rounded-2xl bg-[hsl(var(--primary))]/10 mb-6">
-              <CheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
+              <IconCheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Password Reset!</h1>
             <p className="text-slate-600 mb-6">
               Your password has been successfully reset. Redirecting you to sign in...
             </p>
             <div className="flex justify-center">
-              <Loader2 className="h-5 w-5 animate-spin text-[hsl(var(--primary))]" />
+              <IconLoader className="h-5 w-5 animate-spin text-[hsl(var(--primary))]" />
             </div>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function ResetPassword() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex p-3 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
-              <Lock className="h-8 w-8 text-[hsl(var(--primary))]" />
+              <IconLock className="h-8 w-8 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Set New Password</h1>
             <p className="text-slate-600">
@@ -183,7 +183,7 @@ export default function ResetPassword() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <IconEyeOff className="h-5 w-5" /> : <IconEye className="h-5 w-5" />}
                 </button>
               </div>
               <p className="mt-1.5 text-xs text-slate-500">
@@ -212,7 +212,7 @@ export default function ResetPassword() {
             >
               {loading ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <IconLoader className="h-5 w-5 animate-spin" />
                   Resetting...
                 </>
               ) : (

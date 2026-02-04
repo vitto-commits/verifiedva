@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Loader2, DollarSign, Clock, Briefcase, ChevronRight } from 'lucide-react'
+import { IconArrowLeft, IconLoader, IconDollar, IconClock, IconBriefcase, IconChevronRight } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -115,7 +115,7 @@ export default function CreateJob() {
               to="/my-jobs" 
               className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 sm:mb-6 py-1 text-sm"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <IconArrowLeft className="h-4 w-4" />
               My Jobs
             </Link>
 
@@ -150,7 +150,7 @@ export default function CreateJob() {
                 <div className="space-y-4 sm:space-y-5">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
-                      <Briefcase className="h-5 w-5 text-[hsl(var(--primary))]" />
+                      <IconBriefcase className="h-5 w-5 text-[hsl(var(--primary))]" />
                     </div>
                     <div>
                       <h2 className="text-lg font-semibold">Job Details</h2>
@@ -212,7 +212,7 @@ export default function CreateJob() {
                 <div className="space-y-4 sm:space-y-5">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
-                      <DollarSign className="h-5 w-5 text-[hsl(var(--primary))]" />
+                      <IconDollar className="h-5 w-5 text-[hsl(var(--primary))]" />
                     </div>
                     <div>
                       <h2 className="text-lg font-semibold">Budget & Requirements</h2>
@@ -232,7 +232,7 @@ export default function CreateJob() {
                             : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
-                        <Clock className="h-5 w-5 mx-auto mb-1" />
+                        <IconClock className="h-5 w-5 mx-auto mb-1" />
                         <div className="font-medium text-sm">Hourly Rate</div>
                       </button>
                       <button
@@ -244,7 +244,7 @@ export default function CreateJob() {
                             : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
-                        <DollarSign className="h-5 w-5 mx-auto mb-1" />
+                        <IconDollar className="h-5 w-5 mx-auto mb-1" />
                         <div className="font-medium text-sm">Fixed Price</div>
                       </button>
                     </div>
@@ -327,7 +327,7 @@ export default function CreateJob() {
                 <div className="space-y-4 sm:space-y-5">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
-                      <Briefcase className="h-5 w-5 text-[hsl(var(--primary))]" />
+                      <IconBriefcase className="h-5 w-5 text-[hsl(var(--primary))]" />
                     </div>
                     <div>
                       <h2 className="text-lg font-semibold">Required Skills</h2>
@@ -389,7 +389,7 @@ export default function CreateJob() {
                     className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[hsl(var(--primary))] text-white font-medium text-sm hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98]"
                   >
                     Continue
-                    <ChevronRight className="h-4 w-4" />
+                    <IconChevronRight className="h-4 w-4" />
                   </button>
                 ) : (
                   <button
@@ -398,11 +398,11 @@ export default function CreateJob() {
                     className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[hsl(var(--primary))] text-white font-medium text-sm hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] disabled:opacity-50"
                   >
                     {loading ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <IconLoader className="h-5 w-5 animate-spin" />
                     ) : (
                       <>
                         Post Job
-                        <ChevronRight className="h-4 w-4" />
+                        <IconChevronRight className="h-4 w-4" />
                       </>
                     )}
                   </button>

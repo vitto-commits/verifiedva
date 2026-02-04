@@ -1,8 +1,20 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, User, LogOut, Search, UserPlus, Briefcase, MessageCircle, Calendar, Award, Shield } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
+import {
+  IconMenu,
+  IconX,
+  IconUser,
+  IconLogOut,
+  IconSearch,
+  IconBriefcase,
+  IconMessage,
+  IconCalendar,
+  IconAward,
+  IconShield,
+  IconUserPlus,
+} from './icons'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -132,7 +144,7 @@ export default function Layout({ children }: LayoutProps) {
                           className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                           onClick={() => setUserMenuOpen(false)}
                         >
-                          <User className="h-5 w-5" />
+                          <IconUser className="h-5 w-5" />
                           Dashboard
                         </Link>
                         <Link
@@ -140,7 +152,7 @@ export default function Layout({ children }: LayoutProps) {
                           className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                           onClick={() => setUserMenuOpen(false)}
                         >
-                          <MessageCircle className="h-5 w-5" />
+                          <IconMessage className="h-5 w-5" />
                           Messages
                         </Link>
                         <Link
@@ -148,7 +160,7 @@ export default function Layout({ children }: LayoutProps) {
                           className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                           onClick={() => setUserMenuOpen(false)}
                         >
-                          <Calendar className="h-5 w-5" />
+                          <IconCalendar className="h-5 w-5" />
                           My Interviews
                         </Link>
                         {profile?.user_type === 'client' && (
@@ -157,7 +169,7 @@ export default function Layout({ children }: LayoutProps) {
                             className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                             onClick={() => setUserMenuOpen(false)}
                           >
-                            <Briefcase className="h-5 w-5" />
+                            <IconBriefcase className="h-5 w-5" />
                             My Jobs
                           </Link>
                         )}
@@ -168,7 +180,7 @@ export default function Layout({ children }: LayoutProps) {
                               className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                               onClick={() => setUserMenuOpen(false)}
                             >
-                              <Search className="h-5 w-5" />
+                              <IconSearch className="h-5 w-5" />
                               Browse Jobs
                             </Link>
                             <Link
@@ -176,7 +188,7 @@ export default function Layout({ children }: LayoutProps) {
                               className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                               onClick={() => setUserMenuOpen(false)}
                             >
-                              <Briefcase className="h-5 w-5" />
+                              <IconBriefcase className="h-5 w-5" />
                               My Applications
                             </Link>
                             <Link
@@ -184,7 +196,7 @@ export default function Layout({ children }: LayoutProps) {
                               className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100"
                               onClick={() => setUserMenuOpen(false)}
                             >
-                              <Award className="h-5 w-5" />
+                              <IconAward className="h-5 w-5" />
                               Skill Assessments
                             </Link>
                           </>
@@ -195,7 +207,7 @@ export default function Layout({ children }: LayoutProps) {
                             className="flex items-center gap-3 px-4 py-3 text-sm text-purple-600 hover:bg-purple-50 active:bg-purple-100"
                             onClick={() => setUserMenuOpen(false)}
                           >
-                            <Shield className="h-5 w-5" />
+                            <IconShield className="h-5 w-5" />
                             Admin Panel
                           </Link>
                         )}
@@ -206,7 +218,7 @@ export default function Layout({ children }: LayoutProps) {
                           }}
                           className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-white active:bg-slate-100 w-full"
                         >
-                          <LogOut className="h-5 w-5" />
+                          <IconLogOut className="h-5 w-5" />
                           Sign Out
                         </button>
                       </div>
@@ -237,9 +249,9 @@ export default function Layout({ children }: LayoutProps) {
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? (
-                  <X className="h-6 w-6" />
+                  <IconX className="h-6 w-6" />
                 ) : (
-                  <Menu className="h-6 w-6" />
+                  <IconMenu className="h-6 w-6" />
                 )}
               </button>
             </div>
@@ -264,7 +276,7 @@ export default function Layout({ children }: LayoutProps) {
                     : 'text-slate-700 hover:bg-white active:bg-slate-100'
                 }`}
               >
-                <Search className="h-6 w-6" />
+                <IconSearch className="h-6 w-6" />
                 Find VAs
               </Link>
               <Link
@@ -275,7 +287,7 @@ export default function Layout({ children }: LayoutProps) {
                     : 'text-slate-700 hover:bg-white active:bg-slate-100'
                 }`}
               >
-                <UserPlus className="h-6 w-6" />
+                <IconUserPlus className="h-6 w-6" />
                 Become a VA
               </Link>
               
@@ -290,7 +302,7 @@ export default function Layout({ children }: LayoutProps) {
                         : 'text-slate-700 hover:bg-white active:bg-slate-100'
                     }`}
                   >
-                    <User className="h-6 w-6" />
+                    <IconUser className="h-6 w-6" />
                     Dashboard
                   </Link>
                   <Link
@@ -301,7 +313,7 @@ export default function Layout({ children }: LayoutProps) {
                         : 'text-slate-700 hover:bg-white active:bg-slate-100'
                     }`}
                   >
-                    <MessageCircle className="h-6 w-6" />
+                    <IconMessage className="h-6 w-6" />
                     Messages
                   </Link>
                   <Link
@@ -312,7 +324,7 @@ export default function Layout({ children }: LayoutProps) {
                         : 'text-slate-700 hover:bg-white active:bg-slate-100'
                     }`}
                   >
-                    <Calendar className="h-6 w-6" />
+                    <IconCalendar className="h-6 w-6" />
                     My Interviews
                   </Link>
                   {profile?.user_type === 'client' && (
@@ -324,7 +336,7 @@ export default function Layout({ children }: LayoutProps) {
                           : 'text-slate-700 hover:bg-white active:bg-slate-100'
                       }`}
                     >
-                      <Briefcase className="h-6 w-6" />
+                      <IconBriefcase className="h-6 w-6" />
                       My Jobs
                     </Link>
                   )}
@@ -338,7 +350,7 @@ export default function Layout({ children }: LayoutProps) {
                             : 'text-slate-700 hover:bg-white active:bg-slate-100'
                         }`}
                       >
-                        <Search className="h-6 w-6" />
+                        <IconSearch className="h-6 w-6" />
                         Browse Jobs
                       </Link>
                       <Link
@@ -349,7 +361,7 @@ export default function Layout({ children }: LayoutProps) {
                             : 'text-slate-700 hover:bg-white active:bg-slate-100'
                         }`}
                       >
-                        <Briefcase className="h-6 w-6" />
+                        <IconBriefcase className="h-6 w-6" />
                         My Applications
                       </Link>
                       <Link
@@ -360,7 +372,7 @@ export default function Layout({ children }: LayoutProps) {
                             : 'text-slate-700 hover:bg-white active:bg-slate-100'
                         }`}
                       >
-                        <Award className="h-6 w-6" />
+                        <IconAward className="h-6 w-6" />
                         Skill Assessments
                       </Link>
                     </>
@@ -390,7 +402,7 @@ export default function Layout({ children }: LayoutProps) {
                     onClick={handleSignOut}
                     className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-white active:bg-slate-100 transition-colors"
                   >
-                    <LogOut className="h-5 w-5" />
+                    <IconLogOut className="h-5 w-5" />
                     Sign Out
                   </button>
                 </>

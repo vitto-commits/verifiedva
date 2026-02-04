@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Clock, Plus, Trash2, Loader2, ArrowLeft } from 'lucide-react'
+import { IconClock, IconPlus, IconTrash, IconLoader, IconArrowLeft } from '../components/icons'
 import Layout from '../components/Layout'
 import { Button, Card, CardContent } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
@@ -139,7 +139,7 @@ export default function Availability() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -154,7 +154,7 @@ export default function Availability() {
             onClick={() => navigate('/dashboard')}
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <IconArrowLeft className="h-4 w-4" />
             Back to Dashboard
           </button>
 
@@ -225,7 +225,7 @@ export default function Availability() {
                 </select>
 
                 <Button onClick={addSlot} disabled={saving} className="rounded-lg">
-                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                  {saving ? <IconLoader className="h-4 w-4 animate-spin" /> : <IconPlus className="h-4 w-4" />}
                   Add
                 </Button>
               </div>
@@ -239,7 +239,7 @@ export default function Availability() {
             
             {slots.length === 0 ? (
               <div className="text-center py-8 text-slate-500">
-                <Clock className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <IconClock className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p>No availability set yet</p>
                 <p className="text-sm">Add your available times above</p>
               </div>
@@ -255,7 +255,7 @@ export default function Availability() {
                           className="flex items-center justify-between p-3 rounded-lg bg-slate-50"
                         >
                           <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4 text-[hsl(var(--primary))]" />
+                            <IconClock className="h-4 w-4 text-[hsl(var(--primary))]" />
                             <span>
                               {formatTime(slot.start_time)} - {formatTime(slot.end_time)}
                             </span>
@@ -265,7 +265,7 @@ export default function Availability() {
                             disabled={saving}
                             className="p-2 text-slate-600 hover:text-red-400 disabled:opacity-50"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <IconTrash className="h-4 w-4" />
                           </button>
                         </div>
                       ))}

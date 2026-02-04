@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { MapPin, MessageCircle, Globe, Briefcase, Loader2, ArrowLeft, Clock, Calendar, ChevronRight, CheckCircle } from 'lucide-react'
+import { IconMapPin, IconMessage, IconGlobe, IconBriefcase, IconLoader, IconArrowLeft, IconClock, IconCalendar, IconChevronRight, IconCheckCircle } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
@@ -145,7 +145,7 @@ export default function VAProfile() {
       <AuthGuard>
         <Layout>
           <div className="min-h-[60vh] flex items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+            <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
           </div>
         </Layout>
       </AuthGuard>
@@ -163,7 +163,7 @@ export default function VAProfile() {
               to="/search" 
               className="flex items-center gap-2 text-[hsl(var(--primary))] hover:opacity-80 font-medium"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <IconArrowLeft className="h-4 w-4" />
               Back to search
             </Link>
           </div>
@@ -190,7 +190,7 @@ export default function VAProfile() {
             to="/search" 
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 sm:mb-6 transition-colors py-1"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <IconArrowLeft className="h-4 w-4" />
             <span className="text-sm">Back to search</span>
           </Link>
 
@@ -226,19 +226,19 @@ export default function VAProfile() {
                     <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500">
                       {va.location && (
                         <span className="flex items-center gap-1.5">
-                          <MapPin className="h-4 w-4" />
+                          <IconMapPin className="h-4 w-4" />
                           {va.location}
                         </span>
                       )}
                       {va.timezone && (
                         <span className="flex items-center gap-1.5">
-                          <Globe className="h-4 w-4" />
+                          <IconGlobe className="h-4 w-4" />
                           {va.timezone}
                         </span>
                       )}
                       {va.years_experience > 0 && (
                         <span className="flex items-center gap-1.5">
-                          <Briefcase className="h-4 w-4" />
+                          <IconBriefcase className="h-4 w-4" />
                           {va.years_experience}+ years
                         </span>
                       )}
@@ -313,7 +313,7 @@ export default function VAProfile() {
                                   : 'bg-slate-100 text-slate-700'
                               }`}
                             >
-                              {vs.verified_at && <CheckCircle className="h-3 w-3" />}
+                              {vs.verified_at && <IconCheckCircle className="h-3 w-3" />}
                               {vs.skill?.name}
                               {vs.assessment_score && (
                                 <span className="text-[10px] opacity-75">({vs.assessment_score}%)</span>
@@ -359,10 +359,10 @@ export default function VAProfile() {
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] transition-all mb-3 disabled:opacity-50"
                 >
                   {startingChat ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <IconLoader className="h-5 w-5 animate-spin" />
                   ) : (
                     <>
-                      <MessageCircle className="h-5 w-5" />
+                      <IconMessage className="h-5 w-5" />
                       Contact {va.profile?.full_name?.split(' ')[0] || 'VA'}
                     </>
                   )}
@@ -372,14 +372,14 @@ export default function VAProfile() {
                   to={`/book/${va.id}`}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium hover:bg-slate-50 active:scale-[0.98] transition-all"
                 >
-                  <Calendar className="h-5 w-5" />
+                  <IconCalendar className="h-5 w-5" />
                   Schedule Interview
                 </Link>
 
                 <div className="space-y-4 mt-6">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-500 flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
+                      <IconClock className="h-4 w-4" />
                       Availability
                     </span>
                     <span className="text-slate-900 font-medium capitalize">
@@ -394,7 +394,7 @@ export default function VAProfile() {
 
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-500 flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
+                      <IconCalendar className="h-4 w-4" />
                       Member since
                     </span>
                     <span className="text-slate-900 font-medium">
@@ -428,12 +428,12 @@ export default function VAProfile() {
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-semibold hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] transition-transform disabled:opacity-50"
           >
             {startingChat ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <IconLoader className="h-5 w-5 animate-spin" />
             ) : (
               <>
-                <MessageCircle className="h-5 w-5" />
+                <IconMessage className="h-5 w-5" />
                 Contact
-                <ChevronRight className="h-4 w-4" />
+                <IconChevronRight className="h-4 w-4" />
               </>
             )}
           </button>

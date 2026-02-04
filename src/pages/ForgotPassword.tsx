@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Mail, ArrowLeft, Loader2, CheckCircle } from 'lucide-react'
+import { IconMail, IconArrowLeft, IconLoader, IconCheckCircle } from '../components/icons'
 import Layout from '../components/Layout'
 import { supabase } from '../lib/supabase'
 
@@ -37,7 +37,7 @@ export default function ForgotPassword() {
           <div className="w-full max-w-md">
             <div className="text-center">
               <div className="inline-flex p-4 rounded-2xl bg-[hsl(var(--primary))]/10 mb-6">
-                <CheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
+                <IconCheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
               </div>
               <h1 className="text-2xl font-bold mb-2">Check Your Email</h1>
               <p className="text-slate-600 mb-6">
@@ -51,7 +51,7 @@ export default function ForgotPassword() {
                 to="/login"
                 className="inline-flex items-center gap-2 text-[hsl(var(--primary))] hover:opacity-80"
               >
-                <ArrowLeft className="h-4 w-4" />
+                <IconArrowLeft className="h-4 w-4" />
                 Back to Sign In
               </Link>
             </div>
@@ -68,7 +68,7 @@ export default function ForgotPassword() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex p-3 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
-              <Mail className="h-8 w-8 text-[hsl(var(--primary))]" />
+              <IconMail className="h-8 w-8 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Forgot Password?</h1>
             <p className="text-slate-600">
@@ -105,7 +105,7 @@ export default function ForgotPassword() {
             >
               {loading ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <IconLoader className="h-5 w-5 animate-spin" />
                   Sending...
                 </>
               ) : (
@@ -120,7 +120,7 @@ export default function ForgotPassword() {
               to="/login"
               className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-[hsl(var(--primary))]"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <IconArrowLeft className="h-4 w-4" />
               Back to Sign In
             </Link>
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Plus, Briefcase, Clock, DollarSign, Users, ChevronRight, Loader2, MoreVertical, Eye, Pause, Trash2, Play } from 'lucide-react'
+import { IconPlus, IconBriefcase, IconClock, IconDollar, IconUsers, IconChevronRight, IconLoader, IconMoreVertical, IconEye, IconPause, IconTrash, IconPlay } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -117,7 +117,7 @@ export default function MyJobs() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -137,7 +137,7 @@ export default function MyJobs() {
               to="/jobs/new"
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[hsl(var(--primary))] text-white font-medium text-sm hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98]"
             >
-              <Plus className="h-5 w-5" />
+              <IconPlus className="h-5 w-5" />
               <span className="hidden sm:inline">Post Job</span>
             </Link>
           </div>
@@ -146,7 +146,7 @@ export default function MyJobs() {
           {jobs.length === 0 ? (
             <div className="text-center py-16 sm:py-20">
               <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
-                <Briefcase className="h-8 w-8 text-slate-500" />
+                <IconBriefcase className="h-8 w-8 text-slate-500" />
               </div>
               <h3 className="text-lg font-medium mb-2">No jobs posted yet</h3>
               <p className="text-slate-600 mb-6 text-sm">Post your first job to start finding VAs</p>
@@ -154,7 +154,7 @@ export default function MyJobs() {
                 to="/jobs/new"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98]"
               >
-                <Plus className="h-5 w-5" />
+                <IconPlus className="h-5 w-5" />
                 Post Your First Job
               </Link>
             </div>
@@ -168,7 +168,7 @@ export default function MyJobs() {
                   <div className="flex items-start gap-3 sm:gap-4">
                     {/* Icon */}
                     <div className="hidden sm:flex h-12 w-12 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 items-center justify-center flex-shrink-0">
-                      <Briefcase className="h-6 w-6 text-[hsl(var(--primary))]" />
+                      <IconBriefcase className="h-6 w-6 text-[hsl(var(--primary))]" />
                     </div>
 
                     {/* Content */}
@@ -195,7 +195,7 @@ export default function MyJobs() {
                             onClick={() => setActionMenuId(actionMenuId === job.id ? null : job.id)}
                             className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
                           >
-                            <MoreVertical className="h-5 w-5" />
+                            <IconMoreVertical className="h-5 w-5" />
                           </button>
                           {actionMenuId === job.id && (
                             <>
@@ -208,7 +208,7 @@ export default function MyJobs() {
                                   to={`/jobs/${job.id}`}
                                   className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-white"
                                 >
-                                  <Eye className="h-4 w-4" />
+                                  <IconEye className="h-4 w-4" />
                                   View Details
                                 </Link>
                                 {job.status === 'open' ? (
@@ -216,7 +216,7 @@ export default function MyJobs() {
                                     onClick={() => handleStatusChange(job.id, 'paused')}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-white"
                                   >
-                                    <Pause className="h-4 w-4" />
+                                    <IconPause className="h-4 w-4" />
                                     Pause Job
                                   </button>
                                 ) : job.status === 'paused' ? (
@@ -224,7 +224,7 @@ export default function MyJobs() {
                                     onClick={() => handleStatusChange(job.id, 'open')}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-white"
                                   >
-                                    <Play className="h-4 w-4" />
+                                    <IconPlay className="h-4 w-4" />
                                     Resume Job
                                   </button>
                                 ) : null}
@@ -232,7 +232,7 @@ export default function MyJobs() {
                                   onClick={() => handleDelete(job.id)}
                                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-white"
                                 >
-                                  <Trash2 className="h-4 w-4" />
+                                  <IconTrash className="h-4 w-4" />
                                   Delete
                                 </button>
                               </div>
@@ -249,15 +249,15 @@ export default function MyJobs() {
                       {/* Meta */}
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-500">
                         <span className="flex items-center gap-1.5">
-                          <DollarSign className="h-4 w-4" />
+                          <IconDollar className="h-4 w-4" />
                           {formatBudget(job)}
                         </span>
                         <span className="flex items-center gap-1.5">
-                          <Clock className="h-4 w-4" />
+                          <IconClock className="h-4 w-4" />
                           {job.job_type.replace('-', ' ')}
                         </span>
                         <span className="flex items-center gap-1.5">
-                          <Users className="h-4 w-4" />
+                          <IconUsers className="h-4 w-4" />
                           {job.application_count || 0} applicant{job.application_count !== 1 ? 's' : ''}
                         </span>
                       </div>
@@ -270,7 +270,7 @@ export default function MyJobs() {
                         className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-[hsl(var(--primary))]/40 hover:text-[hsl(var(--primary))] transition-colors"
                       >
                         View
-                        <ChevronRight className="h-4 w-4" />
+                        <IconChevronRight className="h-4 w-4" />
                       </Link>
                     </div>
                   </div>
@@ -281,7 +281,7 @@ export default function MyJobs() {
                     className="sm:hidden flex items-center justify-between mt-3 pt-3 border-t border-slate-200/50 text-sm text-[hsl(var(--primary))]"
                   >
                     View applicants
-                    <ChevronRight className="h-4 w-4" />
+                    <IconChevronRight className="h-4 w-4" />
                   </Link>
                 </div>
               ))}

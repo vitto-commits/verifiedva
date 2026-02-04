@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Upload, Video, Trash2, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { IconArrowLeft, IconUpload, IconVideo, IconTrash, IconLoader, IconCheckCircle, IconAlertCircle } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -138,7 +138,7 @@ export default function VideoIntroUpload() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -153,7 +153,7 @@ export default function VideoIntroUpload() {
             onClick={() => navigate('/dashboard')}
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <IconArrowLeft className="h-4 w-4" />
             Back to Dashboard
           </button>
 
@@ -167,14 +167,14 @@ export default function VideoIntroUpload() {
           {/* Messages */}
           {error && (
             <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+              <IconAlertCircle className="h-4 w-4 flex-shrink-0" />
               {error}
             </div>
           )}
 
           {success && (
             <div className="mb-4 p-3 rounded-lg bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-sm flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+              <IconCheckCircle className="h-4 w-4 flex-shrink-0" />
               {success}
             </div>
           )}
@@ -197,9 +197,9 @@ export default function VideoIntroUpload() {
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 text-red-400 text-sm font-medium hover:bg-red-500/20 disabled:opacity-50"
               >
                 {deleting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <IconLoader className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Trash2 className="h-4 w-4" />
+                  <IconTrash className="h-4 w-4" />
                 )}
                 Delete Video
               </button>
@@ -228,7 +228,7 @@ export default function VideoIntroUpload() {
             >
               {uploading ? (
                 <div className="space-y-4">
-                  <Loader2 className="h-12 w-12 mx-auto text-[hsl(var(--primary))] animate-spin" />
+                  <IconLoader className="h-12 w-12 mx-auto text-[hsl(var(--primary))] animate-spin" />
                   <div>
                     <p className="text-slate-900 font-medium">Uploading video...</p>
                     <p className="text-sm text-slate-500">This may take a moment</p>
@@ -237,7 +237,7 @@ export default function VideoIntroUpload() {
               ) : (
                 <>
                   <div className="inline-flex p-4 rounded-2xl bg-slate-50 mb-4">
-                    <Upload className="h-8 w-8 text-slate-600" />
+                    <IconUpload className="h-8 w-8 text-slate-600" />
                   </div>
                   <p className="text-slate-900 font-medium mb-2">
                     Click to upload or drag and drop
@@ -252,7 +252,7 @@ export default function VideoIntroUpload() {
             {/* Tips */}
             <div className="mt-6 p-4 rounded-lg bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20">
               <h3 className="text-[hsl(var(--primary))] font-medium mb-2 flex items-center gap-2">
-                <Video className="h-4 w-4" />
+                <IconVideo className="h-4 w-4" />
                 Tips for a great intro video
               </h3>
               <ul className="text-sm text-slate-700 space-y-1.5">

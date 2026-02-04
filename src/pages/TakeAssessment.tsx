@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { Clock, AlertCircle, ChevronLeft, ChevronRight, Loader2, CheckCircle, X, Award, ArrowLeft } from 'lucide-react'
+import { IconClock, IconAlertCircle, IconChevronLeft, IconChevronRight, IconLoader, IconCheckCircle, IconX, IconAward, IconArrowLeft } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -260,7 +260,7 @@ export default function TakeAssessment() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -275,13 +275,13 @@ export default function TakeAssessment() {
             to="/assessments"
             className="inline-flex items-center gap-2 text-gray-400 hover:text-gray-200 mb-6"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <IconArrowLeft className="h-4 w-4" />
             Back to Assessments
           </Link>
 
           {error ? (
             <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-center">
-              <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
+              <IconAlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-gray-100 mb-2">Cannot Take Assessment</h2>
               <p className="text-gray-400">{error}</p>
             </div>
@@ -289,7 +289,7 @@ export default function TakeAssessment() {
             <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 md:p-8">
               <div className="text-center mb-8">
                 <div className="inline-flex p-3 rounded-xl bg-gradient-to-r from-[hsl(var(--primary))]/20 to-cyan-500/20 mb-4">
-                  <Award className="h-8 w-8 text-[hsl(var(--primary))]" />
+                  <IconAward className="h-8 w-8 text-[hsl(var(--primary))]" />
                 </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-100 mb-2">
                   {config.skill_name}
@@ -314,7 +314,7 @@ export default function TakeAssessment() {
 
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-6">
                 <div className="flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                  <IconAlertCircle className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                   <div className="text-sm text-yellow-200/80">
                     <p className="font-medium mb-1">Before you begin:</p>
                     <ul className="space-y-1 text-yellow-200/70">
@@ -352,9 +352,9 @@ export default function TakeAssessment() {
                 : 'bg-red-500/20'
             }`}>
               {results.passed ? (
-                <CheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
+                <IconCheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
               ) : (
-                <X className="h-12 w-12 text-red-400" />
+                <IconX className="h-12 w-12 text-red-400" />
               )}
             </div>
 
@@ -409,7 +409,7 @@ export default function TakeAssessment() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))] mb-4" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))] mb-4" />
           <p className="text-gray-400">Submitting your answers...</p>
         </div>
       </Layout>
@@ -435,7 +435,7 @@ export default function TakeAssessment() {
               ? 'bg-red-500/20 text-red-400 animate-pulse' 
               : 'bg-gray-800 text-gray-100'
           }`}>
-            <Clock className="h-4 w-4" />
+            <IconClock className="h-4 w-4" />
             {formatTime(timeRemaining)}
           </div>
         </div>
@@ -510,7 +510,7 @@ export default function TakeAssessment() {
             disabled={currentIndex === 0}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <IconChevronLeft className="h-4 w-4" />
             Previous
           </button>
 
@@ -527,7 +527,7 @@ export default function TakeAssessment() {
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 transition-colors"
             >
               Next
-              <ChevronRight className="h-4 w-4" />
+              <IconChevronRight className="h-4 w-4" />
             </button>
           )}
         </div>

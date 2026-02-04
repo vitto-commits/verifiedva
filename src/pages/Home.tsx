@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, Shield, CheckCircle, Star, ArrowRight, Users, ChevronDown, Zap, Globe, DollarSign } from 'lucide-react'
+import { IconSearch, IconShield, IconCheckCircle, IconStar, IconArrowRight, IconUsers, IconChevronDown, IconZap, IconGlobe, IconDollar } from '../components/icons'
 import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
@@ -35,7 +35,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs sm:text-sm font-medium mb-6 sm:mb-8">
-              <Shield className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <IconShield className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Pre-Verified Filipino VAs
             </div>
             
@@ -58,7 +58,7 @@ export default function Home() {
                 to="/search" 
                 className="flex items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:bg-[hsl(var(--primary))]/90 active:scale-[0.98] transition-all shadow-sm"
               >
-                <Search className="h-5 w-5" />
+                <IconSearch className="h-5 w-5" />
                 Find Your VA
               </Link>
               <Link 
@@ -66,7 +66,7 @@ export default function Home() {
                 className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-slate-900 hover:bg-slate-50 active:bg-slate-100 transition-all"
               >
                 I'm a VA
-                <ArrowRight className="h-5 w-5" />
+                <IconArrowRight className="h-5 w-5" />
               </Link>
             </div>
           </div>
@@ -78,10 +78,10 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8 sm:py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {[
-              { icon: Users, value: '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
-              { icon: Star, value: '4.9', label: 'Avg Rating', tint: 'bg-amber-500/10 text-amber-700' },
-              { icon: DollarSign, value: '60%', label: 'Cost Savings', tint: 'bg-emerald-500/10 text-emerald-700' },
-              { icon: Zap, value: '24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
+              { icon: IconUsers, value: '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
+              { icon: IconStar, value: '4.9', label: 'Avg Rating', tint: 'bg-amber-500/10 text-amber-700' },
+              { icon: IconDollar, value: '60%', label: 'Cost Savings', tint: 'bg-emerald-500/10 text-emerald-700' },
+              { icon: IconZap, value: '24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl ${stat.tint} mb-2 sm:mb-3`}>
@@ -108,19 +108,19 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto">
             {[
               {
-                icon: Shield,
+                icon: IconShield,
                 title: 'Pre-verified experience',
                 desc: 'Every VA passes identity and reference checks before listing.',
                 tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]',
               },
               {
-                icon: Globe,
+                icon: IconGlobe,
                 title: 'Filipino talent',
                 desc: 'Access skilled professionals with excellent English and strong work ethic.',
                 tint: 'bg-slate-100 text-slate-700',
               },
               {
-                icon: DollarSign,
+                icon: IconDollar,
                 title: 'Lower costs',
                 desc: 'Save 60–70% on talent costs without sacrificing quality.',
                 tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]',
@@ -181,7 +181,7 @@ export default function Home() {
                 <ul className="space-y-2 text-xs sm:text-sm">
                   {tier.checks.map((check) => (
                     <li key={check} className="flex items-start gap-2">
-                      <CheckCircle className={`h-4 w-4 text-${tier.color}-500 flex-shrink-0 mt-0.5`} />
+                      <IconCheckCircle className={`h-4 w-4 text-${tier.color}-500 flex-shrink-0 mt-0.5`} />
                       <span className="text-slate-700">{check}</span>
                     </li>
                   ))}
@@ -208,7 +208,7 @@ export default function Home() {
                   className="w-full px-4 sm:px-6 py-4 text-left flex items-center justify-between gap-4 font-medium text-sm sm:text-base hover:bg-white active:bg-slate-100 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`h-5 w-5 text-slate-600 flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+                  <IconChevronDown className={`h-5 w-5 text-slate-600 flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
                 </button>
                 {openFaq === i && (
                   <div className="px-4 sm:px-6 pb-4 text-sm sm:text-base text-slate-600">
@@ -233,7 +233,7 @@ export default function Home() {
               to="/search" 
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r to-[hsl(var(--secondary))] to-[hsl(var(--secondary))] px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold text-white hover:from-emerald-600 hover:to-cyan-600 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25"
             >
-              <Search className="h-5 w-5" />
+              <IconSearch className="h-5 w-5" />
               Start Searching
             </Link>
           </div>

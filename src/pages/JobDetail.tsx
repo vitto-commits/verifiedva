@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Briefcase, Clock, DollarSign, MapPin, Loader2, MessageCircle, CheckCircle, X, ChevronDown, ExternalLink } from 'lucide-react'
+import { IconArrowLeft, IconBriefcase, IconClock, IconDollar, IconMapPin, IconLoader, IconMessage, IconCheckCircle, IconX, IconChevronDown, IconExternalLink } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
@@ -167,7 +167,7 @@ export default function JobDetail() {
       <AuthGuard>
         <Layout>
           <div className="min-h-[60vh] flex items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+            <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
           </div>
         </Layout>
       </AuthGuard>
@@ -203,7 +203,7 @@ export default function JobDetail() {
             to="/my-jobs" 
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 py-1 text-sm"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <IconArrowLeft className="h-4 w-4" />
             My Jobs
           </Link>
 
@@ -211,7 +211,7 @@ export default function JobDetail() {
           <div className="bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
             <div className="flex items-start gap-4">
               <div className="hidden sm:flex h-14 w-14 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 items-center justify-center flex-shrink-0">
-                <Briefcase className="h-7 w-7 text-[hsl(var(--primary))]" />
+                <IconBriefcase className="h-7 w-7 text-[hsl(var(--primary))]" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-3 mb-2">
@@ -220,11 +220,11 @@ export default function JobDetail() {
                 </div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-600">
                   <span className="flex items-center gap-1.5">
-                    <DollarSign className="h-4 w-4" />
+                    <IconDollar className="h-4 w-4" />
                     {formatBudget(job)}
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Clock className="h-4 w-4" />
+                    <IconClock className="h-4 w-4" />
                     {job.job_type.replace('-', ' ')}
                   </span>
                   <span className="text-slate-500">
@@ -379,7 +379,7 @@ export default function JobDetail() {
                               )}
                               {app.va.location && (
                                 <span className="flex items-center gap-1">
-                                  <MapPin className="h-3.5 w-3.5" />
+                                  <IconMapPin className="h-3.5 w-3.5" />
                                   {app.va.location}
                                 </span>
                               )}
@@ -392,7 +392,7 @@ export default function JobDetail() {
                           onClick={() => setExpandedApp(expandedApp === app.id ? null : app.id)}
                           className="flex items-center gap-1 mt-3 text-sm text-slate-600 hover:text-slate-900"
                         >
-                          <ChevronDown className={`h-4 w-4 transition-transform ${expandedApp === app.id ? 'rotate-180' : ''}`} />
+                          <IconChevronDown className={`h-4 w-4 transition-transform ${expandedApp === app.id ? 'rotate-180' : ''}`} />
                           {expandedApp === app.id ? 'Hide' : 'View'} cover letter
                         </button>
                       </div>
@@ -411,7 +411,7 @@ export default function JobDetail() {
                               to={`/va/${app.va.id}`}
                               className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                             >
-                              <ExternalLink className="h-4 w-4" />
+                              <IconExternalLink className="h-4 w-4" />
                               View Profile
                             </Link>
                             {app.status === 'pending' && (
@@ -420,14 +420,14 @@ export default function JobDetail() {
                                   onClick={() => handleApplicationStatus(app.id, 'shortlisted')}
                                   className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-sm hover:bg-[hsl(var(--primary))]/30"
                                 >
-                                  <CheckCircle className="h-4 w-4" />
+                                  <IconCheckCircle className="h-4 w-4" />
                                   Shortlist
                                 </button>
                                 <button
                                   onClick={() => handleApplicationStatus(app.id, 'rejected')}
                                   className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm hover:text-red-400 hover:border-red-500/50"
                                 >
-                                  <X className="h-4 w-4" />
+                                  <IconX className="h-4 w-4" />
                                   Reject
                                 </button>
                               </>
@@ -437,12 +437,12 @@ export default function JobDetail() {
                                 onClick={() => handleApplicationStatus(app.id, 'hired')}
                                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[hsl(var(--primary))] text-white text-sm hover:bg-[hsl(var(--primary))]/90"
                               >
-                                <CheckCircle className="h-4 w-4" />
+                                <IconCheckCircle className="h-4 w-4" />
                                 Mark as Hired
                               </button>
                             )}
                             <button className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 hover:border-slate-300 hover:bg-slate-50">
-                              <MessageCircle className="h-4 w-4" />
+                              <IconMessage className="h-4 w-4" />
                               Message
                             </button>
                           </div>

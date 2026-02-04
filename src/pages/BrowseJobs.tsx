@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Clock, DollarSign, Briefcase, Filter, X, Loader2, ChevronRight } from 'lucide-react'
+import { IconSearch, IconClock, IconDollar, IconBriefcase, IconFilter, IconX, IconLoader, IconChevronRight } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
@@ -159,7 +159,7 @@ export default function BrowseJobs() {
       <AuthGuard requireType="va">
         <Layout>
           <div className="min-h-[60vh] flex items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+            <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
           </div>
         </Layout>
       </AuthGuard>
@@ -182,7 +182,7 @@ export default function BrowseJobs() {
         <div className="sticky top-[57px] sm:top-[65px] z-30 -mx-4 px-4 py-3 bg-white/90 backdrop-blur border-b border-slate-200 mb-4">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+              <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
               <input
                 type="text"
                 placeholder="Search jobs or skills..."
@@ -195,7 +195,7 @@ export default function BrowseJobs() {
               onClick={() => setShowFilters(true)}
               className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 active:bg-slate-200 transition-colors"
             >
-              <Filter className="h-5 w-5" />
+              <IconFilter className="h-5 w-5" />
               <span className="hidden sm:inline">Filters</span>
               {activeFiltersCount > 0 && (
                 <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[hsl(var(--primary))] text-xs flex items-center justify-center font-bold">
@@ -212,7 +212,7 @@ export default function BrowseJobs() {
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs">
                   {budgetType === 'hourly' ? 'Hourly' : 'Fixed Price'}
                   <button onClick={() => setBudgetType('')} className="hover:text-slate-900">
-                    <X className="h-3 w-3" />
+                    <IconX className="h-3 w-3" />
                   </button>
                 </span>
               )}
@@ -220,7 +220,7 @@ export default function BrowseJobs() {
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs">
                   ${minBudget}+ min
                   <button onClick={() => setMinBudget('')} className="hover:text-slate-900">
-                    <X className="h-3 w-3" />
+                    <IconX className="h-3 w-3" />
                   </button>
                 </span>
               )}
@@ -232,7 +232,7 @@ export default function BrowseJobs() {
         {filteredJobs.length === 0 ? (
           <div className="text-center py-16">
             <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
-              <Briefcase className="h-8 w-8 text-slate-500" />
+              <IconBriefcase className="h-8 w-8 text-slate-500" />
             </div>
             <h3 className="text-lg font-medium mb-2">No jobs found</h3>
             <p className="text-slate-600 text-sm">
@@ -293,17 +293,17 @@ export default function BrowseJobs() {
                       {/* Meta */}
                       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
                         <span className="flex items-center gap-1">
-                          <DollarSign className="h-3.5 w-3.5" />
+                          <IconDollar className="h-3.5 w-3.5" />
                           {formatBudget(job)}
                         </span>
                         <span className="flex items-center gap-1">
-                          <Clock className="h-3.5 w-3.5" />
+                          <IconClock className="h-3.5 w-3.5" />
                           {formatTimeAgo(job.created_at)}
                         </span>
                       </div>
                     </div>
 
-                    <ChevronRight className="h-5 w-5 text-slate-500 flex-shrink-0 mt-1" />
+                    <IconChevronRight className="h-5 w-5 text-slate-500 flex-shrink-0 mt-1" />
                   </div>
                 </Link>
               )
@@ -326,7 +326,7 @@ export default function BrowseJobs() {
                 onClick={() => setShowFilters(false)}
                 className="p-2 -mr-2 text-slate-600 hover:text-slate-900"
               >
-                <X className="h-5 w-5" />
+                <IconX className="h-5 w-5" />
               </button>
             </div>
 

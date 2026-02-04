@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search as SearchIcon, SlidersHorizontal, MapPin, Clock, DollarSign, Loader2, X, ChevronDown } from 'lucide-react'
+import { IconSearch, IconSliders, IconMapPin, IconClock, IconDollar, IconLoader, IconX, IconChevronDown } from '../components/icons'
 import Layout from '../components/Layout'
 import AuthGuard from '../components/AuthGuard'
 import { supabase } from '../lib/supabase'
@@ -271,7 +271,7 @@ export default function Search() {
         <div className="container mx-auto px-4 py-3 sm:py-4">
           <div className="flex gap-2 sm:gap-3">
             <div className="relative flex-1">
-              <SearchIcon className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+              <IconSearch className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
               <input
                 type="text"
                 placeholder="Search skills, title..."
@@ -288,7 +288,7 @@ export default function Search() {
                   : 'border-slate-200 text-slate-700 hover:bg-slate-50'
               }`}
             >
-              <SlidersHorizontal className="h-5 w-5" />
+              <IconSliders className="h-5 w-5" />
               <span className="hidden sm:inline">Filters</span>
               {filterCount > 0 && (
                 <span className="flex items-center justify-center h-5 w-5 rounded-full bg-[hsl(var(--primary))] text-white text-xs">
@@ -372,7 +372,7 @@ export default function Search() {
                       className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] border border-[hsl(var(--primary))]/20"
                     >
                       {skill.name}
-                      <X className="h-3 w-3" />
+                      <IconX className="h-3 w-3" />
                     </button>
                   ) : null
                 })}
@@ -383,7 +383,7 @@ export default function Search() {
                     className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-white text-slate-700 border border-slate-200"
                   >
                     {a.replace('-', ' ')}
-                    <X className="h-3 w-3" />
+                    <IconX className="h-3 w-3" />
                   </button>
                 ))}
                 {selectedTiers.map(t => (
@@ -393,7 +393,7 @@ export default function Search() {
                     className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-white text-slate-700 border border-slate-200"
                   >
                     {t}
-                    <X className="h-3 w-3" />
+                    <IconX className="h-3 w-3" />
                   </button>
                 ))}
                 {(minRate || maxRate) && (
@@ -402,7 +402,7 @@ export default function Search() {
                     className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-white text-slate-700 border border-slate-200"
                   >
                     ${minRate || '0'}-${maxRate || '∞'}
-                    <X className="h-3 w-3" />
+                    <IconX className="h-3 w-3" />
                   </button>
                 )}
               </div>
@@ -410,7 +410,7 @@ export default function Search() {
 
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+                <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
               </div>
             ) : vas.length === 0 ? (
               <div className="text-center py-16 sm:py-20">
@@ -454,19 +454,19 @@ export default function Search() {
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-slate-500 mb-2">
                           {va.hourly_rate && (
                             <span className="flex items-center gap-1 text-[hsl(var(--primary))] font-medium">
-                              <DollarSign className="h-3.5 w-3.5" />
+                              <IconDollar className="h-3.5 w-3.5" />
                               ${va.hourly_rate}/hr
                             </span>
                           )}
                           {va.location && (
                             <span className="flex items-center gap-1">
-                              <MapPin className="h-3.5 w-3.5" />
+                              <IconMapPin className="h-3.5 w-3.5" />
                               {va.location}
                             </span>
                           )}
                           {va.availability && (
                             <span className="flex items-center gap-1">
-                              <Clock className="h-3.5 w-3.5" />
+                              <IconClock className="h-3.5 w-3.5" />
                               {va.availability.replace('-', ' ')}
                             </span>
                           )}
@@ -507,7 +507,7 @@ export default function Search() {
                     
                     {/* Mobile: chevron hint */}
                     <div className="sm:hidden flex justify-end mt-2 -mb-1">
-                      <ChevronDown className="h-4 w-4 text-slate-500 rotate-[-90deg]" />
+                      <IconChevronDown className="h-4 w-4 text-slate-500 rotate-[-90deg]" />
                     </div>
                   </Link>
                 ))}
@@ -546,7 +546,7 @@ export default function Search() {
                   onClick={() => setShowFilters(false)}
                   className="p-1 -mr-1"
                 >
-                  <X className="h-6 w-6 text-slate-600" />
+                  <IconX className="h-6 w-6 text-slate-600" />
                 </button>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Send, Loader2, ExternalLink } from 'lucide-react'
+import { IconArrowLeft, IconSend, IconLoader, IconExternalLink } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -212,7 +212,7 @@ export default function Conversation() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -228,7 +228,7 @@ export default function Conversation() {
               to="/messages"
               className="p-2 -ml-2 rounded-lg hover:bg-slate-50 text-slate-600"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <IconArrowLeft className="h-5 w-5" />
             </Link>
 
             <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center font-bold flex-shrink-0">
@@ -248,7 +248,7 @@ export default function Conversation() {
                 className="p-2 rounded-lg hover:bg-slate-50 text-slate-600"
                 title="View Profile"
               >
-                <ExternalLink className="h-5 w-5" />
+                <IconExternalLink className="h-5 w-5" />
               </Link>
             )}
           </div>
@@ -332,9 +332,9 @@ export default function Conversation() {
               className="px-4 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-medium hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-transform"
             >
               {sending ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <IconLoader className="h-5 w-5 animate-spin" />
               ) : (
-                <Send className="h-5 w-5" />
+                <IconSend className="h-5 w-5" />
               )}
             </button>
           </div>

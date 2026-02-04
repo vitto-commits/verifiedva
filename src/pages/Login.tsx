@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react'
+import { IconEye, IconEyeOff, IconArrowRight, IconLoader } from '../components/icons'
 import Layout from '../components/Layout'
 import { Button, Input } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
@@ -96,7 +96,7 @@ export default function Login() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-600 hover:text-slate-700 active:text-slate-800"
                   tabIndex={-1}
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <IconEyeOff className="h-5 w-5" /> : <IconEye className="h-5 w-5" />}
                 </button>
               </div>
             </div>
@@ -108,11 +108,11 @@ export default function Login() {
               className="w-full mt-6"
             >
               {loading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <IconLoader className="h-5 w-5 animate-spin" />
               ) : (
                 <>
                   Sign In
-                  <ArrowRight className="h-5 w-5" />
+                  <IconArrowRight className="h-5 w-5" />
                 </>
               )}
             </Button>

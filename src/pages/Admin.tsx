@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
-  Users, Briefcase, CheckCircle, Clock, XCircle, 
-  TrendingUp, Shield, Loader2, Search, Filter,
-  ChevronDown, ChevronUp, Eye, Ban, CheckCheck
-} from 'lucide-react'
+  IconUsers, IconBriefcase, IconCheckCircle, IconClock,
+  IconTrendingUp, IconShield, IconLoader, IconSearch,
+  IconEye, IconBan, IconCheckCheck
+} from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -56,7 +56,7 @@ export default function Admin() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [vas, setVAs] = useState<VA[]>([])
   const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
+  const [, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [updating, setUpdating] = useState<string | null>(null)
@@ -241,7 +241,7 @@ export default function Admin() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -257,7 +257,7 @@ export default function Admin() {
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 rounded-xl bg-[hsl(var(--primary))]/10">
-            <Shield className="h-6 w-6 text-[hsl(var(--primary))]" />
+            <IconShield className="h-6 w-6 text-[hsl(var(--primary))]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
@@ -268,10 +268,10 @@ export default function Admin() {
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-white/50 p-1 rounded-xl w-fit">
           {[
-            { id: 'overview', label: 'Overview', icon: TrendingUp },
-            { id: 'vas', label: 'VAs', icon: Users },
-            { id: 'users', label: 'Users', icon: Users },
-            { id: 'jobs', label: 'Jobs', icon: Briefcase }
+            { id: 'overview', label: 'Overview', icon: IconTrendingUp },
+            { id: 'vas', label: 'VAs', icon: IconUsers },
+            { id: 'users', label: 'Users', icon: IconUsers },
+            { id: 'jobs', label: 'Jobs', icon: IconBriefcase }
           ].map(tab => (
             <button
               key={tab.id}
@@ -294,49 +294,49 @@ export default function Admin() {
             <StatCard 
               label="Total Users" 
               value={stats.totalUsers} 
-              icon={Users}
+              icon={IconUsers}
               color="blue"
             />
             <StatCard 
               label="Total VAs" 
               value={stats.totalVAs} 
-              icon={Users}
+              icon={IconUsers}
               color="emerald"
             />
             <StatCard 
               label="Verified VAs" 
               value={stats.verifiedVAs} 
-              icon={CheckCircle}
+              icon={IconCheckCircle}
               color="green"
             />
             <StatCard 
               label="Pending VAs" 
               value={stats.pendingVAs} 
-              icon={Clock}
+              icon={IconClock}
               color="yellow"
             />
             <StatCard 
               label="Total Clients" 
               value={stats.totalClients} 
-              icon={Briefcase}
+              icon={IconBriefcase}
               color="purple"
             />
             <StatCard 
               label="Total Jobs" 
               value={stats.totalJobs} 
-              icon={Briefcase}
+              icon={IconBriefcase}
               color="indigo"
             />
             <StatCard 
               label="Open Jobs" 
               value={stats.openJobs} 
-              icon={Briefcase}
+              icon={IconBriefcase}
               color="cyan"
             />
             <StatCard 
               label="Applications" 
               value={stats.totalApplications} 
-              icon={TrendingUp}
+              icon={IconTrendingUp}
               color="pink"
             />
           </div>
@@ -348,7 +348,7 @@ export default function Admin() {
             {/* Filters */}
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search VAs..."
@@ -412,9 +412,9 @@ export default function Admin() {
                                   title="Approve"
                                 >
                                   {updating === va.id ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    <IconLoader className="h-4 w-4 animate-spin" />
                                   ) : (
-                                    <CheckCheck className="h-4 w-4" />
+                                    <IconCheckCheck className="h-4 w-4" />
                                   )}
                                 </button>
                                 <button
@@ -423,7 +423,7 @@ export default function Admin() {
                                   className="p-2 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 disabled:opacity-50"
                                   title="Reject"
                                 >
-                                  <Ban className="h-4 w-4" />
+                                  <IconBan className="h-4 w-4" />
                                 </button>
                               </>
                             )}
@@ -434,7 +434,7 @@ export default function Admin() {
                                 className="p-2 rounded-lg bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20 disabled:opacity-50"
                                 title="Revoke Verification"
                               >
-                                <Clock className="h-4 w-4" />
+                                <IconClock className="h-4 w-4" />
                               </button>
                             )}
                             {va.verification_status === 'rejected' && (
@@ -444,7 +444,7 @@ export default function Admin() {
                                 className="p-2 rounded-lg bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 disabled:opacity-50"
                                 title="Re-review"
                               >
-                                <Eye className="h-4 w-4" />
+                                <IconEye className="h-4 w-4" />
                               </button>
                             )}
                           </div>
@@ -468,7 +468,7 @@ export default function Admin() {
           <div className="space-y-4">
             {/* Search */}
             <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search users..."
@@ -533,7 +533,7 @@ export default function Admin() {
                               }`}
                             >
                               {updating === u.id ? (
-                                <Loader2 className="h-3 w-3 animate-spin" />
+                                <IconLoader className="h-3 w-3 animate-spin" />
                               ) : u.is_admin ? (
                                 'Remove Admin'
                               ) : (
@@ -554,7 +554,7 @@ export default function Admin() {
         {/* Jobs Tab */}
         {activeTab === 'jobs' && (
           <div className="text-center py-12 text-slate-500">
-            <Briefcase className="h-12 w-12 mx-auto mb-4 text-slate-300" />
+            <IconBriefcase className="h-12 w-12 mx-auto mb-4 text-slate-300" />
             <p>Jobs management coming soon</p>
           </div>
         )}

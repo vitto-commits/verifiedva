@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Briefcase, Clock, DollarSign, Loader2, CheckCircle2, XCircle, Star, MessageCircle } from 'lucide-react'
+import { IconBriefcase, IconClock, IconDollar, IconLoader, IconCheckCircle, IconXCircle, IconStar, IconMessage } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -31,11 +31,11 @@ interface Application {
   }
 }
 
-const statusConfig: Record<string, { label: string; icon: typeof Clock; bg: string; text: string }> = {
-  pending: { label: 'Pending', icon: Clock, bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
-  shortlisted: { label: 'Shortlisted', icon: Star, bg: 'bg-blue-500/20', text: 'text-blue-400' },
-  rejected: { label: 'Not Selected', icon: XCircle, bg: 'bg-gray-500/20', text: 'text-slate-600' },
-  hired: { label: 'Hired!', icon: CheckCircle2, bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]' },
+const statusConfig: Record<string, { label: string; icon: typeof IconClock; bg: string; text: string }> = {
+  pending: { label: 'Pending', icon: IconClock, bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
+  shortlisted: { label: 'Shortlisted', icon: IconStar, bg: 'bg-blue-500/20', text: 'text-blue-400' },
+  rejected: { label: 'Not Selected', icon: IconXCircle, bg: 'bg-gray-500/20', text: 'text-slate-600' },
+  hired: { label: 'Hired!', icon: IconCheckCircle, bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]' },
 }
 
 export default function MyApplications() {
@@ -167,7 +167,7 @@ export default function MyApplications() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -205,7 +205,7 @@ export default function MyApplications() {
         {filteredApplications.length === 0 ? (
           <div className="text-center py-16">
             <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
-              <Briefcase className="h-8 w-8 text-slate-500" />
+              <IconBriefcase className="h-8 w-8 text-slate-500" />
             </div>
             <h3 className="text-lg font-medium mb-2">
               {activeTab === 'all' ? 'No applications yet' : `No ${activeTab} applications`}
@@ -267,7 +267,7 @@ export default function MyApplications() {
                   {/* Meta */}
                   <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 mb-4">
                     <span className="flex items-center gap-1">
-                      <DollarSign className="h-3.5 w-3.5" />
+                      <IconDollar className="h-3.5 w-3.5" />
                       {formatBudget(app.job)}
                     </span>
                     {app.proposed_rate && (
@@ -276,7 +276,7 @@ export default function MyApplications() {
                       </span>
                     )}
                     <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
+                      <IconClock className="h-3.5 w-3.5" />
                       Applied {formatDate(app.created_at)}
                     </span>
                   </div>
@@ -298,7 +298,7 @@ export default function MyApplications() {
                         onClick={() => handleMessageClient(app.job.client.user_id)}
                         className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] text-sm font-medium hover:bg-[hsl(var(--primary))]/20 transition-colors"
                       >
-                        <MessageCircle className="h-4 w-4" />
+                        <IconMessage className="h-4 w-4" />
                         Message Client
                       </button>
                     )}

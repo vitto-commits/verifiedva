@@ -1,10 +1,19 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Edit, ExternalLink, Loader2, CheckCircle, Clock, X, Search, Award } from 'lucide-react'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
+import {
+  IconEdit,
+  IconExternalLink,
+  IconLoader,
+  IconCheckCircle,
+  IconClock,
+  IconX,
+  IconSearch,
+  IconAward,
+} from '../components/icons'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -75,7 +84,7 @@ export default function Dashboard() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -90,10 +99,10 @@ export default function Dashboard() {
 
   const getVerificationStatus = (status: string) => {
     const configs: Record<string, { icon: any; color: string; bg: string; label: string; desc: string }> = {
-      pending: { icon: Clock, color: 'text-yellow-400', bg: 'bg-yellow-500/10', label: 'Pending', desc: 'Complete verification to appear in search' },
-      verified: { icon: CheckCircle, color: 'text-[hsl(var(--primary))]', bg: 'bg-[hsl(var(--primary))]/10', label: 'Verified', desc: 'Your identity has been confirmed' },
-      pro: { icon: CheckCircle, color: 'text-blue-400', bg: 'bg-blue-500/10', label: 'Pro', desc: 'Skills tested & references checked' },
-      elite: { icon: CheckCircle, color: 'text-purple-400', bg: 'bg-purple-500/10', label: 'Elite', desc: 'Maximum verification achieved' },
+      pending: { icon: IconClock, color: 'text-yellow-400', bg: 'bg-yellow-500/10', label: 'Pending', desc: 'Complete verification to appear in search' },
+      verified: { icon: IconCheckCircle, color: 'text-[hsl(var(--primary))]', bg: 'bg-[hsl(var(--primary))]/10', label: 'Verified', desc: 'Your identity has been confirmed' },
+      pro: { icon: IconCheckCircle, color: 'text-blue-400', bg: 'bg-blue-500/10', label: 'Pro', desc: 'Skills tested & references checked' },
+      elite: { icon: IconCheckCircle, color: 'text-purple-400', bg: 'bg-purple-500/10', label: 'Elite', desc: 'Maximum verification achieved' },
     }
     return configs[status] || configs.pending
   }
@@ -115,7 +124,7 @@ export default function Dashboard() {
                 to={`/va/${vaProfile.id}`}
                 className="inline-flex items-center gap-2 text-sm text-[hsl(var(--primary))] hover:text-emerald-300 py-1"
               >
-                <ExternalLink className="h-4 w-4" />
+                <IconExternalLink className="h-4 w-4" />
                 View Public Profile
               </Link>
             )}
@@ -157,7 +166,7 @@ export default function Dashboard() {
                         onClick={() => setEditMode(true)}
                         className="flex items-center gap-1.5 sm:gap-2 text-sm text-[hsl(var(--primary))] hover:text-emerald-300 py-1 px-2 -mr-2 rounded-lg active:bg-[hsl(var(--primary))]/10"
                       >
-                        <Edit className="h-4 w-4" />
+                        <IconEdit className="h-4 w-4" />
                         Edit
                       </button>
                     ) : (
@@ -166,7 +175,7 @@ export default function Dashboard() {
                           onClick={() => setEditMode(false)}
                           className="p-2 text-slate-600 hover:text-white rounded-lg active:bg-slate-100"
                         >
-                          <X className="h-5 w-5" />
+                          <IconX className="h-5 w-5" />
                         </button>
                         <button
                           onClick={handleSaveProfile}
@@ -315,7 +324,7 @@ export default function Dashboard() {
                       to="/search"
                       className="p-4 rounded-xl bg-slate-50 hover:bg-slate-100 active:bg-slate-200 transition-colors text-center"
                     >
-                      <Search className="h-6 w-6 mx-auto mb-2 text-slate-600" />
+                      <IconSearch className="h-6 w-6 mx-auto mb-2 text-slate-600" />
                       <div className="font-medium text-sm sm:text-base">Browse VAs</div>
                     </Link>
                     <Link
@@ -338,7 +347,7 @@ export default function Dashboard() {
                       to="/jobs"
                       className="p-4 rounded-xl bg-gradient-to-br to-[hsl(var(--secondary))]/20 to-[hsl(var(--secondary))]/20 border border-[hsl(var(--primary))]/30 hover:border-emerald-500/50 active:bg-[hsl(var(--primary))]/10 transition-colors text-center"
                     >
-                      <Search className="h-6 w-6 mx-auto mb-2 text-[hsl(var(--primary))]" />
+                      <IconSearch className="h-6 w-6 mx-auto mb-2 text-[hsl(var(--primary))]" />
                       <div className="font-medium text-sm sm:text-base text-[hsl(var(--primary))]">Browse Jobs</div>
                     </Link>
                     <Link
@@ -352,14 +361,14 @@ export default function Dashboard() {
                       to="/assessments"
                       className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-purple-500/30 hover:border-purple-500/50 active:bg-purple-500/10 transition-colors text-center"
                     >
-                      <Award className="h-6 w-6 mx-auto mb-2 text-purple-400" />
+                      <IconAward className="h-6 w-6 mx-auto mb-2 text-purple-400" />
                       <div className="font-medium text-sm sm:text-base text-purple-400">Skill Tests</div>
                     </Link>
                     <Link
                       to="/availability"
                       className="p-4 rounded-xl bg-slate-50 hover:bg-slate-100 active:bg-slate-200 transition-colors text-center"
                     >
-                      <Clock className="h-6 w-6 mx-auto mb-2 text-slate-600" />
+                      <IconClock className="h-6 w-6 mx-auto mb-2 text-slate-600" />
                       <div className="font-medium text-sm sm:text-base">Set Availability</div>
                     </Link>
                     <Link
@@ -381,7 +390,7 @@ export default function Dashboard() {
                         to={`/va/${vaProfile.id}`}
                         className="p-4 rounded-xl bg-slate-50 hover:bg-slate-100 active:bg-slate-200 transition-colors text-center"
                       >
-                        <ExternalLink className="h-6 w-6 mx-auto mb-2 text-slate-600" />
+                        <IconExternalLink className="h-6 w-6 mx-auto mb-2 text-slate-600" />
                         <div className="font-medium text-sm sm:text-base">View Profile</div>
                       </Link>
                     )}

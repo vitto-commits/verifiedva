@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Calendar, Clock, Video, MessageCircle, X, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { IconCalendar, IconClock, IconVideo, IconMessage, IconX, IconLoader, IconCheckCircle, IconAlertCircle } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -37,10 +37,10 @@ interface Interview {
 }
 
 const statusConfig = {
-  scheduled: { label: 'Scheduled', bg: 'bg-blue-500/20', text: 'text-blue-400', icon: Calendar },
-  completed: { label: 'Completed', bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]', icon: CheckCircle2 },
-  cancelled: { label: 'Cancelled', bg: 'bg-gray-500/20', text: 'text-slate-600', icon: X },
-  no_show: { label: 'No Show', bg: 'bg-red-500/20', text: 'text-red-400', icon: AlertCircle },
+  scheduled: { label: 'Scheduled', bg: 'bg-blue-500/20', text: 'text-blue-400', icon: IconCalendar },
+  completed: { label: 'Completed', bg: 'bg-[hsl(var(--primary))]/20', text: 'text-[hsl(var(--primary))]', icon: IconCheckCircle },
+  cancelled: { label: 'Cancelled', bg: 'bg-gray-500/20', text: 'text-slate-600', icon: IconX },
+  no_show: { label: 'No Show', bg: 'bg-red-500/20', text: 'text-red-400', icon: IconAlertCircle },
 }
 
 export default function MyInterviews() {
@@ -165,7 +165,7 @@ export default function MyInterviews() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -223,7 +223,7 @@ export default function MyInterviews() {
           {displayInterviews.length === 0 ? (
             <div className="text-center py-16">
               <div className="inline-flex p-4 rounded-2xl bg-white/70 mb-4">
-                <Calendar className="h-8 w-8 text-slate-500" />
+                <IconCalendar className="h-8 w-8 text-slate-500" />
               </div>
               <h3 className="text-lg font-medium mb-2">
                 {activeTab === 'upcoming' ? 'No upcoming interviews' : 'No past interviews'}
@@ -278,11 +278,11 @@ export default function MyInterviews() {
                     {/* Date/Time */}
                     <div className="flex flex-wrap gap-4 mb-4 text-sm">
                       <div className="flex items-center gap-2 text-slate-700">
-                        <Calendar className="h-4 w-4 text-slate-500" />
+                        <IconCalendar className="h-4 w-4 text-slate-500" />
                         {date}
                       </div>
                       <div className="flex items-center gap-2 text-slate-700">
-                        <Clock className="h-4 w-4 text-slate-500" />
+                        <IconClock className="h-4 w-4 text-slate-500" />
                         {time} ({interview.duration_minutes} min)
                       </div>
                     </div>
@@ -315,7 +315,7 @@ export default function MyInterviews() {
                             rel="noopener noreferrer"
                             className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] text-sm font-medium hover:bg-[hsl(var(--primary))]/20"
                           >
-                            <Video className="h-4 w-4" />
+                            <IconVideo className="h-4 w-4" />
                             Join Call
                           </a>
                         )}
@@ -324,7 +324,7 @@ export default function MyInterviews() {
                             onClick={() => handleMessageOther(otherUserId)}
                             className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-sm font-medium hover:bg-slate-100"
                           >
-                            <MessageCircle className="h-4 w-4" />
+                            <IconMessage className="h-4 w-4" />
                             Message
                           </button>
                         )}
@@ -334,9 +334,9 @@ export default function MyInterviews() {
                           className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-500/10 text-red-400 text-sm font-medium hover:bg-red-500/20 disabled:opacity-50"
                         >
                           {cancelling === interview.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <IconLoader className="h-4 w-4 animate-spin" />
                           ) : (
-                            <X className="h-4 w-4" />
+                            <IconX className="h-4 w-4" />
                           )}
                           Cancel
                         </button>

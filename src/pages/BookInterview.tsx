@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, Clock, Loader2, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { IconArrowLeft, IconCalendar, IconClock, IconLoader, IconCheckCircle, IconChevronLeft, IconChevronRight } from '../components/icons'
 import Layout from '../components/Layout'
 import { Button, Card, CardContent, Textarea } from '../components/ui'
 import { useAuth } from '../lib/auth-context'
@@ -240,7 +240,7 @@ export default function BookInterview() {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
         </div>
       </Layout>
     )
@@ -252,7 +252,7 @@ export default function BookInterview() {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-lg mx-auto text-center">
             <div className="inline-flex p-4 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
-              <CheckCircle2 className="h-12 w-12 text-[hsl(var(--primary))]" />
+              <IconCheckCircle className="h-12 w-12 text-[hsl(var(--primary))]" />
             </div>
             <h1 className="text-2xl font-bold mb-2">Interview Scheduled!</h1>
             <p className="text-slate-600 mb-2">
@@ -287,7 +287,7 @@ export default function BookInterview() {
             to={`/va/${vaId}`}
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <IconArrowLeft className="h-4 w-4" />
             Back to Profile
           </Link>
 
@@ -308,7 +308,7 @@ export default function BookInterview() {
           {availability.length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center">
-                <Calendar className="h-10 w-10 text-slate-500 mx-auto mb-3" />
+                <IconCalendar className="h-10 w-10 text-slate-500 mx-auto mb-3" />
                 <h3 className="font-medium mb-2">No Availability Set</h3>
                 <p className="text-slate-600 text-sm">
                   This VA hasn't set their interview availability yet.
@@ -325,7 +325,7 @@ export default function BookInterview() {
                     onClick={prevWeek}
                     className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
                   >
-                    <ChevronLeft className="h-5 w-5" />
+                    <IconChevronLeft className="h-5 w-5" />
                   </button>
                   <span className="font-medium">
                     {currentWeekStart.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
@@ -334,7 +334,7 @@ export default function BookInterview() {
                     onClick={nextWeek}
                     className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
                   >
-                    <ChevronRight className="h-5 w-5" />
+                    <IconChevronRight className="h-5 w-5" />
                   </button>
                 </div>
 
@@ -413,7 +413,7 @@ export default function BookInterview() {
                     </div>
 
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20">
-                      <Clock className="h-5 w-5 text-[hsl(var(--primary))] flex-shrink-0" />
+                      <IconClock className="h-5 w-5 text-[hsl(var(--primary))] flex-shrink-0" />
                       <div className="text-sm">
                         <span className="font-medium text-[hsl(var(--primary))]">Selected: </span>
                         <span className="text-slate-700">
@@ -425,12 +425,12 @@ export default function BookInterview() {
                     <Button onClick={handleBook} disabled={booking} size="lg" className="w-full">
                       {booking ? (
                         <>
-                          <Loader2 className="h-5 w-5 animate-spin" />
+                          <IconLoader className="h-5 w-5 animate-spin" />
                           Booking...
                         </>
                       ) : (
                         <>
-                          <Calendar className="h-5 w-5" />
+                          <IconCalendar className="h-5 w-5" />
                           Confirm Interview
                         </>
                       )}

@@ -102,26 +102,37 @@ export default function Search() {
   }, [])
 
   useEffect(() => {
+    let cancelled = false
+    
     const fetchVAs = async () => {
       setLoading(true)
       
-      let query = supabase
-        .from('vas')
-        .select(`
-          *,
-          profile:profiles(full_name, avatar_url),
-          va_skills(skill:skills(*), proficiency_level, verified_at, assessment_score)
-        `)
-        .eq('is_active', true)
+      try {
+        let query = supabase
+          .from('vas')
+          .select(`
+            *,
+            profile:profiles(full_name, avatar_url),
+            va_skills(skill:skills(*), proficiency_level, verified_at, assessment_score)
+          `)
+          .eq('is_active', true)
 
-      if (minRate) query = query.gte('hourly_rate', parseFloat(minRate))
-      if (maxRate) query = query.lte('hourly_rate', parseFloat(maxRate))
-      if (minExperience) query = query.gte('years_experience', parseInt(minExperience))
-      if (selectedAvailability.length > 0) query = query.in('availability', selectedAvailability)
-      if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
+        if (minRate) query = query.gte('hourly_rate', parseFloat(minRate))
+        if (maxRate) query = query.lte('hourly_rate', parseFloat(maxRate))
+        if (minExperience) query = query.gte('years_experience', parseInt(minExperience))
+        if (selectedAvailability.length > 0) query = query.in('availability', selectedAvailability)
+        if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
 
-      const { data, error } = await query
-      console.log('Search query result:', { data, error: JSON.stringify(error), count: data?.length })
+        const { data, error } = await query
+        
+        // Ignore if component unmounted or request was superseded
+        if (cancelled) return
+        
+        if (error) {
+          console.error('Search query error:', error)
+          setLoading(false)
+          return
+        }
 
       if (data) {
         let filtered = data as VAWithProfile[]
@@ -230,11 +241,19 @@ export default function Search() {
         
         setVas(filtered)
       }
-      setLoading(false)
+        setLoading(false)
+      } catch (err) {
+        if (cancelled) return
+        console.error('Search fetch error:', err)
+        setLoading(false)
+      }
     }
 
     const debounce = setTimeout(fetchVAs, 300)
-    return () => clearTimeout(debounce)
+    return () => {
+      cancelled = true
+      clearTimeout(debounce)
+    }
   }, [searchQuery, minRate, maxRate, minExperience, locationQuery, verifiedSkillsOnly, selectedAvailability, selectedHoursPerWeek, selectedTiers, selectedSkills, sortBy])
 
   const toggleFilter = (value: string, current: string[], setter: (v: string[]) => void) => {

@@ -120,7 +120,8 @@ export default function Search() {
       if (selectedAvailability.length > 0) query = query.in('availability', selectedAvailability)
       if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
 
-      const { data } = await query
+      const { data, error } = await query
+      console.log('Search query result:', { data, error, count: data?.length })
 
       if (data) {
         let filtered = data as VAWithProfile[]

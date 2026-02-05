@@ -102,37 +102,39 @@ export default function Search() {
   }, [])
 
   useEffect(() => {
-    let cancelled = false
+    const controller = new AbortController()
     
     const fetchVAs = async () => {
       setLoading(true)
       
       try {
-        let query = supabase
-          .from('vas')
-          .select(`
-            *,
-            profile:profiles(full_name, avatar_url),
-            va_skills(skill:skills(*), proficiency_level, verified_at, assessment_score)
-          `)
-          .eq('is_active', true)
+        // Build query params
+        let params = 'is_active=eq.true&select=*,profile:profiles(full_name,avatar_url),va_skills(skill:skills(*),proficiency_level,verified_at,assessment_score)'
+        if (minRate) params += `&hourly_rate=gte.${minRate}`
+        if (maxRate) params += `&hourly_rate=lte.${maxRate}`
+        if (minExperience) params += `&years_experience=gte.${minExperience}`
+        if (selectedAvailability.length > 0) params += `&availability=in.(${selectedAvailability.join(',')})`
+        if (selectedTiers.length > 0) params += `&verification_status=in.(${selectedTiers.join(',')})`
 
-        if (minRate) query = query.gte('hourly_rate', parseFloat(minRate))
-        if (maxRate) query = query.lte('hourly_rate', parseFloat(maxRate))
-        if (minExperience) query = query.gte('years_experience', parseInt(minExperience))
-        if (selectedAvailability.length > 0) query = query.in('availability', selectedAvailability)
-        if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
-
-        const { data, error } = await query
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/vas?${params}`,
+          {
+            headers: {
+              'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            signal: controller.signal
+          }
+        )
         
-        // Ignore if component unmounted or request was superseded
-        if (cancelled) return
-        
-        if (error) {
-          console.error('Search query error:', error)
-          setLoading(false)
-          return
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`)
         }
+        
+        const data = await response.json()
+        
+        // Check if aborted
+        if (controller.signal.aborted) return
 
       if (data) {
         let filtered = data as VAWithProfile[]
@@ -242,18 +244,18 @@ export default function Search() {
         setVas(filtered)
       }
         setLoading(false)
-      } catch (err) {
-        if (cancelled) return
+      } catch (err: unknown) {
+        if (controller.signal.aborted) return
+        if (err instanceof Error && err.name === 'AbortError') return
         console.error('Search fetch error:', err)
         setLoading(false)
       }
     }
 
-    // Fetch immediately - no debounce needed as Supabase handles this server-side
     fetchVAs()
     
     return () => {
-      cancelled = true
+      controller.abort()
     }
   }, [searchQuery, minRate, maxRate, minExperience, locationQuery, verifiedSkillsOnly, selectedAvailability, selectedHoursPerWeek, selectedTiers, selectedSkills, sortBy])
 

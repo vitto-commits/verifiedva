@@ -210,9 +210,9 @@ export default function ClientSignup() {
                 />
                 <span>
                   I agree to the{' '}
-                  <a href="#" className="text-[hsl(var(--primary))]">Terms of Service</a>
+                  <Link to="/terms" className="text-[hsl(var(--primary))]">Terms of Service</Link>
                   {' '}and{' '}
-                  <a href="#" className="text-[hsl(var(--primary))]">Privacy Policy</a>
+                  <Link to="/privacy" className="text-[hsl(var(--primary))]">Privacy Policy</Link>
                 </span>
               </label>
 

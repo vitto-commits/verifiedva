@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { IconSearch, IconSliders, IconMapPin, IconClock, IconDollar, IconLoader, IconX, IconChevronDown } from '../components/icons'
+import { IconSearch, IconSliders, IconMapPin, IconClock, IconDollar, IconX, IconChevronDown } from '../components/icons'
 import Layout from '../components/Layout'
 import VAPreviewPanel from '../components/VAPreviewPanel'
 import RateHistogram from '../components/RateHistogram'
@@ -571,8 +571,31 @@ export default function Search() {
             )}
 
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+              <div className="space-y-3 sm:space-y-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="block p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 bg-white/70 animate-pulse">
+                    <div className="flex gap-3 sm:gap-4">
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-slate-200 flex-shrink-0" />
+                      <div className="flex-1 min-w-0 space-y-3">
+                        <div className="flex items-center gap-2">
+                          <div className="h-5 w-32 bg-slate-200 rounded" />
+                          <div className="h-5 w-16 bg-slate-200 rounded-full" />
+                        </div>
+                        <div className="h-4 w-48 bg-slate-200 rounded" />
+                        <div className="flex gap-3">
+                          <div className="h-4 w-16 bg-slate-200 rounded" />
+                          <div className="h-4 w-24 bg-slate-200 rounded" />
+                          <div className="h-4 w-20 bg-slate-200 rounded" />
+                        </div>
+                        <div className="flex gap-1.5">
+                          <div className="h-6 w-20 bg-slate-200 rounded-full" />
+                          <div className="h-6 w-24 bg-slate-200 rounded-full" />
+                          <div className="h-6 w-16 bg-slate-200 rounded-full" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : vas.length === 0 ? (
               <div className="text-center py-16 sm:py-20">

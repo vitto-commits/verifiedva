@@ -288,7 +288,7 @@ export default function VASignup() {
                         onChange={(e) => setAgreed(e.target.checked)}
                         className="mt-0.5 w-5 h-5 rounded border-gray-600 bg-white text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))] focus:ring-offset-0"
                       />
-                      <span>I agree to the Terms of Service and Privacy Policy</span>
+                      <span>I agree to the <a href="/#/terms" className="text-[hsl(var(--primary))]">Terms of Service</a> and <a href="/#/privacy" className="text-[hsl(var(--primary))]">Privacy Policy</a></span>
                     </label>
                     <Captcha 
                       onVerify={(token) => setCaptchaToken(token)}

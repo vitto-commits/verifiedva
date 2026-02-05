@@ -24,6 +24,11 @@ import TakeAssessment from './pages/TakeAssessment'
 import Admin from './pages/Admin'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import About from './pages/About'
+import HowItWorks from './pages/HowItWorks'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
+import NotFound from './pages/NotFound'
 
 function App() {
   return (
@@ -54,6 +59,11 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

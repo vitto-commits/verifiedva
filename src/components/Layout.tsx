@@ -431,19 +431,74 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 mt-auto">
-        <div className="container mx-auto px-4 py-6 sm:py-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-[hsl(var(--primary))] text-white text-xs font-bold">
-                VA
+      <footer className="border-t border-slate-200 mt-auto bg-white/50">
+        <div className="container mx-auto px-4 py-10 sm:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--primary))] text-white font-bold text-xs">
+                  VA
+                </div>
+                <span className="text-base font-semibold text-slate-900">VA Marketplace</span>
               </div>
-              <span className="text-sm text-slate-600">© 2026 VA Marketplace</span>
+              <p className="text-sm text-slate-500 leading-relaxed max-w-sm">
+                Pre-verified Filipino virtual assistants. Browse, review, and hire directly.
+              </p>
+              <p className="text-sm text-slate-500 mt-4">© 2026 VA Marketplace</p>
             </div>
-            <div className="flex gap-6 text-sm text-slate-600">
-              <a href="#" className="hover:text-[hsl(var(--primary))] active:text-[hsl(var(--primary))]">Privacy</a>
-              <a href="#" className="hover:text-[hsl(var(--primary))] active:text-[hsl(var(--primary))]">Terms</a>
-              <a href="#" className="hover:text-[hsl(var(--primary))] active:text-[hsl(var(--primary))]">Contact</a>
+
+            {/* Platform */}
+            <div>
+              <div className="text-sm font-semibold text-slate-900 mb-3">Platform</div>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/search" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">Find VAs</Link>
+                </li>
+                <li>
+                  <Link to="/va/signup" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">Become a VA</Link>
+                </li>
+                <li>
+                  <Link to="/jobs" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">Browse Jobs</Link>
+                </li>
+                <li>
+                  <Link to="/login" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">Sign In</Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <div className="text-sm font-semibold text-slate-900 mb-3">Company</div>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/about" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">About Us</Link>
+                </li>
+                <li>
+                  <Link to="/how-it-works" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">How It Works</Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <div className="text-sm font-semibold text-slate-900 mb-3">Legal</div>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/privacy" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">Privacy Policy</Link>
+                </li>
+                <li>
+                  <Link to="/terms" className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]">Terms of Service</Link>
+                </li>
+                <li>
+                  <a
+                    href="mailto:support@verticestaffing.com"
+                    className="text-sm text-slate-500 hover:text-[hsl(var(--primary))]"
+                  >
+                    Contact Us
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

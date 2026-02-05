@@ -78,10 +78,10 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8 sm:py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {[
-              { icon: IconUsers, value: '500+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
+              { icon: IconUsers, value: '50+', label: 'Verified VAs', tint: 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' },
               { icon: IconStar, value: '4.9', label: 'Avg Rating', tint: 'bg-amber-500/10 text-amber-700' },
               { icon: IconCheckCircle, value: '100%', label: 'Vetted Talent', tint: 'bg-[hsl(var(--primary))]/10 text-emerald-700' },
-              { icon: IconZap, value: '24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
+              { icon: IconZap, value: '<24h', label: 'Avg Response', tint: 'bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))]' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className={`inline-flex p-2.5 sm:p-3 rounded-lg sm:rounded-xl ${stat.tint} mb-2 sm:mb-3`}>
@@ -187,6 +187,114 @@ export default function Home() {
                   ))}
                 </ul>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-12 sm:py-16 md:py-24 bg-white/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <p className="text-[hsl(var(--primary))] font-semibold text-sm sm:text-base mb-2 sm:mb-3">HOW IT WORKS</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Find the right VA in 3 steps</h2>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-col md:flex-row md:items-stretch md:justify-between gap-4 md:gap-6">
+              {/* Step 1 */}
+              <div className="flex-1 bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-5 sm:p-6">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] flex items-center justify-center font-bold">1</div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900">Search &amp; Filter</h3>
+                    <p className="text-sm sm:text-base text-slate-600 mt-1">
+                      Browse VAs by skill, rate, and availability. Every profile is pre-verified.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Connector */}
+              <div className="hidden md:flex items-center justify-center text-slate-300">
+                <div className="flex items-center">
+                  <div className="h-px w-10 bg-slate-200" />
+                  <IconArrowRight className="h-5 w-5" />
+                  <div className="h-px w-10 bg-slate-200" />
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex-1 bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-5 sm:p-6">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] flex items-center justify-center font-bold">2</div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900">Review &amp; Compare</h3>
+                    <p className="text-sm sm:text-base text-slate-600 mt-1">
+                      Watch video intros, check skill scores, and read attribute-based reviews.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Connector */}
+              <div className="hidden md:flex items-center justify-center text-slate-300">
+                <div className="flex items-center">
+                  <div className="h-px w-10 bg-slate-200" />
+                  <IconArrowRight className="h-5 w-5" />
+                  <div className="h-px w-10 bg-slate-200" />
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex-1 bg-white/70 border border-slate-200 rounded-xl sm:rounded-2xl p-5 sm:p-6">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] flex items-center justify-center font-bold">3</div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900">Hire Directly</h3>
+                    <p className="text-sm sm:text-base text-slate-600 mt-1">
+                      No middlemen, no ongoing fees. Connect and start working together.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Skills */}
+      <section className="py-12 sm:py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <p className="text-[hsl(var(--primary))] font-semibold text-sm sm:text-base mb-2 sm:mb-3">POPULAR SKILLS</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">Start with what you need</h2>
+            <p className="text-sm sm:text-base text-slate-600 mt-3 max-w-2xl mx-auto">
+              Explore common VA skill categories and jump straight into filtered results.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto flex flex-wrap gap-3 justify-center">
+            {[
+              'Virtual Assistant',
+              'Social Media Management',
+              'Email Management',
+              'Bookkeeping',
+              'Customer Support',
+              'Data Entry',
+              'Graphic Design',
+              'Content Writing',
+              'Project Management',
+              'E-commerce',
+            ].map((skill) => (
+              <Link
+                key={skill}
+                to={`/search?skill=${encodeURIComponent(skill)}`}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))]/30 hover:bg-white transition-colors"
+              >
+                <IconSearch className="h-4 w-4 text-slate-400" />
+                {skill}
+              </Link>
             ))}
           </div>
         </div>

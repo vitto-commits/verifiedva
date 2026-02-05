@@ -249,10 +249,11 @@ export default function Search() {
       }
     }
 
-    const debounce = setTimeout(fetchVAs, 300)
+    // Fetch immediately - no debounce needed as Supabase handles this server-side
+    fetchVAs()
+    
     return () => {
       cancelled = true
-      clearTimeout(debounce)
     }
   }, [searchQuery, minRate, maxRate, minExperience, locationQuery, verifiedSkillsOnly, selectedAvailability, selectedHoursPerWeek, selectedTiers, selectedSkills, sortBy])
 

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { IconSearch, IconSliders, IconMapPin, IconClock, IconDollar, IconLoader, IconX, IconChevronDown } from '../components/icons'
 import Layout from '../components/Layout'
-import AuthGuard from '../components/AuthGuard'
 import VAPreviewPanel from '../components/VAPreviewPanel'
 import RateHistogram from '../components/RateHistogram'
 import { supabase } from '../lib/supabase'
@@ -405,7 +404,6 @@ export default function Search() {
   )
 
   return (
-    <AuthGuard>
     <Layout>
       {/* Search Header */}
       <div className="sticky top-14 sm:top-16 z-30 border-b border-slate-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -717,6 +715,5 @@ export default function Search() {
         onClose={() => setSelectedVA(null)} 
       />
     </Layout>
-    </AuthGuard>
   )
 }

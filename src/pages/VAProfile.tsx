@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { IconMapPin, IconMessage, IconGlobe, IconBriefcase, IconLoader, IconArrowLeft, IconClock, IconCalendar, IconChevronRight, IconCheckCircle, IconStar } from '../components/icons'
 import Layout from '../components/Layout'
-import AuthGuard from '../components/AuthGuard'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import { getSignedVideoUrl } from '../lib/storage'
@@ -186,33 +185,29 @@ export default function VAProfile() {
 
   if (loading) {
     return (
-      <AuthGuard>
-        <Layout>
-          <div className="min-h-[60vh] flex items-center justify-center">
-            <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
-          </div>
-        </Layout>
-      </AuthGuard>
+      <Layout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <IconLoader className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+        </div>
+      </Layout>
     )
   }
 
   if (error || !va) {
     return (
-      <AuthGuard>
-        <Layout>
-          <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-            <div className="text-4xl mb-4">😕</div>
-            <p className="text-slate-600 mb-4 text-center">{error || 'VA not found'}</p>
-            <Link 
-              to="/search" 
-              className="flex items-center gap-2 text-[hsl(var(--primary))] hover:opacity-80 font-medium"
-            >
-              <IconArrowLeft className="h-4 w-4" />
-              Back to search
-            </Link>
-          </div>
-        </Layout>
-      </AuthGuard>
+      <Layout>
+        <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
+          <div className="text-4xl mb-4">😕</div>
+          <p className="text-slate-600 mb-4 text-center">{error || 'VA not found'}</p>
+          <Link 
+            to="/search" 
+            className="flex items-center gap-2 text-[hsl(var(--primary))] hover:opacity-80 font-medium"
+          >
+            <IconArrowLeft className="h-4 w-4" />
+            Back to search
+          </Link>
+        </div>
+      </Layout>
     )
   }
 
@@ -224,7 +219,6 @@ export default function VAProfile() {
   }, {} as Record<string, typeof va.va_skills>)
 
   return (
-    <AuthGuard>
     <Layout>
       {/* Mobile-friendly padding bottom for sticky CTA */}
       <div className="pb-24 lg:pb-0">
@@ -549,6 +543,5 @@ export default function VAProfile() {
         </div>
       </div>
     </Layout>
-    </AuthGuard>
   )
 }

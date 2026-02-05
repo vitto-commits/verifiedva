@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { IconCheck, IconChevronRight, IconChevronLeft, IconEye, IconEyeOff, IconLoader, IconUser, IconBriefcase, IconWrench } from '../components/icons'
 import Layout from '../components/Layout'
 import { Button, Input, Textarea } from '../components/ui'
+import Captcha from '../components/Captcha'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import type { Skill } from '../types/database'
@@ -41,6 +42,7 @@ export default function VASignup() {
   const [availability, setAvailability] = useState('full-time')
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>([])
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   useEffect(() => {
     if (user) setCurrentStep(2)
@@ -65,6 +67,10 @@ export default function VASignup() {
     }
     if (password.length < 8) {
       setError('Password must be at least 8 characters')
+      return
+    }
+    if (!captchaToken && import.meta.env.VITE_TURNSTILE_SITE_KEY) {
+      setError('Please complete the CAPTCHA verification')
       return
     }
 
@@ -284,6 +290,10 @@ export default function VASignup() {
                       />
                       <span>I agree to the Terms of Service and Privacy Policy</span>
                     </label>
+                    <Captcha 
+                      onVerify={(token) => setCaptchaToken(token)}
+                      onExpire={() => setCaptchaToken(null)}
+                    />
                   </div>
                 </div>
               )}

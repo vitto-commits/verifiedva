@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { IconEye, IconEyeOff, IconArrowRight, IconLoader, IconBuilding, IconUsers } from '../components/icons'
 import Layout from '../components/Layout'
 import { Button, Input } from '../components/ui'
+import Captcha from '../components/Captcha'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 
@@ -25,6 +26,7 @@ export default function ClientSignup() {
   const [companyWebsite, setCompanyWebsite] = useState('')
   const [industry, setIndustry] = useState('')
   const [companySize, setCompanySize] = useState('')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const handleAccountSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,6 +37,10 @@ export default function ClientSignup() {
     }
     if (password.length < 8) {
       setError('Password must be at least 8 characters')
+      return
+    }
+    if (!captchaToken && import.meta.env.VITE_TURNSTILE_SITE_KEY) {
+      setError('Please complete the CAPTCHA verification')
       return
     }
 
@@ -209,6 +215,11 @@ export default function ClientSignup() {
                   <a href="#" className="text-[hsl(var(--primary))]">Privacy Policy</a>
                 </span>
               </label>
+
+              <Captcha 
+                onVerify={(token) => setCaptchaToken(token)}
+                onExpire={() => setCaptchaToken(null)}
+              />
 
               <Button
                 type="submit"

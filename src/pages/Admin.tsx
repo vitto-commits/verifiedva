@@ -8,6 +8,7 @@ import {
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
+import { logAuditEvent } from '../lib/audit'
 
 interface Stats {
   totalUsers: number
@@ -176,19 +177,36 @@ export default function Admin() {
   const updateVAStatus = async (vaId: string, status: 'verified' | 'rejected' | 'pending') => {
     setUpdating(vaId)
     
+    const oldVA = vas.find(v => v.id === vaId)
     const { error } = await supabase
       .from('vas')
       .update({ verification_status: status })
       .eq('id', vaId)
 
     if (!error) {
+      // Log audit event
+      const actionMap = {
+        verified: 'va.verify',
+        rejected: 'va.reject',
+        pending: 'va.set_pending',
+      } as const
+      await logAuditEvent({
+        action: actionMap[status],
+        targetType: 'va',
+        targetId: vaId,
+        details: { 
+          oldStatus: oldVA?.verification_status,
+          newStatus: status,
+          vaName: oldVA?.profile?.full_name 
+        },
+      })
+
       setVAs(prev => prev.map(va => 
         va.id === vaId ? { ...va, verification_status: status } : va
       ))
       
       // Update stats
       if (stats) {
-        const oldVA = vas.find(v => v.id === vaId)
         let newStats = { ...stats }
         
         if (oldVA?.verification_status === 'verified') newStats.verifiedVAs--
@@ -207,12 +225,24 @@ export default function Admin() {
   const toggleAdmin = async (userId: string, currentStatus: boolean) => {
     setUpdating(userId)
     
+    const targetUser = users.find(u => u.id === userId)
     const { error } = await supabase
       .from('profiles')
       .update({ is_admin: !currentStatus })
       .eq('id', userId)
 
     if (!error) {
+      // Log audit event
+      await logAuditEvent({
+        action: currentStatus ? 'user.revoke_admin' : 'user.grant_admin',
+        targetType: 'user',
+        targetId: userId,
+        details: { 
+          userName: targetUser?.full_name,
+          userEmail: targetUser?.email 
+        },
+      })
+
       setUsers(prev => prev.map(u => 
         u.id === userId ? { ...u, is_admin: !currentStatus } : u
       ))

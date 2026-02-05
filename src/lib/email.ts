@@ -1,5 +1,7 @@
 // Email notification utilities
 
+import { supabase } from './supabase';
+
 const API_URL = '/api/send-email';
 
 interface EmailData {
@@ -11,10 +13,18 @@ interface EmailData {
 
 export async function sendEmail(emailData: EmailData): Promise<boolean> {
   try {
+    // Get current session token for authentication
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) {
+      console.error('Email send failed: No active session');
+      return false;
+    }
+
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
       },
       body: JSON.stringify(emailData),
     });

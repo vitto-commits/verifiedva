@@ -117,54 +117,53 @@ export default function VAProfile() {
       if (!id) return
 
       setLoading(true)
-      const { data, error } = await supabase
-        .from('vas')
-        .select(`
-          *,
-          profile:profiles(*),
-          va_skills(
-            proficiency_level,
-            verified_at,
-            assessment_score,
-            skill:skills(*)
-          )
-        `)
-        .eq('id', id)
-        .single()
-
-      if (error) {
-        setError('VA not found')
-      } else {
-        setVa(data as VAWithDetails)
+      
+      try {
+        // Use native fetch to avoid Supabase client session race conditions
+        const apiUrl = import.meta.env.VITE_SUPABASE_URL
+        const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+        const headers = { 'apikey': apiKey, 'Authorization': `Bearer ${apiKey}` }
+        
+        const vaSelect = '*, profile:profiles(*), va_skills(proficiency_level, verified_at, assessment_score, skill:skills(*))'
+        const vaResp = await fetch(
+          `${apiUrl}/rest/v1/vas?id=eq.${id}&select=${encodeURIComponent(vaSelect)}`,
+          { headers }
+        )
+        
+        if (!vaResp.ok) throw new Error(`HTTP ${vaResp.status}`)
+        const vaArr = await vaResp.json()
+        
+        if (!vaArr || vaArr.length === 0) {
+          setError('VA not found')
+          setLoading(false)
+          return
+        }
+        
+        setVa(vaArr[0] as VAWithDetails)
         
         // Fetch reviews for this VA
-        const { data: reviewsData } = await supabase
-          .from('reviews')
-          .select(`
-            id,
-            rating,
-            comment,
-            attributes,
-            created_at,
-            client:clients(
-              company_name,
-              profile:profiles(full_name)
-            )
-          `)
-          .eq('va_id', id)
-          .order('created_at', { ascending: false })
+        const reviewSelect = 'id,rating,comment,attributes,created_at,client:clients(company_name,profile:profiles(full_name))'
+        const reviewResp = await fetch(
+          `${apiUrl}/rest/v1/reviews?va_id=eq.${id}&select=${encodeURIComponent(reviewSelect)}&order=created_at.desc`,
+          { headers }
+        )
         
-        if (reviewsData) {
-          // Flatten the nested Supabase response
-          const flattenedReviews = reviewsData.map((r: any) => ({
-            ...r,
-            client: r.client?.[0] ? {
-              company_name: r.client[0].company_name,
-              profile: r.client[0].profile?.[0] || { full_name: null }
-            } : null
-          }))
-          setReviews(flattenedReviews as Review[])
+        if (reviewResp.ok) {
+          const reviewsData = await reviewResp.json()
+          if (reviewsData) {
+            const flattenedReviews = reviewsData.map((r: any) => ({
+              ...r,
+              client: r.client?.[0] ? {
+                company_name: r.client[0].company_name,
+                profile: r.client[0].profile?.[0] || { full_name: null }
+              } : null
+            }))
+            setReviews(flattenedReviews as Review[])
+          }
         }
+      } catch (err) {
+        console.error('VA profile fetch error:', err)
+        setError('VA not found')
       }
       setLoading(false)
     }

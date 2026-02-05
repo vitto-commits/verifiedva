@@ -121,7 +121,7 @@ export default function Search() {
       if (selectedTiers.length > 0) query = query.in('verification_status', selectedTiers)
 
       const { data, error } = await query
-      console.log('Search query result:', { data, error, count: data?.length })
+      console.log('Search query result:', { data, error: JSON.stringify(error), count: data?.length })
 
       if (data) {
         let filtered = data as VAWithProfile[]

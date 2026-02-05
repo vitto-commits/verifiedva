@@ -132,7 +132,7 @@ export default function Layout({ children }: LayoutProps) {
                       {/* Menu */}
                       <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-xl py-2 z-50">
                         <div className="px-4 py-2 border-b border-slate-200 mb-2">
-                          <div className="font-medium text-white truncate">
+                          <div className="font-medium text-slate-900 truncate">
                             {profile?.full_name || 'User'}
                           </div>
                           <div className="text-sm text-slate-500 truncate">
@@ -386,11 +386,11 @@ export default function Layout({ children }: LayoutProps) {
               {user ? (
                 <>
                   <div className="flex items-center gap-3 px-4 py-2 text-slate-600">
-                    <div className="h-10 w-10 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center font-medium">
+                    <div className="h-10 w-10 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center font-medium text-white">
                       {profile?.full_name?.[0]?.toUpperCase() || 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-white truncate">
+                      <div className="font-medium text-slate-900 truncate">
                         {profile?.full_name || 'User'}
                       </div>
                       <div className="text-sm text-slate-500 truncate">

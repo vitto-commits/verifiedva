@@ -1,0 +1,17 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /my-jobs
+Disallow: /my-applications
+Disallow: /my-interviews
+Disallow: /messages
+Disallow: /availability
+Disallow: /video-intro
+Disallow: /assessments
+
+# Sitemap
+Sitemap: https://verticestaffing.com/sitemap.xml

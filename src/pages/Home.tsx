@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { IconSearch, IconShield, IconCheckCircle, IconStar, IconArrowRight, IconUsers, IconChevronDown, IconZap, IconGlobe } from '../components/icons'
 import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
@@ -23,8 +24,40 @@ export default function Home() {
     { q: "Can I hire directly?", a: "Yes! Once you find a VA you like, you can hire them directly. We don't take ongoing fees from your working relationship." },
   ]
 
+  // FAQ Schema
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
+      }
+    }))
+  }
+
   return (
-    <Layout>
+    <>
+      <Helmet>
+        <title>Hire Virtual Assistants | Premium VA Staffing Agency | Vertice</title>
+        <meta name="description" content="Hire pre-vetted Filipino virtual assistants in 48 hours. Success-based pricing, 3-month guarantee, no monthly costs. Join 500+ businesses saving 60-70%." />
+        <link rel="canonical" href="https://verticestaffing.com/" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="Hire Virtual Assistants from Philippines | Vertice Staffing" />
+        <meta property="og:description" content="Pre-vetted Filipino VAs. Success-based pricing. 3-month guarantee. Start in 48 hours." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://verticestaffing.com/" />
+        
+        {/* FAQ Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchema)}
+        </script>
+      </Helmet>
+      
+      <Layout>
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Background gradient */}
@@ -348,5 +381,6 @@ export default function Home() {
         </div>
       </section>
     </Layout>
+    </>
   )
 }

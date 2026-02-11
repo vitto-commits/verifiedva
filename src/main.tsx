@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { HelmetProvider } from 'react-helmet-async'
 import * as Sentry from '@sentry/react'
 import { initSentry } from './lib/sentry'
 import './index.css'
@@ -36,8 +37,10 @@ function ErrorFallback({ error }: { error: Error }) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Sentry.ErrorBoundary fallback={({ error }) => <ErrorFallback error={error as Error} />}>
-      <App />
-    </Sentry.ErrorBoundary>
+    <HelmetProvider>
+      <Sentry.ErrorBoundary fallback={({ error }) => <ErrorFallback error={error as Error} />}>
+        <App />
+      </Sentry.ErrorBoundary>
+    </HelmetProvider>
   </StrictMode>,
 )

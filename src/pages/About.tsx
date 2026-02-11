@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Layout from '../components/Layout'
 import {
   IconShield,
@@ -16,7 +17,14 @@ import {
 
 export default function About() {
   return (
-    <Layout>
+    <>
+      <Helmet>
+        <title>About Us | Pre-Vetted Filipino Virtual Assistants | Vertice</title>
+        <meta name="description" content="VerifiedVA Marketplace connects agencies with pre-vetted, skill-tested Filipino virtual assistants. Built by Vertice Staffing - making remote hiring reliable." />
+        <link rel="canonical" href="https://verticestaffing.com/about" />
+      </Helmet>
+      
+      <Layout>
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[hsl(var(--primary))]/5" />
@@ -270,5 +278,6 @@ export default function About() {
         </div>
       </section>
     </Layout>
+    </>
   )
 }

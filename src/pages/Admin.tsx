@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { 
   IconUsers, IconBriefcase, IconCheckCircle, IconClock,
   IconTrendingUp, IconShield, IconLoader, IconSearch,
-  IconEye, IconBan, IconCheckCheck
+  IconEye, IconBan, IconCheckCheck, IconVideo
 } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
 import { logAuditEvent } from '../lib/audit'
+import { getSignedVideoUrl } from '../lib/storage'
 
 interface Stats {
   totalUsers: number
@@ -19,6 +20,7 @@ interface Stats {
   totalJobs: number
   openJobs: number
   totalApplications: number
+  pendingVideoReviews: number
 }
 
 interface VA {
@@ -28,6 +30,8 @@ interface VA {
   hourly_rate: number
   years_experience: number
   verification_status: string
+  video_review_status: string | null
+  video_intro_url: string | null
   created_at: string
   profile: {
     full_name: string
@@ -46,7 +50,7 @@ interface User {
   created_at: string
 }
 
-type Tab = 'overview' | 'vas' | 'users' | 'jobs'
+type Tab = 'overview' | 'vas' | 'users' | 'jobs' | 'video_reviews'
 
 export default function Admin() {
   const navigate = useNavigate()
@@ -61,6 +65,8 @@ export default function Admin() {
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [updating, setUpdating] = useState<string | null>(null)
+  const [pendingVideoReviews, setPendingVideoReviews] = useState<VA[]>([])
+  const [videoUrls, setVideoUrls] = useState<Record<string, string>>({})
 
   // Check if user is admin
   useEffect(() => {
@@ -112,7 +118,8 @@ export default function Admin() {
         { count: totalClients },
         { count: totalJobs },
         { count: openJobs },
-        { count: totalApplications }
+        { count: totalApplications },
+        { count: pendingVideoReviews }
       ] = await Promise.all([
         supabase.from('profiles').select('*', { count: 'exact', head: true }),
         supabase.from('vas').select('*', { count: 'exact', head: true }),
@@ -121,7 +128,8 @@ export default function Admin() {
         supabase.from('clients').select('*', { count: 'exact', head: true }),
         supabase.from('jobs').select('*', { count: 'exact', head: true }),
         supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('status', 'open'),
-        supabase.from('job_applications').select('*', { count: 'exact', head: true })
+        supabase.from('job_applications').select('*', { count: 'exact', head: true }),
+        supabase.from('vas').select('*', { count: 'exact', head: true }).eq('video_review_status', 'pending')
       ])
 
       setStats({
@@ -132,7 +140,8 @@ export default function Admin() {
         totalClients: totalClients || 0,
         totalJobs: totalJobs || 0,
         openJobs: openJobs || 0,
-        totalApplications: totalApplications || 0
+        totalApplications: totalApplications || 0,
+        pendingVideoReviews: pendingVideoReviews || 0
       })
 
       // Get VAs with profiles
@@ -166,6 +175,32 @@ export default function Admin() {
 
       if (usersData) {
         setUsers(usersData)
+      }
+
+      // Get pending video reviews
+      const { data: pendingReviewsData } = await supabase
+        .from('vas')
+        .select(`
+          *,
+          profile:profiles!vas_user_id_fkey(full_name, email, avatar_url)
+        `)
+        .eq('video_review_status', 'pending')
+        .order('created_at', { ascending: false })
+
+      if (pendingReviewsData) {
+        setPendingVideoReviews(pendingReviewsData)
+        
+        // Fetch signed URLs for videos
+        const urls: Record<string, string> = {}
+        await Promise.all(
+          pendingReviewsData.map(async (va) => {
+            if (va.video_intro_url) {
+              const signedUrl = await getSignedVideoUrl(va.video_intro_url)
+              if (signedUrl) urls[va.id] = signedUrl
+            }
+          })
+        )
+        setVideoUrls(urls)
       }
 
       setLoading(false)
@@ -251,6 +286,87 @@ export default function Admin() {
     setUpdating(null)
   }
 
+  const approveVideoReview = async (vaId: string) => {
+    if (!confirm('Approve this video intro? The VA will be verified.')) return
+    
+    setUpdating(vaId)
+    
+    const va = pendingVideoReviews.find(v => v.id === vaId)
+    const { error } = await supabase
+      .from('vas')
+      .update({ 
+        video_review_status: 'approved',
+        is_verified: true
+      })
+      .eq('id', vaId)
+
+    if (!error) {
+      await logAuditEvent({
+        action: 'va.video_approved',
+        targetType: 'va',
+        targetId: vaId,
+        details: { 
+          vaName: va?.profile?.full_name,
+          vaEmail: va?.profile?.email
+        },
+      })
+
+      // Remove from pending list
+      setPendingVideoReviews(prev => prev.filter(v => v.id !== vaId))
+      
+      // Update stats
+      if (stats) {
+        setStats({
+          ...stats,
+          pendingVideoReviews: stats.pendingVideoReviews - 1,
+          verifiedVAs: stats.verifiedVAs + 1
+        })
+      }
+    }
+    
+    setUpdating(null)
+  }
+
+  const rejectVideoReview = async (vaId: string) => {
+    if (!confirm('Reject this video intro? The VA will need to upload a new video.')) return
+    
+    setUpdating(vaId)
+    
+    const va = pendingVideoReviews.find(v => v.id === vaId)
+    const { error } = await supabase
+      .from('vas')
+      .update({ 
+        video_review_status: 'rejected',
+        is_verified: false
+      })
+      .eq('id', vaId)
+
+    if (!error) {
+      await logAuditEvent({
+        action: 'va.video_rejected',
+        targetType: 'va',
+        targetId: vaId,
+        details: { 
+          vaName: va?.profile?.full_name,
+          vaEmail: va?.profile?.email
+        },
+      })
+
+      // Remove from pending list
+      setPendingVideoReviews(prev => prev.filter(v => v.id !== vaId))
+      
+      // Update stats
+      if (stats) {
+        setStats({
+          ...stats,
+          pendingVideoReviews: stats.pendingVideoReviews - 1
+        })
+      }
+    }
+    
+    setUpdating(null)
+  }
+
   const filteredVAs = vas.filter(va => {
     const matchesSearch = 
       va.profile?.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -296,9 +412,10 @@ export default function Admin() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 bg-white/50 p-1 rounded-xl w-fit">
+        <div className="flex gap-1 mb-6 bg-white/50 p-1 rounded-xl w-fit overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview', icon: IconTrendingUp },
+            { id: 'video_reviews', label: 'Video Reviews', icon: IconVideo, badge: stats?.pendingVideoReviews },
             { id: 'vas', label: 'VAs', icon: IconUsers },
             { id: 'users', label: 'Users', icon: IconUsers },
             { id: 'jobs', label: 'Jobs', icon: IconBriefcase }
@@ -306,7 +423,7 @@ export default function Admin() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as Tab)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors relative ${
                 activeTab === tab.id
                   ? 'bg-[hsl(var(--primary))] text-white'
                   : 'text-slate-600 hover:bg-white'
@@ -314,6 +431,15 @@ export default function Admin() {
             >
               <tab.icon className="h-4 w-4" />
               {tab.label}
+              {tab.badge !== undefined && tab.badge > 0 && (
+                <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs font-bold ${
+                  activeTab === tab.id 
+                    ? 'bg-white text-[hsl(var(--primary))]' 
+                    : 'bg-[hsl(var(--primary))] text-white'
+                }`}>
+                  {tab.badge}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -369,6 +495,96 @@ export default function Admin() {
               icon={IconTrendingUp}
               color="pink"
             />
+          </div>
+        )}
+
+        {/* Video Reviews Tab */}
+        {activeTab === 'video_reviews' && (
+          <div className="space-y-4">
+            <div className="text-sm text-slate-600 mb-4">
+              {pendingVideoReviews.length} video{pendingVideoReviews.length !== 1 ? 's' : ''} pending review
+            </div>
+
+            {pendingVideoReviews.length === 0 ? (
+              <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+                <IconVideo className="h-12 w-12 mx-auto mb-4 text-slate-300" />
+                <p className="text-slate-500">No pending video reviews</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {pendingVideoReviews.map(va => (
+                  <div key={va.id} className="bg-white rounded-xl border border-slate-200 p-6">
+                    {/* VA Info */}
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="h-12 w-12 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-white font-bold flex-shrink-0">
+                        {va.profile?.full_name?.[0] || '?'}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-slate-900">{va.profile?.full_name}</div>
+                        <div className="text-sm text-slate-500">{va.profile?.email}</div>
+                        {va.headline && (
+                          <div className="text-sm text-slate-600 mt-1">{va.headline}</div>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xs text-slate-500">Submitted</div>
+                        <div className="text-sm text-slate-700">
+                          {new Date(va.created_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Video Player */}
+                    {videoUrls[va.id] ? (
+                      <div className="mb-4 rounded-xl overflow-hidden bg-slate-900 aspect-video">
+                        <video
+                          src={videoUrls[va.id]}
+                          className="w-full h-full object-contain"
+                          controls
+                          playsInline
+                        />
+                      </div>
+                    ) : (
+                      <div className="mb-4 rounded-xl bg-slate-100 aspect-video flex items-center justify-center">
+                        <IconLoader className="h-8 w-8 animate-spin text-slate-400" />
+                      </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => approveVideoReview(va.id)}
+                        disabled={updating === va.id}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-green-500 text-white font-medium hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        {updating === va.id ? (
+                          <IconLoader className="h-5 w-5 animate-spin" />
+                        ) : (
+                          <>
+                            <IconCheckCircle className="h-5 w-5" />
+                            Approve & Verify
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => rejectVideoReview(va.id)}
+                        disabled={updating === va.id}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        {updating === va.id ? (
+                          <IconLoader className="h-5 w-5 animate-spin" />
+                        ) : (
+                          <>
+                            <IconBan className="h-5 w-5" />
+                            Reject
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

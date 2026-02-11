@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IconArrowLeft, IconUpload, IconVideo, IconTrash, IconLoader, IconCheckCircle, IconAlertCircle } from '../components/icons'
+import { IconArrowLeft, IconUpload, IconVideo, IconTrash, IconLoader, IconCheckCircle, IconAlertCircle, IconClock } from '../components/icons'
 import Layout from '../components/Layout'
 import { useAuth } from '../lib/auth-context'
 import { supabase } from '../lib/supabase'
@@ -76,10 +76,13 @@ export default function VideoIntroUpload() {
       // Store as full path reference for consistency
       const storedPath = `video-intros/${path}`
       
-      // Update VA profile with path reference
+      // Update VA profile with path reference and set video review status to pending
       const { error: updateError } = await supabase
         .from('vas')
-        .update({ video_intro_url: storedPath })
+        .update({ 
+          video_intro_url: storedPath,
+          video_review_status: 'pending'
+        })
         .eq('id', vaProfile.id)
 
       if (updateError) throw updateError
@@ -115,10 +118,13 @@ export default function VideoIntroUpload() {
         await deleteVideo(vaProfile.video_intro_url)
       }
 
-      // Update VA profile
+      // Update VA profile and reset video review status
       const { error: updateError } = await supabase
         .from('vas')
-        .update({ video_intro_url: null })
+        .update({ 
+          video_intro_url: null,
+          video_review_status: null
+        })
         .eq('id', vaProfile.id)
 
       if (updateError) throw updateError
@@ -176,6 +182,45 @@ export default function VideoIntroUpload() {
             <div className="mb-4 p-3 rounded-lg bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-sm flex items-center gap-2">
               <IconCheckCircle className="h-4 w-4 flex-shrink-0" />
               {success}
+            </div>
+          )}
+
+          {/* Video Review Status */}
+          {vaProfile?.video_review_status && (
+            <div className={`mb-4 p-4 rounded-xl border ${
+              vaProfile.video_review_status === 'pending' 
+                ? 'bg-yellow-500/10 border-yellow-500/20' 
+                : vaProfile.video_review_status === 'approved'
+                ? 'bg-green-500/10 border-green-500/20'
+                : 'bg-red-500/10 border-red-500/20'
+            }`}>
+              <div className="flex items-center gap-3">
+                {vaProfile.video_review_status === 'pending' ? (
+                  <>
+                    <IconClock className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-yellow-600">Video submitted - pending review</p>
+                      <p className="text-sm text-yellow-600/80 mt-1">Our team will review your video soon</p>
+                    </div>
+                  </>
+                ) : vaProfile.video_review_status === 'approved' ? (
+                  <>
+                    <IconCheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-green-600">Video approved - you're verified!</p>
+                      <p className="text-sm text-green-600/80 mt-1">Your profile is now visible to clients</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <IconAlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-red-600">Video rejected - please upload a new one</p>
+                      <p className="text-sm text-red-600/80 mt-1">Upload a clearer video that follows our guidelines</p>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           )}
 

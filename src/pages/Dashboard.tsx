@@ -13,6 +13,8 @@ import {
   IconX,
   IconSearch,
   IconAward,
+  IconAlertCircle,
+  IconVideo,
 } from '../components/icons'
 
 export default function Dashboard() {
@@ -97,14 +99,48 @@ export default function Dashboard() {
   const isVA = profile.user_type === 'va'
   const isClient = profile.user_type === 'client'
 
-  const getVerificationStatus = (status: string) => {
-    const configs: Record<string, { icon: any; color: string; bg: string; label: string; desc: string }> = {
-      pending: { icon: IconClock, color: 'text-yellow-400', bg: 'bg-yellow-500/10', label: 'Pending', desc: 'Complete verification to appear in search' },
-      verified: { icon: IconCheckCircle, color: 'text-[hsl(var(--primary))]', bg: 'bg-[hsl(var(--primary))]/10', label: 'Verified', desc: 'Your identity has been confirmed' },
-      pro: { icon: IconCheckCircle, color: 'text-blue-400', bg: 'bg-blue-500/10', label: 'Pro', desc: 'Skills tested & references checked' },
-      elite: { icon: IconCheckCircle, color: 'text-purple-400', bg: 'bg-[hsl(var(--secondary))]/10', label: 'Elite', desc: 'Maximum verification achieved' },
+  const getVerificationStatus = (vaProfile: any) => {
+    // Verification now depends on video review status
+    const videoStatus = vaProfile?.video_review_status
+    
+    if (videoStatus === 'approved') {
+      return {
+        icon: IconCheckCircle,
+        color: 'text-[hsl(var(--primary))]',
+        bg: 'bg-[hsl(var(--primary))]/10',
+        label: 'Verified',
+        desc: 'Your video has been approved'
+      }
     }
-    return configs[status] || configs.pending
+    
+    if (videoStatus === 'pending') {
+      return {
+        icon: IconClock,
+        color: 'text-yellow-400',
+        bg: 'bg-yellow-500/10',
+        label: 'Video Review Pending',
+        desc: 'Your video is being reviewed by our team'
+      }
+    }
+    
+    if (videoStatus === 'rejected') {
+      return {
+        icon: IconAlertCircle,
+        color: 'text-red-400',
+        bg: 'bg-red-500/10',
+        label: 'Video Rejected',
+        desc: 'Please upload a new video that meets our guidelines'
+      }
+    }
+    
+    // No video uploaded yet
+    return {
+      icon: IconVideo,
+      color: 'text-slate-400',
+      bg: 'bg-slate-100',
+      label: 'Not Verified',
+      desc: 'Upload a video intro to get verified'
+    }
   }
 
   return (
@@ -142,7 +178,7 @@ export default function Dashboard() {
                   <div className="text-sm text-slate-600 truncate">{user.email}</div>
                 </div>
                 {isVA && vaProfile && (() => {
-                  const status = getVerificationStatus(vaProfile.verification_status)
+                  const status = getVerificationStatus(vaProfile)
                   return (
                     <span className={`px-2 py-1 text-xs rounded-full ${status.bg} ${status.color}`}>
                       {status.label}
@@ -440,7 +476,7 @@ export default function Dashboard() {
                 <div className="bg-white/70 border border-slate-200 rounded-2xl p-6">
                   <h3 className="font-medium mb-4">Verification Status</h3>
                   {(() => {
-                    const status = getVerificationStatus(vaProfile.verification_status)
+                    const status = getVerificationStatus(vaProfile)
                     const Icon = status.icon
                     return (
                       <div className="space-y-3">
@@ -449,10 +485,21 @@ export default function Dashboard() {
                           <span className={`font-medium ${status.color}`}>{status.label}</span>
                         </div>
                         <p className="text-sm text-slate-600">{status.desc}</p>
-                        {vaProfile.verification_status === 'pending' && (
-                          <button className="w-full mt-3 px-4 py-2.5 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium hover:bg-[hsl(var(--primary))]/10 active:bg-[hsl(var(--primary))]/20 transition-colors">
-                            Start Verification
-                          </button>
+                        {!vaProfile.video_review_status && (
+                          <Link 
+                            to="/video-intro"
+                            className="block w-full mt-3 px-4 py-2.5 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium text-center hover:bg-[hsl(var(--primary))]/10 active:bg-[hsl(var(--primary))]/20 transition-colors"
+                          >
+                            Upload Video Intro
+                          </Link>
+                        )}
+                        {vaProfile.video_review_status === 'rejected' && (
+                          <Link 
+                            to="/video-intro"
+                            className="block w-full mt-3 px-4 py-2.5 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium text-center hover:bg-[hsl(var(--primary))]/10 active:bg-[hsl(var(--primary))]/20 transition-colors"
+                          >
+                            Upload New Video
+                          </Link>
                         )}
                       </div>
                     )
@@ -484,16 +531,27 @@ export default function Dashboard() {
                   <div>
                     <h3 className="font-medium text-sm">Verification Status</h3>
                     {(() => {
-                      const status = getVerificationStatus(vaProfile.verification_status)
+                      const status = getVerificationStatus(vaProfile)
                       return (
                         <p className={`text-sm ${status.color}`}>{status.label}</p>
                       )
                     })()}
                   </div>
-                  {vaProfile.verification_status === 'pending' && (
-                    <button className="px-4 py-2 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium active:bg-[hsl(var(--primary))]/10">
-                      Verify
-                    </button>
+                  {!vaProfile.video_review_status && (
+                    <Link 
+                      to="/video-intro"
+                      className="px-4 py-2 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium active:bg-[hsl(var(--primary))]/10"
+                    >
+                      Upload Video
+                    </Link>
+                  )}
+                  {vaProfile.video_review_status === 'rejected' && (
+                    <Link 
+                      to="/video-intro"
+                      className="px-4 py-2 rounded-xl border border-[hsl(var(--primary))] text-[hsl(var(--primary))] text-sm font-medium active:bg-[hsl(var(--primary))]/10"
+                    >
+                      New Video
+                    </Link>
                   )}
                 </div>
               </div>

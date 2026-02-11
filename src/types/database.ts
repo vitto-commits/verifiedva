@@ -1,5 +1,6 @@
 export type UserType = 'va' | 'client' | 'admin'
 export type VerificationStatus = 'pending' | 'verified' | 'pro' | 'elite'
+export type VideoReviewStatus = 'pending' | 'approved' | 'rejected'
 
 export interface Profile {
   id: string
@@ -24,10 +25,12 @@ export interface VA {
   languages: string[]
   availability: string
   verification_status: VerificationStatus
+  video_review_status: VideoReviewStatus | null
   portfolio_url: string | null
   resume_url: string | null
   video_intro_url: string | null
   is_active: boolean
+  is_verified: boolean
   created_at: string
   updated_at: string
   // Joined data

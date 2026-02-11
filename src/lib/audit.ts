@@ -4,6 +4,8 @@ export type AuditAction =
   | 'va.verify'
   | 'va.reject'
   | 'va.set_pending'
+  | 'va.video_approved'
+  | 'va.video_rejected'
   | 'user.grant_admin'
   | 'user.revoke_admin'
   | 'job.delete'
